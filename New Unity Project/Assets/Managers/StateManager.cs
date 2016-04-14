@@ -6,16 +6,15 @@ public class StateManager : MonoBehaviour {
     public enum GameState
     {
         MENU,
-        STREAM,
+        TEXT,
         LOG,
-        MINIGAME
     }
 
     private GameState gameState = GameState.MENU;
 
 	// Use this for initialization
 	void Start () {
-        Unify.Instance.UIMng.loadUILayer(gameState);
+        
 	}
 	
 	// Update is called once per frame
@@ -29,6 +28,5 @@ public class StateManager : MonoBehaviour {
     public void SetGameState(GameState gs)
     {
         gameState = gs;
-        Unify.Instance.UIMng.loadUILayer(gameState);
     }
 }

@@ -21,7 +21,15 @@ public class UIManager : MonoBehaviour {
     {
         switch(state)
         {
-
+            case StateManager.GameState.MENU:
+                UIWrap.ToLayer(UIWrap.MenuLayer);
+                break;
+            case StateManager.GameState.TEXT:
+                UIWrap.ToLayer(UIWrap.TextLayer);
+                break;
+            case StateManager.GameState.LOG:
+                UIWrap.ToLayer(UIWrap.LogLayer);
+                break;
         }
     }
 }
