@@ -1,20 +1,21 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UnityEngine.UI;
 
-public class ModuleBlueprint : MonoBehaviour {
+public class ModuleBlueprint : ScriptableObject {
 
-    private int moduleID = -1;
+    [TextArea(1,1)]
+    public int moduleID = -1;
+
+    public ModuleBlueprint previousModule, nextModule;
+
     private bool IDset = false;
 
-    public Text content;
-
 	// Use this for initialization
-	void Start () {
+	public void Start () {
 	    if(!IDset)
         {
             moduleID = -1;
-            Debug.LogError("moduleID not set for " + this.gameObject);
+            Debug.LogError("moduleID not set for " + this.ToString());
         }
 	}
 	
@@ -22,11 +23,6 @@ public class ModuleBlueprint : MonoBehaviour {
 	void Update () {
 	
 	}
-
-    public void setContent(string txt)
-    {
-        content.text = txt;
-    }
 
     public int GetModuleID ()
     { return moduleID; }
