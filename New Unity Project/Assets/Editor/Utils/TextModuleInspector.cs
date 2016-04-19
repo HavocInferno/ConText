@@ -6,6 +6,7 @@ using System.Collections.Generic;
 [CustomEditor(typeof(TextModule))]
 public class TextModuleInspector : Editor {
 
+    //private SerializedProperty modID;
     private SerializedProperty prevModule;
     private SerializedProperty character;
     private SerializedProperty textContent;
@@ -21,6 +22,7 @@ public class TextModuleInspector : Editor {
 
     void OnEnable()
     {
+        //modID = serializedObject.FindProperty("moduleID");
         textContent = serializedObject.FindProperty("txtContent");
 
         mod = target as TextModule;
@@ -39,6 +41,7 @@ public class TextModuleInspector : Editor {
         }
         serializedObject.ApplyModifiedProperties();
 
+        EditorGUILayout.IntField(mod.moduleID);
         //EditorGUILayout.EnumPopup(character, );
         //text input
         EditorGUILayout.PropertyField(textContent, GUILayout.MaxHeight(500));
@@ -58,6 +61,11 @@ public class TextModuleInspector : Editor {
         {
             mod.nextModule = CreateModule();
             mod.nextModule.previousModule = mod;
+            if(mod.previousModule == null)
+            {
+                mod.moduleID = 0;
+            }
+            mod.nextModule.moduleID = mod.moduleID +1;
         }
 
         EditorUtility.SetDirty(mod);

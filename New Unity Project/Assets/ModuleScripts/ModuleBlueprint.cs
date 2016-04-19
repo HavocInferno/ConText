@@ -8,21 +8,9 @@ public class ModuleBlueprint : ScriptableObject {
 
     public ModuleBlueprint previousModule, nextModule;
 
-    private bool IDset = false;
+    public GameObject UIObject;
 
-	// Use this for initialization
-	public void Start () {
-	    if(!IDset)
-        {
-            moduleID = -1;
-            Debug.LogError("moduleID not set for " + this.ToString());
-        }
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    private bool IDset = false;
 
     public int GetModuleID ()
     { return moduleID; }
@@ -35,4 +23,11 @@ public class ModuleBlueprint : ScriptableObject {
             IDset = true;
         } return IDset;
     }
+
+    public virtual GameObject getUIObject()
+    {
+        return UIObject;
+    }
+
+    public virtual void setContent(GameObject UIObjectInstance) { }
 }

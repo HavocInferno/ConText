@@ -57,5 +57,7 @@ public class UIWrapper : MonoBehaviour {
             Unify.Instance.StateMng.SetGameState(StateManager.GameState.TEXT);
         else if (currentLayer == LogLayer)
             Unify.Instance.StateMng.SetGameState(StateManager.GameState.LOG);
+
+        Debug.Log(Unify.Instance.StateMng.GetGameState());
     }
 }
