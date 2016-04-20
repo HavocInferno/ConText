@@ -31,9 +31,9 @@ public class ModuleManager : MonoBehaviour {
         {
             if (Unify.Instance.StateMng.GetGameState() == StateManager.GameState.TEXT)
             {
-                yield return new WaitForSeconds(1.0f);
+                yield return new WaitForSeconds(nextModule.delayBeforeSend);
                 Unify.Instance.UIMng.addModule(nextModule);
-                nextModule = nextModule.nextModule;
+                nextModule = nextModule.getNextPart();
             } else
             {
                 yield return new WaitForSeconds(1.0f);

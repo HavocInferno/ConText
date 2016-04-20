@@ -12,6 +12,8 @@ public class UIWrapper : MonoBehaviour {
     public GameObject TextLayer;
     public GameObject LogLayer;
 
+    public Scrollbar vertScrollbar;
+
     private Vector2 anchorCenter, offsetCenter, anchorOffC, offsetOffC;
     private GameObject currentLayer;
 
@@ -59,5 +61,10 @@ public class UIWrapper : MonoBehaviour {
             Unify.Instance.StateMng.SetGameState(StateManager.GameState.LOG);
 
         Debug.Log(Unify.Instance.StateMng.GetGameState());
+    }
+
+    public void scrollToZero()
+    {
+        vertScrollbar.value = 0f;
     }
 }
