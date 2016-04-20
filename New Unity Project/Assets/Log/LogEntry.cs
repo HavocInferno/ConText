@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/*--------------------------------
+Copyright 2016 - Paul Preißner - for Bachelor Thesis "ConText - A Choice/Text Adventure Framework" @ TU München
+--------------------------------*/
+
 public class LogEntry : MonoBehaviour {
 
     private int logID = -1;
@@ -14,12 +18,6 @@ public class LogEntry : MonoBehaviour {
             logID = -1;
             Debug.LogError("logID not set for " + this.gameObject);
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     public int GetModuleID()

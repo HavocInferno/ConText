@@ -3,6 +3,10 @@ using UnityEditor;
 using System.Collections;
 using System.IO;
 
+/*--------------------------------
+Copyright 2016 - Paul Preißner - for Bachelor Thesis "ConText - A Choice/Text Adventure Framework" @ TU München
+--------------------------------*/
+
 public class ModuleCreator {
 
 	public static T CreateModuleAsset<T> () where T : ScriptableObject
@@ -23,7 +27,6 @@ public class ModuleCreator {
             AssetDatabase.GenerateUniqueAssetPath(aPath + "/" + typeof(T).ToString() + ".asset"));
         AssetDatabase.SaveAssets();
 
-        //EditorUtility.FocusProjectWindow();
         Selection.activeObject = mAsset;
         return mAsset;
     }

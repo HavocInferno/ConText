@@ -2,21 +2,15 @@
 using System.Collections;
 using System.Collections.Generic;
 
+/*--------------------------------
+Copyright 2016 - Paul Preißner - for Bachelor Thesis "ConText - A Choice/Text Adventure Framework" @ TU München
+--------------------------------*/
+
 public class UIManager : MonoBehaviour {
 
     public UIWrapper UIWrap;
     public UISettings UISettings;
     public TextStream TStream;
-	
-    // Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 
     public bool addModule(ModuleBlueprint mod)
     {

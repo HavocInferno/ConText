@@ -1,31 +1,31 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/*--------------------------------
+Copyright 2016 - Paul Preißner - for Bachelor Thesis "ConText - A Choice/Text Adventure Framework" @ TU München
+--------------------------------*/
+
+/*Parent class to all modules used in the framework, defines all basic functionality needed by and for interaction of any module with the various managers.*/
 public class ModuleBlueprint : ScriptableObject {
 
-    /*public class nextPart
-    {
-        public float delay = 0.0f;
-        public string text = "";
-        public bool lastOfModule = true;
-        public ModuleBlueprint nextModule;
-    }*/
-
+    /*moduleID and subID uniquely identify a single module (at least if not broken manually)*/
     [TextArea(1,1)]
     public int moduleID = -1;
     public int subID = 0;
 
+    /*Delay to imitate natural latency of a message being typed as well as sent. 
+    To be calculated individually inside each heir class and ideally encoded with the getNextPart return value.*/
     public float delayBeforeSend = 1.0f;
 
     public ModuleBlueprint previousModule, nextModule;
 
+    //the gameobject/prefab (needs to be compatible with Unity 4.6/5.0 onward new UI) to be used as a message instance in the UI's content view.
     public GameObject UIObject;
 
+    //getter/setter/crude "final" workaround for defining a moduleID manually. Not used yet (Alan, please fix!)
     private bool IDset = false;
-
     public int GetModuleID ()
     { return moduleID; }
-
     public bool SetModuleID(int id)
     {
         if (!IDset)
@@ -40,15 +40,12 @@ public class ModuleBlueprint : ScriptableObject {
         return UIObject;
     }
 
+    /*is given the actual instance of the prior defined UIObject and sets the corresponding info in it; 
+    e.g. in TextModule this function copies its text value into the UIObjectInstance's Text property.*/
     public virtual void setContent(GameObject UIObjectInstance) { }
 
     public virtual ModuleBlueprint getNextPart()
     {
-        /*nextPart r = new nextPart();
-        r.lastOfModule = true;
-        r.nextModule = nextModule;
-        return r;*/
-
         return nextModule;
     }
 }

@@ -2,6 +2,10 @@
 using System.Collections;
 using UnityEngine.UI;
 
+/*--------------------------------
+Copyright 2016 - Paul Preißner - for Bachelor Thesis "ConText - A Choice/Text Adventure Framework" @ TU München
+--------------------------------*/
+
 public class UIWrapper : MonoBehaviour {
 
     /*
@@ -33,11 +37,6 @@ public class UIWrapper : MonoBehaviour {
 
         Debug.Log(currentLayer.GetComponent<RectTransform>().anchoredPosition + ", " + currentLayer.GetComponent<RectTransform>().offsetMax); //offsetmax is negated though
     }
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 
     /*first set the pos/size of the current layer to off-center (kinda redundant), then deactivate it.
     Then reverse order for the new layer.

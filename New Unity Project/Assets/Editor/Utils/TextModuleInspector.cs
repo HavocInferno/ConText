@@ -3,6 +3,10 @@ using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
 
+/*--------------------------------
+Copyright 2016 - Paul Preißner - for Bachelor Thesis "ConText - A Choice/Text Adventure Framework" @ TU München
+--------------------------------*/
+
 [CustomEditor(typeof(TextModule))]
 public class TextModuleInspector : Editor {
 
@@ -13,6 +17,7 @@ public class TextModuleInspector : Editor {
     private SerializedProperty nextModule;
 
     private TextModule mod;
+    private GUIContent textLabel, prevMLabel, nextMLabel, modIDLabel;
 
     [MenuItem("Assets/Create/TextModule")]
     public static ModuleBlueprint CreateModule()
@@ -26,6 +31,11 @@ public class TextModuleInspector : Editor {
         textContent = serializedObject.FindProperty("txtContent");
 
         mod = target as TextModule;
+
+        textLabel = new GUIContent("Text message (incl. markup)");
+        prevMLabel = new GUIContent("Previous module", "is usually set automatically when using this Inspector's Create button");
+        nextMLabel = new GUIContent("Next module", "is usually set automatically when using this Inspector's Create button");
+        modIDLabel = new GUIContent("Module ID", "unique ID, automatically generated when using this Inspector's Create button");
     }
 
     public override void OnInspectorGUI()
@@ -34,20 +44,20 @@ public class TextModuleInspector : Editor {
         serializedObject.Update();
 
         //previous module selection
-        ModuleBlueprint prevMod = (ModuleBlueprint)EditorGUILayout.ObjectField("prev module", mod.previousModule, typeof(ModuleBlueprint), false);
+        ModuleBlueprint prevMod = (ModuleBlueprint)EditorGUILayout.ObjectField(prevMLabel, mod.previousModule, typeof(ModuleBlueprint), false);
         if(prevMod != null || true)
         {
             mod.previousModule = prevMod;
         }
         serializedObject.ApplyModifiedProperties();
 
-        EditorGUILayout.IntField(mod.moduleID);
-        //EditorGUILayout.EnumPopup(character, );
+        EditorGUILayout.IntField(modIDLabel, mod.moduleID);
+
         //text input
-        EditorGUILayout.PropertyField(textContent, GUILayout.MaxHeight(500));
+        EditorGUILayout.PropertyField(textContent, textLabel, GUILayout.MaxHeight(500));
 
         //next module selection
-        ModuleBlueprint nextMod = (ModuleBlueprint)EditorGUILayout.ObjectField("next module", mod.nextModule, typeof(ModuleBlueprint), false);
+        ModuleBlueprint nextMod = (ModuleBlueprint)EditorGUILayout.ObjectField(nextMLabel, mod.nextModule, typeof(ModuleBlueprint), false);
         if (nextMod != null)
         {
             mod.nextModule = nextMod;

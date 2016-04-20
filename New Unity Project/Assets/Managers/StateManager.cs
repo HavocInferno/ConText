@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/*--------------------------------
+Copyright 2016 - Paul Preißner - for Bachelor Thesis "ConText - A Choice/Text Adventure Framework" @ TU München
+--------------------------------*/
+
 public class StateManager : MonoBehaviour {
 
     public enum GameState
@@ -11,16 +15,6 @@ public class StateManager : MonoBehaviour {
     }
 
     private GameState gameState = GameState.MENU;
-
-	// Use this for initialization
-	void Start () {
-        
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 
     public GameState GetGameState()
     { return gameState; }
