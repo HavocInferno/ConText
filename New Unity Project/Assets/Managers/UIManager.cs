@@ -26,7 +26,7 @@ public class UIManager : MonoBehaviour {
         UIModInstance.transform.SetParent(TStream.UIContent.transform);
         UIModInstance.name = mod.GetType().ToString() + " " + mod.moduleID + " " + mod.subID;
         UIWrap.scrollToZero(); //this seems to take effect before the scrollview adjusts its height...why?
-        Unify.Instance.ModMng.addModuleToDict(mod.moduleID, UIModInstance);
+        Unify.Instance.ModMng.addModuleToDict(mod.moduleID, mod.subID, UIModInstance);
 
         return false;
     }

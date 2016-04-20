@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class ModuleManager : MonoBehaviour {
 
-    public Dictionary<int, GameObject> modules = new Dictionary<int, GameObject>();
+    public Dictionary<Pair<int,int>, GameObject> modules = new Dictionary<Pair<int,int>, GameObject>();
     public ModuleBlueprint firstModule;
     private ModuleBlueprint nextModule;
 
@@ -20,9 +20,9 @@ public class ModuleManager : MonoBehaviour {
 	
 	}
 
-    public void addModuleToDict(int modID, GameObject inst)
+    public void addModuleToDict(int modID, int subID, GameObject inst)
     {
-        modules.Add(modID, inst);
+        modules.Add(new Pair<int, int>(modID, subID), inst);
     }
 
     IEnumerator fireNext()

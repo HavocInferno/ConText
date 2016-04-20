@@ -38,9 +38,10 @@ public class TextModule : ModuleBlueprint {
         if (subID < 4)
         {
             TextModule r = ScriptableObject.CreateInstance<TextModule>();
-            r.delayBeforeSend = 2.0f;
             r.txtContent = "this is another part";
-            r.SetModuleID(moduleID - 1000); //bad temp fix! need to expand modules dict in ModMng to Pairs for keys in order to save ID + subID as key!
+            r.delayBeforeSend = (r.txtContent.Length * 0.2f) + 1f; //200c/m = 1/200 m/c = 60/200 s/c -> 60/200 * len = type speed (subject to change); +1 sec for send latency?
+            //Debug.Log("Delay " + r.delayBeforeSend + " for " + r.txtContent.Length + " chars in text: " + r.txtContent);
+            r.SetModuleID(moduleID); //bad temp fix! need to expand modules dict in ModMng to Pairs for keys in order to save ID + subID as key!
             r.subID = subID + 1;
             r.previousModule = previousModule;
             r.nextModule = nextModule;
