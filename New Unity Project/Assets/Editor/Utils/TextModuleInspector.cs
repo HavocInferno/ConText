@@ -17,7 +17,7 @@ public class TextModuleInspector : Editor {
     private SerializedProperty nextModule;
 
     private TextModule mod;
-    private GUIContent textLabel, prevMLabel, nextMLabel, modIDLabel, charLabel;
+    private GUIContent textLabel, prevMLabel, nextMLabel, modIDLabel, subIDLabel, charLabel;
 
     [MenuItem("Assets/Create/ConText Framework/Modules/Text Module")]
     public static ModuleBlueprint CreateModule()
@@ -36,6 +36,7 @@ public class TextModuleInspector : Editor {
         prevMLabel = new GUIContent("Previous module", "is usually set automatically when using this Inspector's Create button");
         nextMLabel = new GUIContent("Next module", "is usually set automatically when using this Inspector's Create button");
         modIDLabel = new GUIContent("Module ID", "unique ID, automatically generated when using this Inspector's Create button");
+        subIDLabel = new GUIContent("Sub ID", "unique ID, automatically generated when using this Inspector's Create button");
         charLabel = new GUIContent("Character", "which character is sending this?");
     }
 
@@ -57,7 +58,10 @@ public class TextModuleInspector : Editor {
         }
         serializedObject.ApplyModifiedProperties();
 
+        EditorGUILayout.BeginHorizontal();
         EditorGUILayout.IntField(modIDLabel, mod.moduleID);
+        EditorGUILayout.IntField(subIDLabel, mod.subID);
+        EditorGUILayout.EndHorizontal();
 
         //character sending the message -> change to dropdown (enum of all characters, then determine forward/backward?)
         Character character = (Character)EditorGUILayout.ObjectField(charLabel, mod.sendingCharacter, typeof(Character), false);
@@ -66,13 +70,20 @@ public class TextModuleInspector : Editor {
         //EditorGUILayout.PropertyField(textContent, textLabel, GUILayout.MaxHeight(500));
         drawTextField(500);
 
+        ModuleSpecific();
+
+        serializedObject.ApplyModifiedProperties();
+        EditorUtility.SetDirty(mod);
+    }
+
+    public virtual void ModuleSpecific()
+    {
         //next module selection
         ModuleBlueprint nextMod = (ModuleBlueprint)EditorGUILayout.ObjectField(nextMLabel, mod.nextModule, typeof(ModuleBlueprint), false);
         if (nextMod != null)
         {
             mod.nextModule = nextMod;
         }
-        serializedObject.ApplyModifiedProperties();
 
         EditorGUILayout.Space();
 
@@ -80,13 +91,19 @@ public class TextModuleInspector : Editor {
         {
             mod.nextModule = CreateModule();
             mod.nextModule.previousModule = mod;
-            if(mod.previousModule == null)
+            if (mod.previousModule == null)
             {
                 mod.moduleID = 0;
+                mod.subID = -1;
             }
-            mod.nextModule.moduleID = mod.moduleID +1;
+            if (mod.subID > -1)
+            {
+                mod.nextModule.moduleID = ((mod.moduleID == 0 ? 1 : mod.moduleID) * 100 + mod.subID * 10) + 1;
+            } else
+            {
+                mod.nextModule.moduleID = mod.moduleID + 1;
+            }
+            mod.nextModule.subID = -1;
         }
-
-        EditorUtility.SetDirty(mod);
     }
 }

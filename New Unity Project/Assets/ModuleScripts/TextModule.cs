@@ -15,26 +15,27 @@ public class TextModule : ModuleBlueprint {
 
     public override GameObject getUIObject()
     {
-        return UIObject;
+        return UIObjectTemplate;
     }
 
     public override void setContent(GameObject UIObjectInstance)
     {
         if (UIContent == null)
         {
-            UIContent = UIObjectInstance.GetComponentInChildren<Text>();
+            UIContent = UIObjectInstance.GetComponentInChildren<ModuleUIHelper>().TextContainer.GetComponentInChildren<Text>();
             if (UIContent == null)
             {
-                Debug.LogError("this module's UI Object is missing a Text element; " + UIObject.ToString());
+                Debug.LogError("this module's UI Object is missing a Text element; " + getUIObject().ToString());
             }
         }
         UIContent.text = txtContent;
+        
     }
 
     public override ModuleBlueprint getNextPart()
     {
         /*this if block is temporary -> to test whether virtual text module splitting works. Once text parsing is in, this will go.*/
-        if (subID < 4)
+        if (subID < 1)
         {
             TextModule r = ScriptableObject.CreateInstance<TextModule>();
             r.txtContent = "this is another part";
@@ -44,7 +45,7 @@ public class TextModule : ModuleBlueprint {
             r.subID = subID + 1;
             r.previousModule = previousModule;
             r.nextModule = nextModule;
-            r.UIObject = getUIObject();
+            r.UIObjectTemplate = getUIObject();
             return r;
         } else { return nextModule; }
     }

@@ -22,7 +22,7 @@ public class UIManager : MonoBehaviour {
         UIWrap.scrollToZero(); //this seems to take effect before the scrollview adjusts its height...why?
         Unify.Instance.ModMng.addModuleToDict(mod.moduleID, mod.subID, UIModInstance);
 
-        return false;
+        return true;
     }
 
     public void loadUILayer(StateManager.GameState state)

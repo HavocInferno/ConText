@@ -24,7 +24,7 @@ public class ModuleBlueprint : ScriptableObject {
     public Character sendingCharacter;
 
     //the gameobject/prefab (needs to be compatible with Unity 4.6/5.0 onward new UI) to be used as a message instance in the UI's content view.
-    public GameObject UIObject;
+    public GameObject UIObjectTemplate;
 
     //getter/setter/crude "final" workaround for defining a moduleID manually. Not used yet (Alan, please fix!)
     private bool IDset = false;
@@ -41,7 +41,7 @@ public class ModuleBlueprint : ScriptableObject {
 
     public virtual GameObject getUIObject()
     {
-        return UIObject;
+        return UIObjectTemplate;
     }
 
     /*is given the actual instance of the prior defined UIObject and sets the corresponding info in it; 

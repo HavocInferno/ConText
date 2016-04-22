@@ -1,13 +1,14 @@
 fileFormatVersion: 2
 guid: 6bfc478e6336f264385fed6b588467c6
-timeCreated: 1461068183
+timeCreated: 1461340354
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
   defaultReferences:
   - previousModule: {instanceID: 0}
   - nextModule: {instanceID: 0}
-  - UIObject: {fileID: 135278, guid: 618d507457aab0a40b062f04411aeebf, type: 2}
+  - sendingCharacter: {instanceID: 0}
+  - UIObjectTemplate: {fileID: 135278, guid: 618d507457aab0a40b062f04411aeebf, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

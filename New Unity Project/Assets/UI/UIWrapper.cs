@@ -16,6 +16,8 @@ public class UIWrapper : MonoBehaviour {
     public GameObject TextLayer;
     public GameObject LogLayer;
 
+    public GameObject ReplyButtonTemplate;
+
     public Scrollbar vertScrollbar;
 
     private Vector2 anchorCenter, offsetCenter, anchorOffC, offsetOffC;
