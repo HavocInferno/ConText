@@ -19,13 +19,13 @@ public class TextModuleInspector : Editor {
     private TextModule mod;
     private GUIContent textLabel, prevMLabel, nextMLabel, modIDLabel, charLabel;
 
-    [MenuItem("Assets/Create/ConText Framework/Text Module")]
+    [MenuItem("Assets/Create/ConText Framework/Modules/Text Module")]
     public static ModuleBlueprint CreateModule()
     {
         return AssetCreator.CreateCustomAsset<TextModule>();
     }
 
-    void OnEnable()
+    public void OnEnable()
     {
         //modID = serializedObject.FindProperty("moduleID");
         textContent = serializedObject.FindProperty("txtContent");
@@ -37,6 +37,11 @@ public class TextModuleInspector : Editor {
         nextMLabel = new GUIContent("Next module", "is usually set automatically when using this Inspector's Create button");
         modIDLabel = new GUIContent("Module ID", "unique ID, automatically generated when using this Inspector's Create button");
         charLabel = new GUIContent("Character", "which character is sending this?");
+    }
+
+    public virtual void drawTextField(int height)
+    {
+        EditorGUILayout.PropertyField(textContent, textLabel, GUILayout.MaxHeight(height));
     }
 
     public override void OnInspectorGUI()
@@ -58,7 +63,8 @@ public class TextModuleInspector : Editor {
         Character character = (Character)EditorGUILayout.ObjectField(charLabel, mod.sendingCharacter, typeof(Character), false);
 
         //text input
-        EditorGUILayout.PropertyField(textContent, textLabel, GUILayout.MaxHeight(500));
+        //EditorGUILayout.PropertyField(textContent, textLabel, GUILayout.MaxHeight(500));
+        drawTextField(500);
 
         //next module selection
         ModuleBlueprint nextMod = (ModuleBlueprint)EditorGUILayout.ObjectField(nextMLabel, mod.nextModule, typeof(ModuleBlueprint), false);
