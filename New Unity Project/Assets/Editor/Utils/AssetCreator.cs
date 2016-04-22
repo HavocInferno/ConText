@@ -7,9 +7,9 @@ using System.IO;
 Copyright 2016 - Paul Preißner - for Bachelor Thesis "ConText - A Choice/Text Adventure Framework" @ TU München
 --------------------------------*/
 
-public class ModuleCreator {
+public class AssetCreator {
 
-	public static T CreateModuleAsset<T> () where T : ScriptableObject
+	public static T CreateCustomAsset<T> () where T : ScriptableObject
     {
         T mAsset = ScriptableObject.CreateInstance<T>();
         string aPath = AssetDatabase.GetAssetPath(Selection.activeObject);

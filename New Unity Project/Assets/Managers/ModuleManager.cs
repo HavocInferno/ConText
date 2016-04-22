@@ -18,7 +18,8 @@ public class ModuleManager : MonoBehaviour {
     // Use this for initialization
 	void Start () {
         nextModule = firstModule;
-        StartCoroutine(fireNext());
+        //StartCoroutine(fireNext());
+        goOn();
 	}
 
     //rather self explanatory? Adds the given UI module/message instance plus the underlying Module's IDs to the dictionary
@@ -32,6 +33,7 @@ public class ModuleManager : MonoBehaviour {
     ((here's hoping that putting a while loop into getNextPart - when a reply or game outcome is expected - actually stalls this one here...))*/
     IEnumerator fireNext()
     {
+        Debug.Log("automatic text stream started");
         while (nextModule != null)
         {
             if (Unify.Instance.StateMng.GetGameState() == StateManager.GameState.TEXT)
@@ -44,5 +46,21 @@ public class ModuleManager : MonoBehaviour {
                 yield return new WaitForSeconds(1.0f);
             }
         }
+        Debug.Log("automatic text stream stopped. (due to module awaiting input? then that module should be starting the text stream again. otherwise...tough luck!)");
+    }
+    
+    //this function serves for when the "window" is switched (and including the gameState) back to the Text view. needs to be called then in order for the text stream to continue.
+    public void goOn()
+    {
+        StartCoroutine(fireNext());
+    }
+
+    /*this function serves mostly for modules that dont continue instantly but await input. 
+    Then the fireNext coroutine will inevitably stop and for an unknown amount of time, nothing new might be fired. 
+    The module in question would then, upon having computed its input, call goOnWith(x) with the respective followup module given as x.*/
+    public void goOnWith(ModuleBlueprint mdl)
+    {
+        nextModule = mdl;
+        StartCoroutine(fireNext());
     }
 }

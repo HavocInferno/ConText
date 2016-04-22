@@ -33,6 +33,7 @@ public class TextModule : ModuleBlueprint {
 
     public override ModuleBlueprint getNextPart()
     {
+        /*this if block is temporary -> to test whether virtual text module splitting works. Once text parsing is in, this will go.*/
         if (subID < 4)
         {
             TextModule r = ScriptableObject.CreateInstance<TextModule>();

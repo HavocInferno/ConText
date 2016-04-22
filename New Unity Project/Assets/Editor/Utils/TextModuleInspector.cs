@@ -17,12 +17,12 @@ public class TextModuleInspector : Editor {
     private SerializedProperty nextModule;
 
     private TextModule mod;
-    private GUIContent textLabel, prevMLabel, nextMLabel, modIDLabel;
+    private GUIContent textLabel, prevMLabel, nextMLabel, modIDLabel, charLabel;
 
-    [MenuItem("Assets/Create/TextModule")]
+    [MenuItem("Assets/Create/ConText Framework/Text Module")]
     public static ModuleBlueprint CreateModule()
     {
-        return ModuleCreator.CreateModuleAsset<TextModule>();
+        return AssetCreator.CreateCustomAsset<TextModule>();
     }
 
     void OnEnable()
@@ -36,6 +36,7 @@ public class TextModuleInspector : Editor {
         prevMLabel = new GUIContent("Previous module", "is usually set automatically when using this Inspector's Create button");
         nextMLabel = new GUIContent("Next module", "is usually set automatically when using this Inspector's Create button");
         modIDLabel = new GUIContent("Module ID", "unique ID, automatically generated when using this Inspector's Create button");
+        charLabel = new GUIContent("Character", "which character is sending this?");
     }
 
     public override void OnInspectorGUI()
@@ -53,6 +54,9 @@ public class TextModuleInspector : Editor {
 
         EditorGUILayout.IntField(modIDLabel, mod.moduleID);
 
+        //character sending the message -> change to dropdown (enum of all characters, then determine forward/backward?)
+        Character character = (Character)EditorGUILayout.ObjectField(charLabel, mod.sendingCharacter, typeof(Character), false);
+
         //text input
         EditorGUILayout.PropertyField(textContent, textLabel, GUILayout.MaxHeight(500));
 
@@ -66,7 +70,6 @@ public class TextModuleInspector : Editor {
 
         EditorGUILayout.Space();
 
-        //GUIStyle style = new GUIStyle(GUI.skin.button);
         if (GUILayout.Button("Create next module"))
         {
             mod.nextModule = CreateModule();

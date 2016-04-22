@@ -6,6 +6,7 @@ Copyright 2016 - Paul Preißner - for Bachelor Thesis "ConText - A Choice/Text A
 --------------------------------*/
 
 /*Parent class to all modules used in the framework, defines all basic functionality needed by and for interaction of any module with the various managers.*/
+[System.Serializable]
 public class ModuleBlueprint : ScriptableObject {
 
     /*moduleID and subID uniquely identify a single module (at least if not broken manually)*/
@@ -17,7 +18,10 @@ public class ModuleBlueprint : ScriptableObject {
     To be calculated individually inside each heir class and ideally encoded with the getNextPart return value.*/
     public float delayBeforeSend = 1.0f;
 
+    [SerializeField]
     public ModuleBlueprint previousModule, nextModule;
+
+    public Character sendingCharacter;
 
     //the gameobject/prefab (needs to be compatible with Unity 4.6/5.0 onward new UI) to be used as a message instance in the UI's content view.
     public GameObject UIObject;
@@ -44,6 +48,9 @@ public class ModuleBlueprint : ScriptableObject {
     e.g. in TextModule this function copies its text value into the UIObjectInstance's Text property.*/
     public virtual void setContent(GameObject UIObjectInstance) { }
 
+    /*this function is called by ModuleManager in order to get the next module (be it global or virtual) to fire. 
+    If an heir of this class/module wants to await own input and send the next part whenever necessary, 
+    simply return null with this.*/
     public virtual ModuleBlueprint getNextPart()
     {
         return nextModule;
