@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.UI;
 
 /*--------------------------------
@@ -12,6 +12,8 @@ public class TextModule : ModuleBlueprint {
     public string txtContent;
 
     private Text UIContent;
+    //this has the module's text parsed
+    private List<TextParser.ParsedChunk> allnextParts;
 
     public override GameObject getUIObject()
     {
@@ -20,6 +22,7 @@ public class TextModule : ModuleBlueprint {
 
     public override void setContent(GameObject UIObjectInstance)
     {
+        Debug.Log("setting content for ID " + moduleID + ", subID " + subID);
         if (UIContent == null)
         {
             UIContent = UIObjectInstance.GetComponentInChildren<ModuleUIHelper>().TextContainer.GetComponentInChildren<Text>();
@@ -28,24 +31,40 @@ public class TextModule : ModuleBlueprint {
                 Debug.LogError("this module's UI Object is missing a Text element; " + getUIObject().ToString());
             }
         }
-        UIContent.text = txtContent;
-        
+        if (allnextParts == null || allnextParts.Count == 0 )
+        {
+            Debug.Log("text not parsed yet? parsing...");
+            allnextParts = TextParser.parse(txtContent);
+        } else
+        {
+            Debug.Log("text already parsed into " + allnextParts.Count + " parts.");
+            foreach(TextParser.ParsedChunk a in allnextParts)
+            {
+                Debug.Log(a.ToString());
+            }
+        }
+
+        UIContent.text = allnextParts[0].text;
+        delayBeforeSend = allnextParts[0].delay;
+        allnextParts.RemoveAt(0);
     }
 
     public override ModuleBlueprint getNextPart()
     {
-        /*this if block is temporary -> to test whether virtual text module splitting works. Once text parsing is in, this will go.*/
-        if (subID < 1)
+        if(allnextParts.Count > 0)
         {
             TextModule r = ScriptableObject.CreateInstance<TextModule>();
-            r.txtContent = "this is another part";
-            r.delayBeforeSend = (r.txtContent.Length * 0.2f) + 1f; //200c/m = 1/200 m/c = 60/200 s/c -> 60/200 * len = type speed (subject to change); +1 sec for send latency?
-            //Debug.Log("Delay " + r.delayBeforeSend + " for " + r.txtContent.Length + " chars in text: " + r.txtContent);
-            r.SetModuleID(moduleID);
-            r.subID = subID + 1;
+            r.txtContent = allnextParts[0].text;
+            r.delayBeforeSend = allnextParts[0].delay;
             r.previousModule = previousModule;
             r.nextModule = nextModule;
+            r.SetModuleID(moduleID);
+            r.subID = subID + 1;
             r.UIObjectTemplate = getUIObject();
+
+            //allnextParts.RemoveAt(0);
+            r.allnextParts = allnextParts;
+
             return r;
         } else { return nextModule; }
     }
