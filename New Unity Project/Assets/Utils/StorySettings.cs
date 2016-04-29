@@ -10,9 +10,22 @@ public class StorySettings : ScriptableObject {
 
     [SerializeField]
     List<Character> characters = new List<Character>();
+    static string[] charNames = new string[0];
 
     public void addChar(Character nC)
     {
         characters.Add(nC);
+        if(characters.Count >= charNames.Length)
+        {
+            string[] newCN = new string[charNames.Length + 1];
+            charNames.CopyTo(newCN, 0);
+            newCN[charNames.Length] = nC.characterName;
+            charNames = newCN;
+        }
+    }
+
+    public static string[] getListAsStrings()
+    {
+        return charNames;
     }
 }

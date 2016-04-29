@@ -7,4 +7,17 @@ Copyright 2016 - Paul Preißner - for Bachelor Thesis "ConText - A Choice/Text A
 
 public class Character : ScriptableObject {
 
+    public int charID;
+
+    [System.Serializable]
+    public enum blobAlignment
+    {
+        LEFT, 
+        RIGHT,
+        CENTER,
+        NONE
+    };
+
+    public string characterName = "char";
+    public blobAlignment alignment = blobAlignment.NONE;
 }

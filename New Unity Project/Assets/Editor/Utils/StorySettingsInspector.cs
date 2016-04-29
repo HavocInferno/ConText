@@ -40,6 +40,8 @@ public class StorySettingsInspector : Editor {
             stt.addChar(CreateCharacter());
         }
 
+        //needs a custom view of the characters with a button beside each to delete. on delete -> adjust string array and list in storysettings
+
         EditorUtility.SetDirty(stt);
     }
 }

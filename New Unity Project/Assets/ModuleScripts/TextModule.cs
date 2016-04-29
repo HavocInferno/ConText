@@ -11,7 +11,7 @@ public class TextModule : ModuleBlueprint {
     [TextArea(5, 15)]
     public string txtContent;
 
-    private Text UIContent;
+    //private Text UIContent;
     //this has the module's text parsed
     private List<TextParser.ParsedChunk> allnextParts;
 
@@ -23,6 +23,7 @@ public class TextModule : ModuleBlueprint {
     public override void setContent(GameObject UIObjectInstance)
     {
         Debug.Log("setting content for ID " + moduleID + ", subID " + subID);
+        Text UIContent = null;
         if (UIContent == null)
         {
             UIContent = UIObjectInstance.GetComponentInChildren<ModuleUIHelper>().TextContainer.GetComponentInChildren<Text>();
@@ -44,7 +45,7 @@ public class TextModule : ModuleBlueprint {
             }
         }
 
-        UIContent.text = allnextParts[0].text;
+        UIContent.text = (sendingCharacter != null ? sendingCharacter.characterName : "") + "@" + System.DateTime.Now.ToString() + ": " + allnextParts[0].text;
         delayBeforeSend = allnextParts[0].delay;
         allnextParts.RemoveAt(0);
     }
@@ -61,6 +62,7 @@ public class TextModule : ModuleBlueprint {
             r.SetModuleID(moduleID);
             r.subID = subID + 1;
             r.UIObjectTemplate = getUIObject();
+            r.sendingCharacter = sendingCharacter;
 
             //allnextParts.RemoveAt(0);
             r.allnextParts = allnextParts;

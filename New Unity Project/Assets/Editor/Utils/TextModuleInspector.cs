@@ -12,7 +12,6 @@ public class TextModuleInspector : Editor {
 
     //private SerializedProperty modID;
     private SerializedProperty prevModule;
-    private SerializedProperty character;
     private SerializedProperty textContent;
     private SerializedProperty nextModule;
 
@@ -64,10 +63,10 @@ public class TextModuleInspector : Editor {
         EditorGUILayout.EndHorizontal();
 
         //character sending the message -> change to dropdown (enum of all characters, then determine forward/backward?)
-        Character character = (Character)EditorGUILayout.ObjectField(charLabel, mod.sendingCharacter, typeof(Character), false);
+        mod.sendingCharacter = (Character)EditorGUILayout.ObjectField(charLabel, mod.sendingCharacter, typeof(Character), false);
+        EditorGUILayout.HelpBox("testus", MessageType.Info);
 
         //text input
-        //EditorGUILayout.PropertyField(textContent, textLabel, GUILayout.MaxHeight(500));
         drawTextField(500);
 
         ModuleSpecific();

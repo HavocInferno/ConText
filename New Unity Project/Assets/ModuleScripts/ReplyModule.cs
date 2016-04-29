@@ -15,7 +15,7 @@ public class ReplyModule : TextModule {
         public ModuleBlueprint outcome;
     }
 
-    public GameObject buttonCont;
+    //public GameObject buttonCont;
 
     public List<ReplyOption> outcomes = new List<ReplyOption>();
 
@@ -23,7 +23,7 @@ public class ReplyModule : TextModule {
     {
         base.setContent(UIObjectInstance);
 
-        buttonCont = UIObjectInstance.GetComponentInChildren<ModuleUIHelper>().ButtonContainer;
+        GameObject buttonCont = UIObjectInstance.GetComponentInChildren<ModuleUIHelper>().ButtonContainer;
 
         foreach(ReplyOption r in outcomes)
         {

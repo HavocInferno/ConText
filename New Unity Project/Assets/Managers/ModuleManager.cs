@@ -11,7 +11,7 @@ public class ModuleManager : MonoBehaviour {
     /*modules dictionary receives all modules instanced at runtime, technically in order to handle hiding, access etc when needed, also to generally keep track.
     firstModule has to be the starting point of the story.
     nextModule internally temporarily stores a reference to the module next up for display.*/
-    public Dictionary<Pair<int,int>, GameObject> modules = new Dictionary<Pair<int,int>, GameObject>();
+    public Dictionary<int/*Pair<int,int>*/, GameObject> modules = new Dictionary<int/*Pair<int,int>*/, GameObject>();
     public ModuleBlueprint firstModule;
     private ModuleBlueprint nextModule;
 
@@ -23,9 +23,9 @@ public class ModuleManager : MonoBehaviour {
 	}
 
     //rather self explanatory? Adds the given UI module/message instance plus the underlying Module's IDs to the dictionary
-    public void addModuleToDict(int modID, int subID, GameObject inst)
+    public void addModuleToDict(int iID/*int modID, int subID*/, GameObject inst)
     {
-        modules.Add(new Pair<int, int>(modID, subID), inst);
+        modules.Add(iID/*new Pair<int, int>(modID, subID)*/, inst);
     }
 
     /*coroutine to handle calling/firing of the module stream. checks whether text window is open, then triggers UI Manager to instance the next Module to be drawn.
