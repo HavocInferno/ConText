@@ -11,6 +11,8 @@ public class StorySettingsInspector : Editor {
 
     private StorySettings stt;
 
+    private GUIContent charsLabel = new GUIContent("Characters");
+
 	[MenuItem("Assets/Create/ConText Framework/Story Settings")]
     public static void Create()
     {
@@ -30,17 +32,36 @@ public class StorySettingsInspector : Editor {
 
     public override void OnInspectorGUI()
     {
-        DrawDefaultInspector();
         serializedObject.Update();
 
-       // serializedObject.ApplyModifiedProperties();
+        serializedObject.ApplyModifiedProperties();
 
+        /*display a list of characters with their associated assets as well as (label) each character name*/
+        EditorGUILayout.LabelField(charsLabel);
+        for (int i = 0; i < stt.characters.Count; i++)
+        {
+            EditorGUILayout.BeginHorizontal();
+
+            stt.characters[i] = (Character)EditorGUILayout.ObjectField(stt.characters[i], typeof(Character), false);
+            EditorGUILayout.LabelField("Name: " + (stt.characters[i] != null ? stt.characters[i].characterName : ""));
+
+            if (GUILayout.Button("Delete"))
+            {
+                stt.characters.RemoveAt(i);
+            }
+            EditorGUILayout.EndHorizontal();
+        }
+
+        EditorGUILayout.BeginHorizontal();
+        if (GUILayout.Button("Add a character slot"))
+        {
+            stt.characters.Add(null);
+        }
         if (GUILayout.Button("Add a character"))
         {
             stt.addChar(CreateCharacter());
         }
-
-        //needs a custom view of the characters with a button beside each to delete. on delete -> adjust string array and list in storysettings
+        EditorGUILayout.EndHorizontal();
 
         EditorUtility.SetDirty(stt);
     }

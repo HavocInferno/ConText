@@ -12,9 +12,13 @@ public class UIManager : MonoBehaviour {
     public UISettings UISettings;
     public TextStream TStream;
 
+    /*instantiates the specified module's UI prefab, 
+    then orders the module(asset) to set the content of the new UI instance accordingly, 
+    then child-orders the instance into the text stream, 
+    >ideally< scrolls down to it (not quite working yet), 
+    and adds the instance to the runtime module dictionary*/
     public bool addModule(ModuleBlueprint mod)
     {
-        //Debug.Log(mod.GetType().ToString());
         GameObject UIModInstance = Instantiate(mod.getUIObject()) as GameObject;
         mod.setContent(UIModInstance);
         UIModInstance.transform.SetParent(TStream.UIContent.transform);

@@ -58,8 +58,8 @@ public class TextModuleInspector : Editor {
         serializedObject.ApplyModifiedProperties();
 
         EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.IntField(modIDLabel, mod.moduleID);
-        EditorGUILayout.IntField(subIDLabel, mod.subID);
+        EditorGUILayout.LabelField("Module ID: " + mod.moduleID);
+        EditorGUILayout.LabelField("Sub ID: " + mod.subID);
         EditorGUILayout.EndHorizontal();
 
         //character sending the message -> change to dropdown (enum of all characters, then determine forward/backward?)
@@ -86,6 +86,8 @@ public class TextModuleInspector : Editor {
 
         EditorGUILayout.Space();
 
+        //create a new module and give it a fitting set of IDs
+        //{TODO}: selection list where the user can select which *type* of module is up next
         if (GUILayout.Button("Create next module"))
         {
             mod.nextModule = CreateModule();

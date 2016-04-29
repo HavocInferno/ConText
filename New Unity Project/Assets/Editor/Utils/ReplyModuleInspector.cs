@@ -6,12 +6,12 @@ using System.Collections;
 Copyright 2016 - Paul Preißner - for Bachelor Thesis "ConText - A Choice/Text Adventure Framework" @ TU München
 --------------------------------*/
 
+//custom editor for Reply Modules.
 [CustomEditor(typeof(ReplyModule))]
 public class ReplyModuleInspector : TextModuleInspector {
 
     private ReplyModule rmod;
-    private GUIContent repliesLabel;
-    private Vector2 spos = Vector2.zero;
+    private GUIContent repliesLabel = new GUIContent("Replies");
 
     [MenuItem("Assets/Create/ConText Framework/Modules/Reply Module")]
     public static ModuleBlueprint CreateModule()
@@ -24,8 +24,6 @@ public class ReplyModuleInspector : TextModuleInspector {
         base.OnEnable();
 
         rmod = target as ReplyModule;
-
-        repliesLabel = new GUIContent("Replies");
     }
 
     public override void drawTextField(int height)
@@ -35,7 +33,9 @@ public class ReplyModuleInspector : TextModuleInspector {
 
     public override void OnInspectorGUI()
     {
-        //DrawDefaultInspector();
+        /*replaces default inspector with specifics for reply modules,
+        i.e. display base stuff (from TextModule/ModuleBlueprint) as well as a list of replies with linked outcomes
+        */
 
         base.OnInspectorGUI();
 

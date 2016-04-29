@@ -5,6 +5,8 @@ using System.Collections;
 Copyright 2016 - Paul Preißner - for Bachelor Thesis "ConText - A Choice/Text Adventure Framework" @ TU München
 --------------------------------*/
 
+/*intended to simply unify public access to globally needed/requested stuff like references to the managers
+essentially a fancier name for classic GameData script*/
 public class Unify : MonoBehaviour {
 
     private static Unify instance;
@@ -32,5 +34,4 @@ public class Unify : MonoBehaviour {
     public ModuleManager ModMng;
     public StateManager StateMng;
     public LogManager LogMng;
-    public InputManager InMng;
 }

@@ -9,7 +9,7 @@ Copyright 2016 - Paul Preißner - for Bachelor Thesis "ConText - A Choice/Text A
 public class StorySettings : ScriptableObject {
 
     [SerializeField]
-    List<Character> characters = new List<Character>();
+    public List<Character> characters = new List<Character>();
     static string[] charNames = new string[0];
 
     public void addChar(Character nC)
