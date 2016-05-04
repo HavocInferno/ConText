@@ -1,10 +1,12 @@
 fileFormatVersion: 2
 guid: 5c8a184b0e75285409fa2f5e04204d6e
-timeCreated: 1460543433
+timeCreated: 1462359877
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - parent: {instanceID: 0}
+  - UIObjectTemplate: {fileID: 135278, guid: 618d507457aab0a40b062f04411aeebf, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

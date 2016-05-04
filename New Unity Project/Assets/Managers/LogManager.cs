@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 /*--------------------------------
 Copyright 2016 - Paul Preißner - for Bachelor Thesis "ConText - A Choice/Text Adventure Framework" @ TU München
@@ -7,7 +7,18 @@ Copyright 2016 - Paul Preißner - for Bachelor Thesis "ConText - A Choice/Text A
 
 public class LogManager : MonoBehaviour {
 
-    public IDictionary logEntries; //not IDictionary...
-    public LogEntry firstLog;
+    public Dictionary<int, GameObject> logEntries = new Dictionary<int, GameObject>();
 
+    public void fireLog(LogEntry log)
+    {
+        if (log == null)
+            return;
+
+        Unify.Instance.UIMng.addLogEntry(log);
+    }
+
+    public void addLogToDict(int lID, GameObject logInst)
+    {
+        logEntries.Add(lID, logInst);
+    }
 }

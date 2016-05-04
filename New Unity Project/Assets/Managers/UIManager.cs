@@ -10,7 +10,8 @@ public class UIManager : MonoBehaviour {
 
     public UIWrapper UIWrap;
     public UISettings UISettings;
-    public TextStream TStream;
+    public GameObject TextStreamUIObject;
+    public GameObject LogStreamUIObject;
 
     /*instantiates the specified module's UI prefab, 
     then orders the module(asset) to set the content of the new UI instance accordingly, 
@@ -21,11 +22,27 @@ public class UIManager : MonoBehaviour {
     {
         GameObject UIModInstance = Instantiate(mod.getUIObject()) as GameObject;
         mod.setContent(UIModInstance);
-        UIModInstance.transform.SetParent(TStream.UIContent.transform);
+        UIModInstance.transform.SetParent(TextStreamUIObject.transform);
         UIModInstance.name = mod.GetType().ToString() + " " + mod.moduleID + " " + mod.subID;
         UIWrap.scrollToZero(); //this seems to take effect before the scrollview adjusts its height...why?
         Unify.Instance.ModMng.addModuleToDict(UIModInstance.GetInstanceID()/*mod.moduleID, mod.subID*/, UIModInstance);
 
+        return true;
+    }
+
+    public bool addLogEntry(LogEntry log)
+    {
+        GameObject UIModInstance;
+        Unify.Instance.LogMng.logEntries.TryGetValue(log.logID, out UIModInstance);
+        if(UIModInstance == null) { 
+            UIModInstance = Instantiate(log.getUIObject()) as GameObject;
+            Unify.Instance.LogMng.addLogToDict(log.logID, UIModInstance);
+            UIModInstance.transform.SetParent(LogStreamUIObject.transform);
+            UIModInstance.name = log.GetType().ToString() + " " + log.logID;
+        }
+        log.setContent(UIModInstance);
+        //UIWrap.scrollToZero(); //this seems to take effect before the scrollview adjusts its height...why?
+        
         return true;
     }
 

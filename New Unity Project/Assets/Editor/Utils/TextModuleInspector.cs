@@ -16,7 +16,7 @@ public class TextModuleInspector : Editor {
     private SerializedProperty nextModule;
 
     private TextModule mod;
-    private GUIContent textLabel, prevMLabel, nextMLabel, modIDLabel, subIDLabel, charLabel;
+    private GUIContent textLabel, prevMLabel, nextMLabel, modIDLabel, subIDLabel, charLabel, logLabel;
 
     [MenuItem("Assets/Create/ConText Framework/Modules/Text Module")]
     public static ModuleBlueprint CreateModule()
@@ -37,6 +37,7 @@ public class TextModuleInspector : Editor {
         modIDLabel = new GUIContent("Module ID", "unique ID, automatically generated when using this Inspector's Create button");
         subIDLabel = new GUIContent("Sub ID", "unique ID, automatically generated when using this Inspector's Create button");
         charLabel = new GUIContent("Character", "which character is sending this?");
+        logLabel = new GUIContent("Log", "log");
     }
 
     public virtual void drawTextField(int height)
@@ -70,6 +71,12 @@ public class TextModuleInspector : Editor {
         drawTextField(500);
 
         ModuleSpecific();
+
+        if (GUILayout.Button("Add Log Entry"))
+        {
+            mod.log = LogEntryInspector.CreateEntry();
+        }
+        mod.log = (LogEntry)EditorGUILayout.ObjectField(logLabel, mod.log, typeof(LogEntry), false);
 
         serializedObject.ApplyModifiedProperties();
         EditorUtility.SetDirty(mod);

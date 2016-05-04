@@ -48,6 +48,8 @@ public class TextModule : ModuleBlueprint {
         UIContent.text = (sendingCharacter != null ? sendingCharacter.characterName : "") + "@" + System.DateTime.Now.ToString() + ": " + allnextParts[0].text;
         delayBeforeSend = allnextParts[0].delay;
         allnextParts.RemoveAt(0);
+
+        Unify.Instance.LogMng.fireLog(log);
     }
 
     public override ModuleBlueprint getNextPart()

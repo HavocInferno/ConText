@@ -1,35 +1,40 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
+using UnityEngine.UI;
 
 /*--------------------------------
 Copyright 2016 - Paul Preißner - for Bachelor Thesis "ConText - A Choice/Text Adventure Framework" @ TU München
 --------------------------------*/
 
-public class LogEntry : MonoBehaviour {
+[System.Serializable]
+public class LogEntry : ScriptableObject {
 
-    private int logID = -1;
-    private bool IDset = false;
+    public int logID = 1;
 
-    // Use this for initialization
-    void Start()
+    public LogEntry parent;
+    public List<LogEntry> children = new List<LogEntry>();
+    public string txtContent;
+
+    public GameObject UIObjectTemplate;
+
+    public GameObject getUIObject()
     {
-        if (!IDset)
-        {
-            logID = -1;
-            Debug.LogError("logID not set for " + this.gameObject);
-        }
+        return UIObjectTemplate;
     }
 
-    public int GetModuleID()
-    { return logID; }
-
-    public bool SetModuleID(int id)
+    public void setContent(GameObject UIObjectInstance)
     {
-        if (!IDset)
+        Debug.Log("setting content for ID " + logID);
+        Text UIContent = null;
+        if (UIContent == null)
         {
-            logID = id;
-            IDset = true;
+            UIContent = UIObjectInstance.GetComponentInChildren<ModuleUIHelper>().TextContainer.GetComponentInChildren<Text>();
+            if (UIContent == null)
+            {
+                Debug.LogError("this log's UI Object is missing a Text element; " + getUIObject().ToString());
+            }
         }
-        return IDset;
+
+        UIContent.text = "Log @ " + System.DateTime.Now.ToString() + ": " + txtContent;
     }
 }
