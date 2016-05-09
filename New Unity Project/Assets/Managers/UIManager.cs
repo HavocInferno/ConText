@@ -37,7 +37,11 @@ public class UIManager : MonoBehaviour {
         if(UIModInstance == null) { 
             UIModInstance = Instantiate(log.getUIObject()) as GameObject;
             Unify.Instance.LogMng.addLogToDict(log.logID, UIModInstance);
-            UIModInstance.transform.SetParent(LogStreamUIObject.transform);
+
+            GameObject par;
+            Unify.Instance.LogMng.logEntries.TryGetValue(log.getParentLogID(), out par);
+            UIModInstance.transform.SetParent(par != null ? par.transform : LogStreamUIObject.transform);
+
             UIModInstance.name = log.GetType().ToString() + " " + log.logID;
         }
         log.setContent(UIModInstance);

@@ -37,4 +37,9 @@ public class LogEntry : ScriptableObject {
 
         UIContent.text = "Log @ " + System.DateTime.Now.ToString() + ": " + txtContent;
     }
+
+    public int getParentLogID()
+    {
+        return parent != null ? parent.logID : -1;
+    }
 }

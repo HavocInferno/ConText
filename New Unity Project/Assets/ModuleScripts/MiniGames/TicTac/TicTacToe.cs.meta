@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: f5915d3e331fc494f8e1d176b6441dee
+timeCreated: 1462812731
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - previousModule: {instanceID: 0}
+  - nextModule: {instanceID: 0}
+  - sendingCharacter: {instanceID: 0}
+  - log: {instanceID: 0}
+  - UIObjectTemplate: {fileID: 168088, guid: ab3fb35ac72f23b4ba615ffb01d5bcd1, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
