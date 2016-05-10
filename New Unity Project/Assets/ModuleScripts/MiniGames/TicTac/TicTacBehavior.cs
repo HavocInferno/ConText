@@ -28,6 +28,8 @@ public class TicTacBehavior : MonoBehaviour {
     public GameObject tictactoe;
     public GameObject end;
 
+    public TicTacToe baseModule;
+
     private bool ended = false;
     private List<TicTacField> freeFields = new List<TicTacField>(), takenFields = new List<TicTacField>();
 
@@ -101,8 +103,11 @@ public class TicTacBehavior : MonoBehaviour {
     {
         ended = true;
 
-        //fire success or failure module here
+        //do some UI shizzle so the player knows who won
         //FOO
+
+        //fire success or failure module here
+        baseModule.triggerNext(p == TicTacPlayer.HUMAN);
     }
 
     void checkWinCondition()
