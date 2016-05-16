@@ -22,6 +22,8 @@ public class TextModule : ModuleBlueprint {
 
     public override void setContent(GameObject UIObjectInstance)
     {
+        base.setContent(UIObjectInstance);
+
         Debug.Log("setting content for ID " + moduleID + ", subID " + subID);
         Text UIContent = null;
         if (UIContent == null)

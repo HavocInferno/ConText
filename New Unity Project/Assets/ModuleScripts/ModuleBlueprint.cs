@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 /*--------------------------------
 Copyright 2016 - Paul Preißner - for Bachelor Thesis "ConText - A Choice/Text Adventure Framework" @ TU München
@@ -47,7 +48,16 @@ public class ModuleBlueprint : ScriptableObject {
 
     /*is given the actual instance of the prior defined UIObject and sets the corresponding info in it; 
     e.g. in TextModule this function copies its text value into the UIObjectInstance's Text property.*/
-    public virtual void setContent(GameObject UIObjectInstance) { }
+    public virtual void setContent(GameObject UIObjectInstance)
+    {
+        if (sendingCharacter != null)
+        {
+            foreach (Image ia in UIObjectInstance.GetComponentsInChildren<Image>())
+            {
+                ia.color = sendingCharacter.blobColor;
+            }
+        }
+    }
 
     /*this function is called by ModuleManager in order to get the next module (be it global or virtual) to fire. 
     If an heir of this class/module wants to await own input and send the next part whenever necessary, 

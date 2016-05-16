@@ -20,4 +20,6 @@ public class Character : ScriptableObject {
 
     public string characterName = "char";
     public blobAlignment alignment = blobAlignment.NONE;
+
+    public Color blobColor;
 }
