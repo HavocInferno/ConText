@@ -16,7 +16,6 @@ public class UISettingsInspector : Editor {
     private UISettings uis;
     private GUIContent bg_ModColorLabel, bg_ModFontLabel, bg_ViewsColorLabel, bg_ViewsFontLabel;
     private SerializedProperty modTemplates;
-    //private List<Character> chars;
 
     [MenuItem("Assets/Create/ConText Framework/Misc/UI Settings (don't add multiple)")]
     public static UISettings CreateModule()
@@ -147,6 +146,57 @@ public class UISettingsInspector : Editor {
         //
         EditorGUILayout.EndVertical();
         #endregion
+
+        /*foreach (KeyValuePair<string, GameObject> kvp in uis.modUITemplates)
+        {
+            EditorGUILayout.BeginHorizontal();
+
+            string nkey = kvp.Key;
+            nkey = EditorGUILayout.TextField(nkey);
+            GameObject ngo = kvp.Value;
+            ngo = (GameObject)EditorGUILayout.ObjectField(ngo, typeof(GameObject), false);
+
+            if (GUILayout.Button("Apply"))
+            {
+                uis.modUITemplates.Remove(nkey);
+                uis.modUITemplates.Add(nkey, ngo);
+            }
+
+            EditorGUILayout.EndHorizontal();
+        }
+
+        if (GUILayout.Button("Add template pair"))
+        {
+            uis.modUITemplates.Add("Empty", null);
+        }*/
+
+        EditorGUI.BeginChangeCheck();
+        
+        foreach (UISettings.modUIPair mup in uis.modUITemplates)
+        {
+            EditorGUILayout.BeginHorizontal();
+
+            mup.modClassName = EditorGUILayout.TextField(mup.modClassName);
+            mup.modUITemplate = (GameObject)EditorGUILayout.ObjectField(mup.modUITemplate, typeof(GameObject), false);
+
+            if (GUILayout.Button("X"))
+            {
+                uis.modUITemplates.Remove(mup);
+            }
+
+            EditorGUILayout.EndHorizontal();
+        }
+
+        if (GUILayout.Button("Add template pair"))
+        {
+            UISettings.modUIPair mp = new UISettings.modUIPair();
+            mp.modClassName = "Empty";
+            mp.modUITemplate = null;
+            uis.modUITemplates.Add(mp);
+        }
+
+        if (EditorGUI.EndChangeCheck())
+            serializedObject.ApplyModifiedProperties();
     }
 }
 

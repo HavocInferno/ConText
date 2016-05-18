@@ -20,12 +20,17 @@ public class UIManager : MonoBehaviour {
     and adds the instance to the runtime module dictionary*/
     public bool addModule(ModuleBlueprint mod)
     {
-        GameObject UIModInstance = Instantiate(mod.getUIObject()) as GameObject;
-        mod.setContent(UIModInstance);
-        UIModInstance.transform.SetParent(TextStreamUIObject.transform);
-        UIModInstance.name = mod.GetType().ToString() + " " + mod.moduleID + " " + mod.subID;
-        UIWrap.scrollToZero(); //this seems to take effect before the scrollview adjusts its height...why?
-        Unify.Instance.ModMng.addModuleToDict(UIModInstance.GetInstanceID()/*mod.moduleID, mod.subID*/, UIModInstance);
+        GameObject UIModTemplate;
+        Debug.Log(mod.GetType().ToString());
+        if (Unify.Instance.ModMng.UITemplateMapping.TryGetValue(mod.GetType().ToString(), out UIModTemplate))
+        {
+            GameObject UIModInstance = Instantiate(UIModTemplate) as GameObject;
+            mod.setContent(UIModInstance);
+            UIModInstance.transform.SetParent(TextStreamUIObject.transform);
+            UIModInstance.name = mod.GetType().ToString() + " " + mod.moduleID + " " + mod.subID;
+            UIWrap.scrollToZero(); //this seems to take effect before the scrollview adjusts its height...why?
+            Unify.Instance.ModMng.addModuleToDict(UIModInstance.GetInstanceID()/*mod.moduleID, mod.subID*/, UIModInstance);
+        }
 
         return true;
     }

@@ -12,11 +12,17 @@ public class ModuleManager : MonoBehaviour {
     firstModule has to be the starting point of the story.
     nextModule internally temporarily stores a reference to the module next up for display.*/
     public Dictionary<int/*Pair<int,int>*/, GameObject> modules = new Dictionary<int/*Pair<int,int>*/, GameObject>();
+    public Dictionary<string, GameObject> UITemplateMapping = new Dictionary<string, GameObject>();
     public ModuleBlueprint firstModule;
     private ModuleBlueprint nextModule;
 
     // Use this for initialization
 	void Start () {
+        foreach(UISettings.modUIPair mup in Unify.Instance.UIMng.UISettings.modUITemplates)
+        {
+            UITemplateMapping.Add(mup.modClassName, mup.modUITemplate);
+        }
+
         nextModule = firstModule;
         //StartCoroutine(fireNext());
         goOn();
