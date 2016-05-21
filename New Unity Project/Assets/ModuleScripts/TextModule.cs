@@ -68,7 +68,6 @@ public class TextModule : ModuleBlueprint {
             r.UIObjectTemplate = getUIObject();
             r.sendingCharacter = sendingCharacter;
 
-            //allnextParts.RemoveAt(0);
             r.allnextParts = allnextParts;
 
             return r;

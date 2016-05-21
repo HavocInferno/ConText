@@ -14,10 +14,10 @@ public class TicTacInspector : Editor
     //private SerializedProperty modID;
     private SerializedProperty prevModule;
     private SerializedProperty textContent;
-    private SerializedProperty successModule, failureModule;
+    private SerializedProperty successModule, failureModule, tieModule;
 
     private TicTacToe mod;
-    private GUIContent textLabel, prevMLabel, succMLabel, failMLabel, modIDLabel, subIDLabel, charLabel, logLabel;
+    private GUIContent textLabel, prevMLabel, succMLabel, failMLabel, tieMLabel, modIDLabel, subIDLabel, charLabel, logLabel;
 
     [MenuItem("Assets/Create/ConText Framework/Modules/Minigames/TicTacToe")]
     public static ModuleBlueprint CreateModule()
@@ -36,6 +36,7 @@ public class TicTacInspector : Editor
         prevMLabel = new GUIContent("Previous module", "is usually set automatically when using this Inspector's Create button");
         succMLabel = new GUIContent("SNext module", "is usually set automatically when using this Inspector's Create button");
         failMLabel = new GUIContent("FNext module", "is usually set automatically when using this Inspector's Create button");
+        tieMLabel = new GUIContent("TNext module", "is usually set automatically when using this Inspector's Create button");
         modIDLabel = new GUIContent("Module ID", "unique ID, automatically generated when using this Inspector's Create button");
         subIDLabel = new GUIContent("Sub ID", "unique ID, automatically generated when using this Inspector's Create button");
         charLabel = new GUIContent("Character", "which character is sending this?");
@@ -86,23 +87,30 @@ public class TicTacInspector : Editor
 
     public virtual void ModuleSpecific()
     {
-        //next module selection
+        //success module selection
         ModuleBlueprint succMod = (ModuleBlueprint)EditorGUILayout.ObjectField(succMLabel, mod.moduleSuccess, typeof(ModuleBlueprint), false);
         if (succMod != null)
         {
             mod.moduleSuccess = succMod;
         }
 
-        //next module selection
+        //failure module selection
         ModuleBlueprint failMod = (ModuleBlueprint)EditorGUILayout.ObjectField(failMLabel, mod.moduleFailure, typeof(ModuleBlueprint), false);
         if (failMod != null)
         {
             mod.moduleFailure = failMod;
         }
 
+        //tie module selection
+        ModuleBlueprint tieMod = (ModuleBlueprint)EditorGUILayout.ObjectField(tieMLabel, mod.moduleTie, typeof(ModuleBlueprint), false);
+        if (tieMod != null)
+        {
+            mod.moduleTie = tieMod;
+        }
+
         EditorGUILayout.Space();
 
-        //create a new module and give it a fitting set of IDs
+        //create a success/failure/tie module and give it a fitting set of IDs
         //{TODO}: selection list where the user can select which *type* of module is up next
         if (GUILayout.Button("Create succ module"))
         {
@@ -142,6 +150,26 @@ public class TicTacInspector : Editor
                 mod.moduleFailure.moduleID = mod.moduleID + 1;
             }
             mod.moduleFailure.subID = -1;
+        }
+
+        if (GUILayout.Button("Create tie module"))
+        {
+            mod.moduleTie = CreateModule();
+            mod.moduleTie.previousModule = mod;
+            if (mod.previousModule == null)
+            {
+                mod.moduleID = 0;
+                mod.subID = -1;
+            }
+            if (mod.subID > -1)
+            {
+                mod.moduleTie.moduleID = ((mod.moduleID == 0 ? 1 : mod.moduleID) * 100 + mod.subID * 10) + 1;
+            }
+            else
+            {
+                mod.moduleTie.moduleID = mod.moduleID + 1;
+            }
+            mod.moduleTie.subID = -1;
         }
     }
 }

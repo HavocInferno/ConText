@@ -19,7 +19,7 @@ public class ReplyModuleInspector : TextModuleInspector {
         return AssetCreator.CreateCustomAsset<ReplyModule>();
     }
 
-    void OnEnable()
+    public void OnEnable()
     {
         base.OnEnable();
 

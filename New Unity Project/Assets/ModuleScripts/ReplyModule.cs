@@ -15,8 +15,6 @@ public class ReplyModule : TextModule {
         public ModuleBlueprint outcome;
     }
 
-    //public GameObject buttonCont;
-
     public List<ReplyOption> outcomes = new List<ReplyOption>();
 
     public override void setContent(GameObject UIObjectInstance)
@@ -25,6 +23,8 @@ public class ReplyModule : TextModule {
 
         GameObject buttonCont = UIObjectInstance.GetComponentInChildren<ModuleUIHelper>().ButtonContainer;
 
+        /*since the module itself is basically just a text module with replies, do the base function, 
+        then simply attach all possible replies*/
         foreach(ReplyOption r in outcomes)
         {
             GameObject button = Instantiate(Unify.Instance.UIMng.UIWrap.ReplyButtonTemplate);
@@ -35,6 +35,10 @@ public class ReplyModule : TextModule {
         }
     }
 
+    /*this module is essentially Push for progression, not Pull, 
+    so return null here in order to halt automatic module loading. 
+    Note: in order for things to work out then, the buttons need to start module loading again. 
+    The ReplyButton class does that for its use.*/
     public override ModuleBlueprint getNextPart()
     {
         return null;

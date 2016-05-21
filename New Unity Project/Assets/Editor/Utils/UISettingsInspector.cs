@@ -65,6 +65,7 @@ public class UISettingsInspector : Editor {
             }
         }
 
+        /*for settings related to module properties*/
         #region ModuleRelatedFields
         EditorGUI.BeginChangeCheck();
         EditorGUILayout.PropertyField(modTemplates, true);
@@ -92,13 +93,8 @@ public class UISettingsInspector : Editor {
         EditorGUILayout.EndVertical();
         #endregion
 
+        /*for settings related to view properties (views being Menu, Text, Log etc)*/
         #region ViewRelatedFields
-        /*
-        uis.MenuView = (GameObject)EditorGUILayout.ObjectField(uis.MenuView, typeof(GameObject), true);
-        uis.TextView = (GameObject)EditorGUILayout.ObjectField(uis.TextView, typeof(GameObject), true);
-        uis.LogView = (GameObject)EditorGUILayout.ObjectField(uis.LogView, typeof(GameObject), true);
-        */
-
         EditorGUILayout.BeginVertical();
         //
         EditorGUILayout.BeginHorizontal();
@@ -147,29 +143,8 @@ public class UISettingsInspector : Editor {
         EditorGUILayout.EndVertical();
         #endregion
 
-        /*foreach (KeyValuePair<string, GameObject> kvp in uis.modUITemplates)
-        {
-            EditorGUILayout.BeginHorizontal();
-
-            string nkey = kvp.Key;
-            nkey = EditorGUILayout.TextField(nkey);
-            GameObject ngo = kvp.Value;
-            ngo = (GameObject)EditorGUILayout.ObjectField(ngo, typeof(GameObject), false);
-
-            if (GUILayout.Button("Apply"))
-            {
-                uis.modUITemplates.Remove(nkey);
-                uis.modUITemplates.Add(nkey, ngo);
-            }
-
-            EditorGUILayout.EndHorizontal();
-        }
-
-        if (GUILayout.Button("Add template pair"))
-        {
-            uis.modUITemplates.Add("Empty", null);
-        }*/
-
+        /*for configuring which modules use which templates*/
+        #region ModTemplatesStuff
         EditorGUI.BeginChangeCheck();
         
         foreach (UISettings.modUIPair mup in uis.modUITemplates)
@@ -197,6 +172,7 @@ public class UISettingsInspector : Editor {
 
         if (EditorGUI.EndChangeCheck())
             serializedObject.ApplyModifiedProperties();
+        #endregion
     }
 }
 

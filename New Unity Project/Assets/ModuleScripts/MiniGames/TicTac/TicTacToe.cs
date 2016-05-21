@@ -4,11 +4,18 @@ using UnityEngine.UI;
 
 public class TicTacToe : TextModule {
 
-    public ModuleBlueprint moduleSuccess, moduleFailure;
+    public ModuleBlueprint moduleSuccess, moduleFailure, moduleTie;
 
-    public void triggerNext(bool humanWon)
+    public void triggerNext(bool humanWon, bool tie)
     {
-        Unify.Instance.ModMng.goOnWith((humanWon ? moduleSuccess : moduleFailure));
+        if (tie)
+        {
+            Unify.Instance.ModMng.goOnWith(moduleTie);
+        }
+        else
+        {
+            Unify.Instance.ModMng.goOnWith((humanWon ? moduleSuccess : moduleFailure));
+        }
     }
 
     public override void setContent(GameObject UIObjectInstance)

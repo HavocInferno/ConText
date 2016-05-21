@@ -19,7 +19,8 @@ public class TicTacBehavior : MonoBehaviour {
     public enum TicTacPlayer
     {
         HUMAN,
-        AI
+        AI,
+        NONE
     }
 
     public TicTacPlayer currentPlayer;
@@ -101,13 +102,16 @@ public class TicTacBehavior : MonoBehaviour {
 
     void wonBy(TicTacPlayer p)
     {
-        ended = true;
+        if (!ended)
+        {
+            ended = true;
 
-        //do some UI shizzle so the player knows who won
-        //FOO
+            //do some UI shizzle so the player knows who won
+            //FOO
 
-        //fire success or failure module here
-        baseModule.triggerNext(p == TicTacPlayer.HUMAN);
+            //fire success or failure module here
+            baseModule.triggerNext(p == TicTacPlayer.HUMAN, p == TicTacPlayer.NONE);
+        }
     }
 
     void checkWinCondition()
@@ -170,6 +174,14 @@ public class TicTacBehavior : MonoBehaviour {
                         break;
                     }
                 }
+            }
+
+            //tie
+            if(freeFields.Count < 1)
+            {
+                Debug.Log("It's a tie!");
+                wonBy(TicTacPlayer.NONE);
+                break;
             }
         }
     }
