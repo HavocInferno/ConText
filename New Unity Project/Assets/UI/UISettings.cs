@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 /*--------------------------------
 Copyright 2016 - Paul Preißner - for Bachelor Thesis "ConText - A Choice/Text Adventure Framework" @ TU München
@@ -13,12 +14,16 @@ public class UISettings : ScriptableObject {
     public GameObject[] moduleTemplates;
 
     public GameObject MenuView, TextView, LogView;
+    public Image MenuImage, TextImage, LogImage;
+
     public StorySettings sSettings;
 
     public Font moduleTextFont;
+    public int moduleTextFontSize;
 
     public Color viewBackgroundColor;
     public Font viewTextFont;
+    public int viewTextFontSize;
 
     [System.Serializable]
     public class modUIPair

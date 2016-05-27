@@ -47,7 +47,18 @@ public class TextModule : ModuleBlueprint {
             }
         }
 
+        UIContent.font = Unify.Instance.UIMng.UISettings.moduleTextFont;
+        UIContent.fontSize = Unify.Instance.UIMng.UISettings.moduleTextFontSize;
         UIContent.text = (sendingCharacter != null ? sendingCharacter.characterName : "") + "@" + System.DateTime.Now.ToString() + ": " + allnextParts[0].text;
+
+        if(sendingCharacter.blobBackground != null)
+        {
+            Image tmp = UIObjectInstance.GetComponentInChildren<Image>();
+            tmp.sprite = sendingCharacter.blobBackground;
+            tmp.color = Color.white;
+            tmp.enabled = true;
+        }
+
         delayBeforeSend = allnextParts[0].delay;
         allnextParts.RemoveAt(0);
 

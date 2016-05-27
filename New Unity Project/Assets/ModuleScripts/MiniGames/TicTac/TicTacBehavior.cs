@@ -134,7 +134,7 @@ public class TicTacBehavior : MonoBehaviour {
                 }
             }
 
-            if (i % 3 == 0 && allTaken.Length > i + 2)
+            if (i % 3 == 0 && allTaken.Length > 2)
             {
                 if (allTaken[i] != null && allTaken[i + 1] != null && allTaken[i + 2] != null)
                 {
