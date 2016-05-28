@@ -11,9 +11,11 @@ Copyright 2016 - Paul Preißner - for Bachelor Thesis "ConText - A Choice/Text A
 public class ModuleBlueprint : ScriptableObject {
 
     /*moduleID and subID uniquely identify a single module (at least if not broken manually)*/
-    [TextArea(1,1)]
-    public int moduleID = -1;
-    public int subID = 0;
+    //[TextArea(1,1)]
+    public int seqID = -1;
+    public int branchID = -1;
+    public int hierarchyID = -1;
+    public int subpartID = 0;
 
     /*Delay to imitate natural latency of a message being typed as well as sent. 
     To be calculated individually inside each heir class and ideally encoded with the getNextPart return value.*/
@@ -30,13 +32,18 @@ public class ModuleBlueprint : ScriptableObject {
 
     //getter/setter/crude "final" workaround for defining a moduleID manually. Not used yet (Alan, please fix!)
     private bool IDset = false;
-    public int GetModuleID ()
-    { return moduleID; }
-    public bool SetModuleID(int id)
+    public int[] GetModuleID()
+    {
+        int[] r = { seqID, branchID, hierarchyID };
+        return r;
+    }
+    public bool SetModuleID(int sID, int bID, int hID)
     {
         if (!IDset)
         {
-            moduleID = id;
+            seqID = sID;
+            branchID = bID;
+            hierarchyID = hID;
             IDset = true;
         } return IDset;
     }

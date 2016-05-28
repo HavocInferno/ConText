@@ -52,15 +52,16 @@ public class TextModuleInspector : Editor {
 
         //previous module selection
         ModuleBlueprint prevMod = (ModuleBlueprint)EditorGUILayout.ObjectField(prevMLabel, mod.previousModule, typeof(ModuleBlueprint), false);
-        if(prevMod != null || true)
+        if(prevMod != null)
         {
             mod.previousModule = prevMod;
+            prevMod.nextModule = mod;
+            fixNextIDs();
         }
         serializedObject.ApplyModifiedProperties();
 
         EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.LabelField("Module ID: " + mod.moduleID);
-        EditorGUILayout.LabelField("Sub ID: " + mod.subID);
+        EditorGUILayout.LabelField("ID: " + mod.seqID + "(seq) " + mod.branchID + "(branch) " + mod.hierarchyID + "(hierarchy)");
         EditorGUILayout.EndHorizontal();
 
         //character sending the message -> change to dropdown (enum of all characters, then determine forward/backward?)
@@ -99,19 +100,25 @@ public class TextModuleInspector : Editor {
         {
             mod.nextModule = CreateModule();
             mod.nextModule.previousModule = mod;
+            ((TextModule)mod.nextModule).txtContent = "[textless]";
+            mod.nextModule.sendingCharacter = mod.sendingCharacter;
             if (mod.previousModule == null)
             {
-                mod.moduleID = 0;
-                mod.subID = -1;
+                mod.seqID = mod.branchID = mod.hierarchyID = 0;
             }
-            if (mod.subID > -1)
-            {
-                mod.nextModule.moduleID = ((mod.moduleID == 0 ? 1 : mod.moduleID) * 100 + mod.subID * 10) + 1;
-            } else
-            {
-                mod.nextModule.moduleID = mod.moduleID + 1;
-            }
-            mod.nextModule.subID = -1;
+            mod.nextModule.seqID = mod.seqID + 1;
+            mod.nextModule.branchID = mod.branchID;
+            mod.nextModule.hierarchyID = mod.hierarchyID;
+        }
+    }
+
+    public void fixNextIDs()
+    {
+        if (mod.seqID == -1 || mod.branchID == -1 || mod.hierarchyID == -1)
+        {
+            mod.seqID = mod.previousModule.seqID + 1;
+            mod.branchID = mod.previousModule.branchID;
+            mod.hierarchyID = mod.previousModule.hierarchyID;
         }
     }
 }

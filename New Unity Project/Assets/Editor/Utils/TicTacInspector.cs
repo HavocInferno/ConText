@@ -62,8 +62,7 @@ public class TicTacInspector : Editor
         serializedObject.ApplyModifiedProperties();
 
         EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.LabelField("Module ID: " + mod.moduleID);
-        EditorGUILayout.LabelField("Sub ID: " + mod.subID);
+        EditorGUILayout.LabelField("ID: " + mod.seqID + "(seq) " + mod.branchID + "(branch) " + mod.hierarchyID + "(hierarchy)");
         EditorGUILayout.EndHorizontal();
 
         //character sending the message -> change to dropdown (enum of all characters, then determine forward/backward?)
@@ -114,62 +113,50 @@ public class TicTacInspector : Editor
         //{TODO}: selection list where the user can select which *type* of module is up next
         if (GUILayout.Button("Create succ module"))
         {
-            mod.moduleSuccess = CreateModule();
+            mod.moduleSuccess = TextModuleInspector.CreateModule();
+            ((TextModule)mod.moduleSuccess).txtContent = "[textless]";
+            mod.moduleSuccess.sendingCharacter = mod.sendingCharacter;
+
             mod.moduleSuccess.previousModule = mod;
             if (mod.previousModule == null)
             {
-                mod.moduleID = 0;
-                mod.subID = -1;
+                mod.seqID = mod.branchID = mod.hierarchyID = 0;
             }
-            if (mod.subID > -1)
-            {
-                mod.moduleSuccess.moduleID = ((mod.moduleID == 0 ? 1 : mod.moduleID) * 100 + mod.subID * 10) + 1;
-            }
-            else
-            {
-                mod.moduleSuccess.moduleID = mod.moduleID + 1;
-            }
-            mod.moduleSuccess.subID = -1;
+            mod.moduleSuccess.seqID = 0;
+            mod.moduleSuccess.branchID = 0;
+            mod.moduleSuccess.hierarchyID = mod.hierarchyID + 1;
         }
 
         if (GUILayout.Button("Create fail module"))
         {
-            mod.moduleFailure = CreateModule();
+            mod.moduleFailure = TextModuleInspector.CreateModule();
+            ((TextModule)mod.moduleFailure).txtContent = "[textless]";
+            mod.moduleFailure.sendingCharacter = mod.sendingCharacter;
+
             mod.moduleFailure.previousModule = mod;
             if (mod.previousModule == null)
             {
-                mod.moduleID = 0;
-                mod.subID = -1;
+                mod.seqID = mod.branchID = mod.hierarchyID = 0;
             }
-            if (mod.subID > -1)
-            {
-                mod.moduleFailure.moduleID = ((mod.moduleID == 0 ? 1 : mod.moduleID) * 100 + mod.subID * 10) + 1;
-            }
-            else
-            {
-                mod.moduleFailure.moduleID = mod.moduleID + 1;
-            }
-            mod.moduleFailure.subID = -1;
+            mod.moduleFailure.seqID = 0;
+            mod.moduleFailure.branchID = 1;
+            mod.moduleFailure.hierarchyID = mod.hierarchyID + 1;
         }
 
         if (GUILayout.Button("Create tie module"))
         {
-            mod.moduleTie = CreateModule();
+            mod.moduleTie = TextModuleInspector.CreateModule();
+            ((TextModule)mod.moduleTie).txtContent = "[textless]";
+            mod.moduleTie.sendingCharacter = mod.sendingCharacter;
+
             mod.moduleTie.previousModule = mod;
             if (mod.previousModule == null)
             {
-                mod.moduleID = 0;
-                mod.subID = -1;
+                mod.seqID = mod.branchID = mod.hierarchyID = 0;
             }
-            if (mod.subID > -1)
-            {
-                mod.moduleTie.moduleID = ((mod.moduleID == 0 ? 1 : mod.moduleID) * 100 + mod.subID * 10) + 1;
-            }
-            else
-            {
-                mod.moduleTie.moduleID = mod.moduleID + 1;
-            }
-            mod.moduleTie.subID = -1;
+            mod.moduleTie.seqID = 0;
+            mod.moduleTie.branchID = 2;
+            mod.moduleTie.hierarchyID = mod.hierarchyID + 1;
         }
     }
 }

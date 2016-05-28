@@ -24,7 +24,7 @@ public class TextModule : ModuleBlueprint {
     {
         base.setContent(UIObjectInstance);
 
-        Debug.Log("setting content for ID " + moduleID + ", subID " + subID);
+        Debug.Log("setting content for ID " + seqID + "s-" + branchID + "b-" + hierarchyID + "h-" + subpartID + "sp");
         Text UIContent = null;
         if (UIContent == null)
         {
@@ -74,8 +74,8 @@ public class TextModule : ModuleBlueprint {
             r.delayBeforeSend = allnextParts[0].delay;
             r.previousModule = previousModule;
             r.nextModule = nextModule;
-            r.SetModuleID(moduleID);
-            r.subID = subID + 1;
+            r.SetModuleID(seqID, branchID, hierarchyID);
+            r.subpartID = subpartID + 1;
             r.UIObjectTemplate = getUIObject();
             r.sendingCharacter = sendingCharacter;
 

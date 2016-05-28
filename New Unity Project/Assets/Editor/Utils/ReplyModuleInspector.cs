@@ -61,16 +61,20 @@ public class ReplyModuleInspector : TextModuleInspector {
         if (GUILayout.Button("Add reply option"))
         {
             ReplyModule.ReplyOption r = new ReplyModule.ReplyOption();
-            r.replyText = "new reply";
             r.outcome = TextModuleInspector.CreateModule();
             rmod.outcomes.Add(r);
             r.outcome.previousModule = rmod;
+            ((TextModule)r.outcome).txtContent = "[textless]";
+            r.outcome.sendingCharacter = rmod.sendingCharacter;
             if (rmod.previousModule == null)
             {
-                rmod.moduleID = 0;
+                rmod.seqID = rmod.branchID = rmod.hierarchyID = 0;
             }
-            r.outcome.moduleID = rmod.moduleID;
-            r.outcome.subID = rmod.outcomes.Count;
+            r.outcome.seqID = 0;
+            r.outcome.branchID = rmod.outcomes.Count;
+            r.outcome.hierarchyID = rmod.hierarchyID + 1;
+
+            r.replyText = "new reply " + r.outcome.branchID;
         }
 
         serializedObject.ApplyModifiedProperties();
