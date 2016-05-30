@@ -51,7 +51,16 @@ public class TextModule : ModuleBlueprint {
         UIContent.fontSize = Unify.Instance.UIMng.UISettings.moduleTextFontSize;
         UIContent.text = (sendingCharacter != null ? sendingCharacter.characterName : "") + "@" + System.DateTime.Now.ToString() + ": " + allnextParts[0].text;
 
-        if(sendingCharacter.blobBackground != null)
+        //float canvWidth = Unify.Instance.UIMng.UIWrap.canvas.pixelRect.width;
+        //LayoutElement lelem = UIObjectInstance.GetComponentInChildren<ModuleUIHelper>().TextContainer.GetComponentInParent<LayoutElement>();
+        //lelem.minWidth = canvWidth - 50f;
+        //lelem.minHeight =
+        //((UIContent.text.Length * Unify.Instance.UIMng.UIWrap.letterWidth) / lelem.minWidth) * UIContent.fontSize;
+
+        //Debug.Log(UIContent.GetComponent<RectTransform>().);
+        //Debug.Log(UIObjectInstance.GetComponentInChildren<ModuleUIHelper>().TextContainer.GetComponentInChildren<RectTransform>().sizeDelta[0]);
+
+        if (sendingCharacter.blobBackground != null)
         {
             Image tmp = UIObjectInstance.GetComponentInChildren<Image>();
             tmp.sprite = sendingCharacter.blobBackground;
