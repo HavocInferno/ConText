@@ -23,9 +23,12 @@ public class ReplyModule : TextModule {
 
         GameObject buttonCont = UIObjectInstance.GetComponentInChildren<ModuleUIHelper>().ButtonContainer;
 
+        //temp fix. need to decouple text part and button part of it or something, since as it stands, the default padding code in TextModule leads to skewed padding layout with other modules when ReplyModule modules are used
+        UIObjectInstance.GetComponent<HorizontalOrVerticalLayoutGroup>().padding.left = UIObjectInstance.GetComponent<HorizontalOrVerticalLayoutGroup>().padding.right = 0;
+
         /*since the module itself is basically just a text module with replies, do the base function, 
         then simply attach all possible replies*/
-        foreach(ReplyOption r in outcomes)
+        foreach (ReplyOption r in outcomes)
         {
             GameObject button = Instantiate(Unify.Instance.UIMng.UIWrap.ReplyButtonTemplate);
             button.transform.SetParent(buttonCont.transform);

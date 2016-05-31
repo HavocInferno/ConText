@@ -59,6 +59,22 @@ public class TextModule : ModuleBlueprint {
 
         //Debug.Log(UIContent.GetComponent<RectTransform>().);
         //Debug.Log(UIObjectInstance.GetComponentInChildren<ModuleUIHelper>().TextContainer.GetComponentInChildren<RectTransform>().sizeDelta[0]);
+        switch(sendingCharacter.alignment)
+        {
+            case Character.blobAlignment.LEFT:
+                UIObjectInstance.GetComponent<HorizontalOrVerticalLayoutGroup>().padding.right = 50;
+                if(UIContent.GetComponentInChildren<LayoutElement>() != null)
+                    UIContent.GetComponentInChildren<LayoutElement>().minWidth -= 50;
+                break;
+            case Character.blobAlignment.RIGHT:
+                UIObjectInstance.GetComponent<HorizontalOrVerticalLayoutGroup>().padding.left = 50;
+                if (UIContent.GetComponentInChildren<LayoutElement>() != null)
+                    UIContent.GetComponentInChildren<LayoutElement>().minWidth -= 50;
+                break;
+            default:
+                UIObjectInstance.GetComponent<HorizontalOrVerticalLayoutGroup>().padding.left = UIObjectInstance.GetComponent<HorizontalOrVerticalLayoutGroup>().padding.right = 0;
+                break;
+        }
 
         if (sendingCharacter.blobBackground != null)
         {
