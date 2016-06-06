@@ -92,6 +92,8 @@ public class TextModule : ModuleBlueprint {
 
     public override ModuleBlueprint getNextPart()
     {
+        pushChoice(null);
+
         if(allnextParts.Count > 0)
         {
             TextModule r = ScriptableObject.CreateInstance<TextModule>();
@@ -108,5 +110,13 @@ public class TextModule : ModuleBlueprint {
 
             return r;
         } else { return nextModule; }
+    }
+
+    public override void pushChoice(IDChoiceCapsule idc)
+    {
+        idc = new IDChoiceCapsule();
+        idc.SetModuleID(seqID, branchID, hierarchyID, subpartID);
+
+        base.pushChoice(idc);
     }
 }

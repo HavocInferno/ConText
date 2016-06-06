@@ -10,6 +10,47 @@ Copyright 2016 - Paul Preißner - for Bachelor Thesis "ConText - A Choice/Text A
 [System.Serializable]
 public class ModuleBlueprint : ScriptableObject {
 
+    [System.Serializable]
+    public class IDChoiceCapsule
+    {
+        public int c_seqID = -1;
+        public int c_branchID = -1;
+        public int c_hierarchyID = -1;
+        public int c_subpartID = 0;
+
+        public int choice = -1;
+
+        public void SetModuleID(int sID, int bID, int hID, int spID)
+        {
+            c_seqID = sID;
+            c_branchID = bID;
+            c_hierarchyID = hID;
+            c_subpartID = spID;
+        }
+
+        public bool checkIDequal(ModuleBlueprint mod)
+        {
+            if (mod.seqID != c_seqID)
+                return false;
+
+            if (mod.branchID != c_branchID)
+                return false;
+
+            if (mod.hierarchyID != c_hierarchyID)
+                return false;
+
+            if (mod.subpartID != c_subpartID)
+                return false;
+
+            return true;
+        }
+
+        public override string ToString()
+        {
+            return c_seqID + "s-" + c_branchID + "b-" + c_hierarchyID + "h-" + c_subpartID + "sp";
+        }
+    }
+
     /*moduleID and subID uniquely identify a single module (at least if not broken manually)*/
     //[TextArea(1,1)]
     public int seqID = -1;
@@ -72,5 +113,15 @@ public class ModuleBlueprint : ScriptableObject {
     public virtual ModuleBlueprint getNextPart()
     {
         return nextModule;
+    }
+
+    public virtual void pushChoice(IDChoiceCapsule idc)
+    {
+        Unify.Instance.ModMng.addChoiceToList(this, idc);
+    }
+
+    public virtual ModuleBlueprint getChoiceFromCapsule(IDChoiceCapsule idc)
+    {
+        return null;
     }
 }

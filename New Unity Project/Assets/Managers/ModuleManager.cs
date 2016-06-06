@@ -12,12 +12,16 @@ public class ModuleManager : MonoBehaviour {
     firstModule has to be the starting point of the story.
     nextModule internally temporarily stores a reference to the module next up for display.*/
     public Dictionary<int/*Pair<int,int>*/, GameObject> modules = new Dictionary<int/*Pair<int,int>*/, GameObject>();
+    public List<ModuleBlueprint.IDChoiceCapsule> choices = new List<ModuleBlueprint.IDChoiceCapsule>();
+
     public Dictionary<string, GameObject> UITemplateMapping = new Dictionary<string, GameObject>();
     public ModuleBlueprint firstModule;
     private ModuleBlueprint nextModule;
 
     // Use this for initialization
 	void Start () {
+        StateManager.LoadChoices("mainStory");
+
         foreach(UISettings.modUIPair mup in Unify.Instance.UIMng.UISettings.modUITemplates)
         {
             UITemplateMapping.Add(mup.modClassName, mup.modUITemplate);
@@ -28,7 +32,7 @@ public class ModuleManager : MonoBehaviour {
         goOn();
 	}
 
-    //rather self explanatory? Adds the given UI module/message instance plus the underlying Module's IDs to the dictionary
+    //rather self explanatory? Adds the given UI module/message instance to the dictionary
     public void addModuleToDict(int iID/*int modID, int subID*/, GameObject inst)
     {
         modules.Add(iID/*new Pair<int, int>(modID, subID)*/, inst);
@@ -47,7 +51,8 @@ public class ModuleManager : MonoBehaviour {
                 yield return new WaitForSeconds(nextModule.delayBeforeSend);
                 Unify.Instance.UIMng.addModule(nextModule);
                 nextModule = nextModule.getNextPart();
-            } else
+            }
+            else
             {
                 yield return new WaitForSeconds(1.0f);
             }
@@ -68,5 +73,23 @@ public class ModuleManager : MonoBehaviour {
     {
         nextModule = mdl;
         StartCoroutine(fireNext());
+    }
+
+    public bool addChoiceToList(ModuleBlueprint mod, ModuleBlueprint.IDChoiceCapsule id_choice)
+    {
+        /*There check whether mod and choice capsule are same data, 
+        then add the capsule to the choices list (i.e. this function to be 
+        called from within the specific module's code, as those have better 
+        control over what choice ID to use etc)*/
+        if (mod == null || id_choice == null)
+            { Debug.Log("choice addition failed"); return false; }
+
+        if (id_choice.checkIDequal(mod))
+        {
+            choices.Add(id_choice);
+            StateManager.SaveChoices("mainStory");
+            return true;
+        }
+        return false;
     }
 }
