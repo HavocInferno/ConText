@@ -18,6 +18,7 @@ public class StateManager : MonoBehaviour {
     }
 
     private GameState gameState = GameState.MENU;
+    public bool initialLoad = true;
 
     public GameState GetGameState()
     { return gameState; }

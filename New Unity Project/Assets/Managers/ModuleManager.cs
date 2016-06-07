@@ -27,7 +27,7 @@ public class ModuleManager : MonoBehaviour {
             UITemplateMapping.Add(mup.modClassName, mup.modUITemplate);
         }
 
-        nextModule = firstModule;
+        nextModule = advanceToLatest();//firstModule;
         //StartCoroutine(fireNext());
         goOn();
 	}
@@ -58,6 +58,15 @@ public class ModuleManager : MonoBehaviour {
             }
         }
         Debug.Log("automatic text stream stopped. (due to module awaiting input? then that module should be starting the text stream again. otherwise...tough luck!)");
+    }
+
+    public void fireInvidivual(ModuleBlueprint mod)
+    {
+        //if (Unify.Instance.StateMng.GetGameState() == StateManager.GameState.TEXT)
+        //{
+            Debug.Log("Firing individual mod " + mod.ToString());
+            Unify.Instance.UIMng.addModule(mod);
+        //}
     }
     
     //this function serves for when the "window" is switched (and including the gameState) back to the Text view. needs to be called then in order for the text stream to continue.
@@ -91,5 +100,26 @@ public class ModuleManager : MonoBehaviour {
             return true;
         }
         return false;
+    }
+
+    public ModuleBlueprint advanceToLatest()
+    {
+        ModuleBlueprint nextMod = firstModule;
+        foreach (ModuleBlueprint.IDChoiceCapsule idc in choices)
+        {
+            if(idc.checkIDequal(nextMod))
+            {
+                fireInvidivual(nextMod);
+                nextMod = nextMod.getModForChoice(idc.choice);
+                if (nextMod == null)
+                    { Debug.Log("Couldn't load story progress. Some error happened."); return firstModule; }
+            } else
+            {
+                Debug.Log("Save file corrupt; does not fit with storyline.");
+                return firstModule;
+            }
+        }
+
+        return nextMod;
     }
 }

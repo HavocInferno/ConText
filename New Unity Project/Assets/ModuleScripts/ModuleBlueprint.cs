@@ -117,11 +117,17 @@ public class ModuleBlueprint : ScriptableObject {
 
     public virtual void pushChoice(IDChoiceCapsule idc)
     {
-        Unify.Instance.ModMng.addChoiceToList(this, idc);
+        if(Unify.Instance.StateMng.initialLoad)
+            Unify.Instance.ModMng.addChoiceToList(this, idc);
     }
 
     public virtual ModuleBlueprint getChoiceFromCapsule(IDChoiceCapsule idc)
     {
         return null;
+    }
+
+    public virtual ModuleBlueprint getModForChoice(int choiceID)
+    {
+        return nextModule;
     }
 }
