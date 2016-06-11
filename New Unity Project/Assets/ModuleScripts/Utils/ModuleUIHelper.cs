@@ -9,4 +9,5 @@ public class ModuleUIHelper : MonoBehaviour {
 
     public GameObject TextContainer;
     public GameObject ButtonContainer;
+    public GameObject ImageContainer;
 }

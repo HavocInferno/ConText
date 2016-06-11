@@ -5,15 +5,22 @@ using UnityEngine.UI;
 public class TicTacToe : TextModule {
 
     public ModuleBlueprint moduleSuccess, moduleFailure, moduleTie;
+    public bool playerWon, tied;
 
     public void triggerNext(bool humanWon, bool tie)
     {
         if (tie)
         {
+            tied = tie;
+            playerWon = false;
+            pushChoice(null);
             Unify.Instance.ModMng.goOnWith(moduleTie);
         }
         else
         {
+            tied = false;
+            playerWon = humanWon;
+            pushChoice(null);
             Unify.Instance.ModMng.goOnWith((humanWon ? moduleSuccess : moduleFailure));
         }
     }
@@ -32,12 +39,33 @@ public class TicTacToe : TextModule {
     {
         idc = new IDChoiceCapsule();
         idc.SetModuleID(seqID, branchID, hierarchyID, subpartID);
+        if (!tied && playerWon)
+            idc.choice = 0;
+        else if (!tied && !playerWon)
+            idc.choice = 1;
+        else if (tied)
+            idc.choice = 2;
+        else
+            idc.choice = -1;
 
-        base.pushChoice(idc);
+        if (!Unify.Instance.StateMng.initialLoad)
+            Unify.Instance.ModMng.addChoiceToList(this, idc);
+        else
+            Debug.Log("Not pushing due to initial load");
     }
 
     public override ModuleBlueprint getModForChoice(int choiceID)
     {
-        return nextModule;
+        switch(choiceID)
+        {
+            case 0:
+                return moduleSuccess;
+            case 1:
+                return moduleFailure;
+            case 2:
+                return moduleTie;
+            default:
+                return null;
+        }
     }
 }
