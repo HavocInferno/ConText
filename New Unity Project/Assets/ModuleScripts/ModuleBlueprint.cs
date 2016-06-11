@@ -117,14 +117,16 @@ public class ModuleBlueprint : ScriptableObject {
 
     public virtual void pushChoice(IDChoiceCapsule idc)
     {
-        if(Unify.Instance.StateMng.initialLoad)
+        if (!Unify.Instance.StateMng.initialLoad)
             Unify.Instance.ModMng.addChoiceToList(this, idc);
+        else
+            Debug.Log("Not pushing due to initial load");
     }
 
-    public virtual ModuleBlueprint getChoiceFromCapsule(IDChoiceCapsule idc)
+    /*public virtual ModuleBlueprint getChoiceFromCapsule(IDChoiceCapsule idc)
     {
         return null;
-    }
+    }*/
 
     public virtual ModuleBlueprint getModForChoice(int choiceID)
     {

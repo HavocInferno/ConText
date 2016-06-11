@@ -4,12 +4,14 @@ using UnityEngine.UI;
 
 public class ReplyButton : MonoBehaviour {
 
-    public ModuleBlueprint outcome;
+    public ReplyModule.ReplyOption option;
     public GameObject parentContainer;
+    public ReplyModule parentModule;
 
     public void pressed()
     {
-        Unify.Instance.ModMng.goOnWith(outcome);
+        parentModule.continueWithReply(option);
+        //Unify.Instance.ModMng.goOnWith(outcome);
         foreach(Button b in parentContainer.GetComponentsInChildren<Button>())
         {
             b.interactable = false;

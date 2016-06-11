@@ -48,6 +48,7 @@ public class ReplyModuleInspector : TextModuleInspector {
 
             EditorGUILayout.BeginVertical();
             rmod.outcomes[i].replyText = EditorGUILayout.TextArea(rmod.outcomes[i].replyText);
+            EditorGUILayout.LabelField("choice ID: " + rmod.outcomes[i].choiceID);
             rmod.outcomes[i].outcome = (ModuleBlueprint)EditorGUILayout.ObjectField("Module", rmod.outcomes[i].outcome, typeof(ModuleBlueprint), false);
             EditorGUILayout.EndVertical();
 
@@ -62,6 +63,14 @@ public class ReplyModuleInspector : TextModuleInspector {
         {
             ReplyModule.ReplyOption r = new ReplyModule.ReplyOption();
             r.outcome = TextModuleInspector.CreateModule();
+            if (rmod.outcomes.Count < 1)
+            {
+                r.choiceID = 0;
+            }
+            else
+            {
+                r.choiceID = rmod.outcomes[rmod.outcomes.Count - 1].choiceID + 1;
+            }
             rmod.outcomes.Add(r);
             r.outcome.previousModule = rmod;
             ((TextModule)r.outcome).txtContent = "[textless]";
@@ -73,6 +82,7 @@ public class ReplyModuleInspector : TextModuleInspector {
             r.outcome.seqID = 0;
             r.outcome.branchID = rmod.outcomes.Count;
             r.outcome.hierarchyID = rmod.hierarchyID + 1;
+            
 
             r.replyText = "new reply " + r.outcome.branchID;
         }

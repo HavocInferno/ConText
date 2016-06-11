@@ -63,7 +63,7 @@ public class StateManager : MonoBehaviour {
 
             for(int i = 0; i < Unify.Instance.ModMng.choices.Count; i++)
             {
-                Debug.Log("loaded entry " + i + ": " + Unify.Instance.ModMng.choices[i].ToString());
+                Debug.Log("loaded entry " + i + ": [" + Unify.Instance.ModMng.choices[i].ToString() + "]--[" + Unify.Instance.ModMng.choices[i].choice + "]c");
             }
 
             saveFile.Close();

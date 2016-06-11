@@ -104,6 +104,7 @@ public class ModuleManager : MonoBehaviour {
 
     public ModuleBlueprint advanceToLatest()
     {
+        Debug.Log("Attempting to load existing story progress.");
         ModuleBlueprint nextMod = firstModule;
         foreach (ModuleBlueprint.IDChoiceCapsule idc in choices)
         {
@@ -112,13 +113,15 @@ public class ModuleManager : MonoBehaviour {
                 fireInvidivual(nextMod);
                 nextMod = nextMod.getModForChoice(idc.choice);
                 if (nextMod == null)
-                    { Debug.Log("Couldn't load story progress. Some error happened."); return firstModule; }
+                    { Debug.Log("Couldn't load further story progress. No next module found."); return null; }
             } else
             {
                 Debug.Log("Save file corrupt; does not fit with storyline.");
+                Unify.Instance.StateMng.initialLoad = false;
                 return firstModule;
             }
         }
+        Unify.Instance.StateMng.initialLoad = false;
 
         return nextMod;
     }

@@ -12,10 +12,12 @@ public class ReplyModule : TextModule {
     public class ReplyOption
     {
         public string replyText = "reply";
+        public int choiceID = -1;
         public ModuleBlueprint outcome;
     }
 
     public List<ReplyOption> outcomes = new List<ReplyOption>();
+    public int chosen = -1;
 
     public override void setContent(GameObject UIObjectInstance)
     {
@@ -33,8 +35,16 @@ public class ReplyModule : TextModule {
             GameObject button = Instantiate(Unify.Instance.UIMng.UIWrap.ReplyButtonTemplate);
             button.transform.SetParent(buttonCont.transform);
             button.GetComponentInChildren<Text>().text = r.replyText;
-            button.GetComponentInChildren<ReplyButton>().outcome = r.outcome;
+            button.GetComponentInChildren<ReplyButton>().option = r;
             button.GetComponentInChildren<ReplyButton>().parentContainer = buttonCont;
+            button.GetComponentInChildren<ReplyButton>().parentModule = this;
+            if (Unify.Instance.StateMng.initialLoad)
+            {
+                foreach (Button b in button.GetComponentsInChildren<Button>())
+                {
+                    b.interactable = false;
+                }
+            }
         }
     }
 
@@ -45,5 +55,37 @@ public class ReplyModule : TextModule {
     public override ModuleBlueprint getNextPart()
     {
         return null;
+    }
+
+    public void continueWithReply(ReplyOption ro)
+    {
+        chosen = ro.choiceID;
+        pushChoice(null);
+        Unify.Instance.ModMng.goOnWith(ro.outcome);
+    }
+
+    public override void pushChoice(IDChoiceCapsule idc)
+    {
+        idc = new IDChoiceCapsule();
+        idc.SetModuleID(seqID, branchID, hierarchyID, subpartID);
+        idc.choice = chosen;
+
+        if (!Unify.Instance.StateMng.initialLoad)
+            Unify.Instance.ModMng.addChoiceToList(this, idc);
+        else
+            Debug.Log("Not pushing due to initial load");
+    }
+
+    public override ModuleBlueprint getModForChoice(int choiceID)
+    {
+        foreach (ReplyOption r in outcomes)
+        {
+            if(r.choiceID == choiceID)
+            {
+                return r.outcome;
+            }
+        }
+
+        return nextModule;
     }
 }

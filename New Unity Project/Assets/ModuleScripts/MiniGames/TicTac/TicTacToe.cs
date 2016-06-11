@@ -27,4 +27,17 @@ public class TicTacToe : TextModule {
         //temp fix. need to decouple text part and game part of it or something, since as it stands, the default padding code in TextModule leads to skewed padding layout with other modules when TicTacToe modules are used
         UIObjectInstance.GetComponent<HorizontalOrVerticalLayoutGroup>().padding.left = UIObjectInstance.GetComponent<HorizontalOrVerticalLayoutGroup>().padding.right = 0;
     }
+
+    public override void pushChoice(IDChoiceCapsule idc)
+    {
+        idc = new IDChoiceCapsule();
+        idc.SetModuleID(seqID, branchID, hierarchyID, subpartID);
+
+        base.pushChoice(idc);
+    }
+
+    public override ModuleBlueprint getModForChoice(int choiceID)
+    {
+        return nextModule;
+    }
 }
