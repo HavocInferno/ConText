@@ -18,33 +18,45 @@ public class ReplyModule : TextModule {
 
     public List<ReplyOption> outcomes = new List<ReplyOption>();
     public int chosen = -1;
+    public bool textHandover = true;
 
     public override void setContent(GameObject UIObjectInstance)
     {
-        base.setContent(UIObjectInstance);
-
-        GameObject buttonCont = UIObjectInstance.GetComponentInChildren<ModuleUIHelper>().ButtonContainer;
-
-        //temp fix. need to decouple text part and button part of it or something, since as it stands, the default padding code in TextModule leads to skewed padding layout with other modules when ReplyModule modules are used
-        UIObjectInstance.GetComponent<HorizontalOrVerticalLayoutGroup>().padding.left = UIObjectInstance.GetComponent<HorizontalOrVerticalLayoutGroup>().padding.right = 0;
-
-        /*since the module itself is basically just a text module with replies, do the base function, 
-        then simply attach all possible replies*/
-        foreach (ReplyOption r in outcomes)
+        Debug.Log("this should be 1st + " + textHandover);
+        if (textHandover)
         {
-            GameObject button = Instantiate(Unify.Instance.UIMng.UIWrap.ReplyButtonTemplate);
-            button.transform.SetParent(buttonCont.transform);
-            button.GetComponentInChildren<Text>().text = r.replyText;
-            button.GetComponentInChildren<ReplyButton>().option = r;
-            button.GetComponentInChildren<ReplyButton>().parentContainer = buttonCont;
-            button.GetComponentInChildren<ReplyButton>().parentModule = this;
-            if (Unify.Instance.StateMng.initialLoad)
+            Debug.Log("first texthandover, destroying bogus reply module instance.");
+            Destroy(UIObjectInstance);
+        } else {
+            Debug.Log("texthandover done, proceed with normal setContent.");
+            base.setContent(UIObjectInstance);
+
+            GameObject buttonCont = UIObjectInstance.GetComponentInChildren<ModuleUIHelper>().ButtonContainer;
+
+            //temp fix. need to decouple text part and button part of it or something, since as it stands, the default padding code in TextModule leads to skewed padding layout with other modules when ReplyModule modules are used
+            UIObjectInstance.GetComponent<HorizontalOrVerticalLayoutGroup>().padding.left = UIObjectInstance.GetComponent<HorizontalOrVerticalLayoutGroup>().padding.right = 0;
+
+            /*since the module itself is basically just a text module with replies, do the base function, 
+            then simply attach all possible replies*/
+            foreach (ReplyOption r in outcomes)
             {
-                foreach (Button b in button.GetComponentsInChildren<Button>())
+                GameObject button = Instantiate(Unify.Instance.UIMng.UIWrap.ReplyButtonTemplate);
+                button.transform.SetParent(buttonCont.transform);
+                button.GetComponentInChildren<Text>().text = r.replyText;
+                button.GetComponentInChildren<ReplyButton>().option = r;
+                button.GetComponentInChildren<ReplyButton>().parentContainer = buttonCont;
+                button.GetComponentInChildren<ReplyButton>().parentModule = this;
+                if (Unify.Instance.StateMng.initialLoad)
                 {
-                    b.interactable = false;
+                    foreach (Button b in button.GetComponentsInChildren<Button>())
+                    {
+                        b.interactable = false;
+                    }
                 }
             }
+
+            //if(Unify.Instance.StateMng.initialLoad)
+             //   textHandover = true;
         }
     }
 
@@ -54,11 +66,33 @@ public class ReplyModule : TextModule {
     The ReplyButton class does that for its use.*/
     public override ModuleBlueprint getNextPart()
     {
-        return null;
+        Debug.Log("this should be 2nd + " + textHandover);
+        if (textHandover)
+        {
+            Debug.Log("handing over reply module -> text module");
+            TextModule tm = CreateInstance<TextModule>();
+            tm.delayBeforeSend = delayBeforeSend;
+            tm.sendingCharacter = sendingCharacter;
+            tm.previousModule = previousModule;
+            tm.nextModule = this;
+            tm.txtContent = txtContent;
+            tm.seqID = seqID; tm.branchID = branchID; tm.hierarchyID = hierarchyID; tm.subpartID = subpartID + 1;
+            tm.UIObjectTemplate = UIObjectTemplate;
+
+            textHandover = false;
+
+            return tm;
+        }
+        else
+        {
+            textHandover = true;
+            return null;
+        }
     }
 
     public void continueWithReply(ReplyOption ro)
     {
+        textHandover = true;
         chosen = ro.choiceID;
         pushChoice(null);
         Unify.Instance.ModMng.goOnWith(ro.outcome);
@@ -78,11 +112,31 @@ public class ReplyModule : TextModule {
 
     public override ModuleBlueprint getModForChoice(int choiceID)
     {
-        foreach (ReplyOption r in outcomes)
+        if (textHandover)
         {
-            if(r.choiceID == choiceID)
+            Debug.Log("(getModForChoice) handing over reply module -> text module");
+            TextModule tm = CreateInstance<TextModule>();
+            tm.delayBeforeSend = delayBeforeSend;
+            tm.sendingCharacter = sendingCharacter;
+            tm.previousModule = previousModule;
+            tm.nextModule = this;
+            tm.txtContent = txtContent;
+            tm.seqID = seqID; tm.branchID = branchID; tm.hierarchyID = hierarchyID; tm.subpartID = subpartID + 1;
+            tm.UIObjectTemplate = UIObjectTemplate;
+
+            textHandover = false;
+
+            return tm;
+        }
+        else
+        {
+            textHandover = true;
+            foreach (ReplyOption r in outcomes)
             {
-                return r.outcome;
+                if (r.choiceID == choiceID)
+                {
+                    return r.outcome;
+                }
             }
         }
 

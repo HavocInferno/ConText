@@ -39,8 +39,8 @@ public class ModuleBlueprint : ScriptableObject {
             if (mod.hierarchyID != c_hierarchyID)
                 return false;
 
-            if (mod.subpartID != c_subpartID)
-                return false;
+            /*if (mod.subpartID != c_subpartID)
+                return false;*/
 
             return true;
         }

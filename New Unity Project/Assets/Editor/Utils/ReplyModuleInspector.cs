@@ -24,6 +24,8 @@ public class ReplyModuleInspector : TextModuleInspector {
         base.OnEnable();
 
         rmod = target as ReplyModule;
+
+        Debug.Log(rmod.ToString() + "; " + rmod.textHandover);
     }
 
     public override void drawTextField(int height)

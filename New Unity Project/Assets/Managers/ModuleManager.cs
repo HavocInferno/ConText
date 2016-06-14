@@ -113,12 +113,12 @@ public class ModuleManager : MonoBehaviour {
                 fireInvidivual(nextMod);
                 nextMod = nextMod.getModForChoice(idc.choice);
                 if (nextMod == null)
-                    { Debug.Log("Couldn't load further story progress. No next module found."); return null; }
+                    { Debug.Log("Couldn't load further story progress. No next module found. Actual end of story?"); return null; }
             } else
             {
                 Debug.Log("Save file corrupt; does not fit with storyline.");
                 Unify.Instance.StateMng.initialLoad = false;
-                return firstModule;
+                return firstModule; //not ideal, if corrupt, reset to 0?
             }
         }
         Unify.Instance.StateMng.initialLoad = false;
