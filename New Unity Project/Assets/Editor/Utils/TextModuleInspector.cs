@@ -8,7 +8,8 @@ Copyright 2016 - Paul Preißner - for Bachelor Thesis "ConText - A Choice/Text A
 --------------------------------*/
 
 [CustomEditor(typeof(TextModule))]
-public class TextModuleInspector : Editor {
+public class TextModuleInspector : ModuleInspectorAncestor
+{
 
     //private SerializedProperty modID;
     private SerializedProperty prevModule;
@@ -16,6 +17,7 @@ public class TextModuleInspector : Editor {
     private SerializedProperty nextModule;
 
     private TextModule mod;
+    private ModuleManager.ModuleTypes nextModType;
     private GUIContent textLabel, prevMLabel, nextMLabel, modIDLabel, subIDLabel, charLabel, logLabel;
 
     [MenuItem("Assets/Create/ConText Framework/Modules/Text Module")]
@@ -96,9 +98,12 @@ public class TextModuleInspector : Editor {
 
         //create a new module and give it a fitting set of IDs
         //{TODO}: selection list where the user can select which *type* of module is up next
-        if (GUILayout.Button("Create next module"))
+        nextModType = (ModuleManager.ModuleTypes)EditorGUILayout.Popup("Next module type", (int)nextModType, ModuleManager.m_ModuleTypeEnumDescriptions);
+
+        if (GUILayout.Button("Create next module (" + ModuleManager.m_ModuleTypeEnumDescriptions[(int)nextModType] + ")"))
         {
-            mod.nextModule = CreateModule();
+            createNextModule(nextModType, mod);
+            /*mod.nextModule = CreateModule();
             mod.nextModule.previousModule = mod;
             ((TextModule)mod.nextModule).txtContent = "[textless]";
             mod.nextModule.sendingCharacter = mod.sendingCharacter;
@@ -108,7 +113,7 @@ public class TextModuleInspector : Editor {
             }
             mod.nextModule.seqID = mod.seqID + 1;
             mod.nextModule.branchID = mod.branchID;
-            mod.nextModule.hierarchyID = mod.hierarchyID;
+            mod.nextModule.hierarchyID = mod.hierarchyID;*/
         }
     }
 

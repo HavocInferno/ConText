@@ -18,8 +18,23 @@ public class ModuleManager : MonoBehaviour {
     public ModuleBlueprint firstModule;
     private ModuleBlueprint nextModule;
 
+    public enum ModuleTypes
+    {
+        TEXTM,
+        IMGM,
+        REPLYM,
+        TICTACM
+    }
+    public static string[] m_ModuleTypeEnumDescriptions = new string[]
+    {
+        "Text Module",
+        "Image Module",
+        "Reply Module",
+        "Tic Tac Toe Module"
+    };
+
     // Use this for initialization
-	void Start () {
+    void Start () {
         StateManager.LoadChoices("mainStory");
 
         foreach(UISettings.modUIPair mup in Unify.Instance.UIMng.UISettings.modUITemplates)
