@@ -8,7 +8,7 @@ Copyright 2016 - Paul Preißner - for Bachelor Thesis "ConText - A Choice/Text A
 --------------------------------*/
 
 [CustomEditor(typeof(TicTacToe))]
-public class TicTacInspector : Editor
+public class TicTacInspector : ModuleInspectorAncestor
 {
 
     //private SerializedProperty modID;
@@ -17,12 +17,13 @@ public class TicTacInspector : Editor
     private SerializedProperty successModule, failureModule, tieModule;
 
     private TicTacToe mod;
+    private ModuleManager.ModuleTypes nextModType;
     private GUIContent textLabel, prevMLabel, succMLabel, failMLabel, tieMLabel, modIDLabel, subIDLabel, charLabel, logLabel;
 
     [MenuItem("Assets/Create/ConText Framework/Modules/Minigames/TicTacToe")]
-    public static ModuleBlueprint CreateModule()
+    public static ModuleBlueprint CreateModule(string name)
     {
-        return AssetCreator.CreateCustomAsset<TicTacToe>();
+        return AssetCreator.CreateCustomAsset<TicTacToe>(name);
     }
 
     public void OnEnable()
@@ -76,7 +77,7 @@ public class TicTacInspector : Editor
 
         if (GUILayout.Button("Add Log Entry"))
         {
-            mod.log = LogEntryInspector.CreateEntry();
+            mod.log = LogEntryInspector.CreateEntry(null);
         }
         mod.log = (LogEntry)EditorGUILayout.ObjectField(logLabel, mod.log, typeof(LogEntry), false);
 
@@ -111,9 +112,11 @@ public class TicTacInspector : Editor
 
         //create a success/failure/tie module and give it a fitting set of IDs
         //{TODO}: selection list where the user can select which *type* of module is up next
-        if (GUILayout.Button("Create succ module"))
+        nextModType = (ModuleManager.ModuleTypes)EditorGUILayout.Popup("Next module type", (int)nextModType, ModuleManager.m_ModuleTypeEnumDescriptions);
+        if (GUILayout.Button("Create succ module (" + ModuleManager.m_ModuleTypeEnumDescriptions[(int)nextModType] + ")"))
         {
-            mod.moduleSuccess = TextModuleInspector.CreateModule();
+            mod.moduleSuccess = createNextModule(nextModType, mod, 0, 0, mod.hierarchyID + 1, mod.subpartID);
+            /*mod.moduleSuccess = TextModuleInspector.CreateModule();
             ((TextModule)mod.moduleSuccess).txtContent = "[textless]";
             mod.moduleSuccess.sendingCharacter = mod.sendingCharacter;
 
@@ -124,12 +127,13 @@ public class TicTacInspector : Editor
             }
             mod.moduleSuccess.seqID = 0;
             mod.moduleSuccess.branchID = 0;
-            mod.moduleSuccess.hierarchyID = mod.hierarchyID + 1;
+            mod.moduleSuccess.hierarchyID = mod.hierarchyID + 1;*/
         }
 
-        if (GUILayout.Button("Create fail module"))
+        if (GUILayout.Button("Create fail module (" + ModuleManager.m_ModuleTypeEnumDescriptions[(int)nextModType] + ")"))
         {
-            mod.moduleFailure = TextModuleInspector.CreateModule();
+            mod.moduleFailure = createNextModule(nextModType, mod, 0, 1, mod.hierarchyID + 1, mod.subpartID);
+            /*mod.moduleFailure = TextModuleInspector.CreateModule();
             ((TextModule)mod.moduleFailure).txtContent = "[textless]";
             mod.moduleFailure.sendingCharacter = mod.sendingCharacter;
 
@@ -140,12 +144,13 @@ public class TicTacInspector : Editor
             }
             mod.moduleFailure.seqID = 0;
             mod.moduleFailure.branchID = 1;
-            mod.moduleFailure.hierarchyID = mod.hierarchyID + 1;
+            mod.moduleFailure.hierarchyID = mod.hierarchyID + 1;*/
         }
 
-        if (GUILayout.Button("Create tie module"))
+        if (GUILayout.Button("Create tie module (" + ModuleManager.m_ModuleTypeEnumDescriptions[(int)nextModType] + ")"))
         {
-            mod.moduleTie = TextModuleInspector.CreateModule();
+            mod.moduleTie = createNextModule(nextModType, mod, 0, 2, mod.hierarchyID + 1, mod.subpartID);
+            /*mod.moduleTie = TextModuleInspector.CreateModule();
             ((TextModule)mod.moduleTie).txtContent = "[textless]";
             mod.moduleTie.sendingCharacter = mod.sendingCharacter;
 
@@ -156,7 +161,7 @@ public class TicTacInspector : Editor
             }
             mod.moduleTie.seqID = 0;
             mod.moduleTie.branchID = 2;
-            mod.moduleTie.hierarchyID = mod.hierarchyID + 1;
+            mod.moduleTie.hierarchyID = mod.hierarchyID + 1;*/
         }
     }
 }

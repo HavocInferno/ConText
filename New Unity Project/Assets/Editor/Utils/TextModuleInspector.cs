@@ -17,13 +17,13 @@ public class TextModuleInspector : ModuleInspectorAncestor
     private SerializedProperty nextModule;
 
     private TextModule mod;
-    private ModuleManager.ModuleTypes nextModType;
+    protected ModuleManager.ModuleTypes nextModType;
     private GUIContent textLabel, prevMLabel, nextMLabel, modIDLabel, subIDLabel, charLabel, logLabel;
 
     [MenuItem("Assets/Create/ConText Framework/Modules/Text Module")]
-    public static ModuleBlueprint CreateModule()
+    public static ModuleBlueprint CreateModule(string name)
     {
-        return AssetCreator.CreateCustomAsset<TextModule>();
+        return AssetCreator.CreateCustomAsset<TextModule>(name);
     }
 
     public void OnEnable()
@@ -77,7 +77,7 @@ public class TextModuleInspector : ModuleInspectorAncestor
 
         if (GUILayout.Button("Add Log Entry"))
         {
-            mod.log = LogEntryInspector.CreateEntry();
+            mod.log = LogEntryInspector.CreateEntry(null);
         }
         mod.log = (LogEntry)EditorGUILayout.ObjectField(logLabel, mod.log, typeof(LogEntry), false);
 
@@ -102,7 +102,7 @@ public class TextModuleInspector : ModuleInspectorAncestor
 
         if (GUILayout.Button("Create next module (" + ModuleManager.m_ModuleTypeEnumDescriptions[(int)nextModType] + ")"))
         {
-            createNextModule(nextModType, mod);
+            mod.nextModule = createNextModule(nextModType, mod, mod.seqID + 1, mod.branchID, mod.hierarchyID, mod.subpartID);
             /*mod.nextModule = CreateModule();
             mod.nextModule.previousModule = mod;
             ((TextModule)mod.nextModule).txtContent = "[textless]";

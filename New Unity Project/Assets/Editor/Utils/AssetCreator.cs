@@ -10,7 +10,7 @@ Copyright 2016 - Paul Preißner - for Bachelor Thesis "ConText - A Choice/Text A
 public class AssetCreator {
 
     //creates a new asset of type T
-	public static T CreateCustomAsset<T> () where T : ScriptableObject
+	public static T CreateCustomAsset<T> (string name) where T : ScriptableObject
     {
         T mAsset = ScriptableObject.CreateInstance<T>();
         string aPath = AssetDatabase.GetAssetPath(Selection.activeObject);
@@ -26,8 +26,15 @@ public class AssetCreator {
         }
 
         //there a way to give it more clever default names? maybe give the types/classes static functions for something better?
+        Debug.Log(name);
+        string assetName = aPath + "/New" + typeof(T).ToString() + ".asset";
+        if (name != null)
+        {
+            if (!name.Equals(""))
+                assetName = aPath + "/" + name + ".asset";
+        } 
         AssetDatabase.CreateAsset(mAsset,
-            AssetDatabase.GenerateUniqueAssetPath(aPath + "/New" + typeof(T).ToString() + ".asset"));
+            AssetDatabase.GenerateUniqueAssetPath(assetName));
         AssetDatabase.SaveAssets();
 
         Selection.activeObject = mAsset;

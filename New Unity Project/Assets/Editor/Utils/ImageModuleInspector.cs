@@ -8,7 +8,7 @@ Copyright 2016 - Paul Preißner - for Bachelor Thesis "ConText - A Choice/Text A
 --------------------------------*/
 
 [CustomEditor(typeof(ImageModule))]
-public class ImageModuleInspector : Editor
+public class ImageModuleInspector : ModuleInspectorAncestor
 {
 
     //private SerializedProperty modID;
@@ -16,12 +16,13 @@ public class ImageModuleInspector : Editor
     private SerializedProperty nextModule;
 
     private ImageModule mod;
+    private ModuleManager.ModuleTypes nextModType;
     private GUIContent imgLabel, prevMLabel, nextMLabel, modIDLabel, subIDLabel, charLabel, logLabel;
 
     [MenuItem("Assets/Create/ConText Framework/Modules/Image Module")]
-    public static ModuleBlueprint CreateModule()
+    public static ModuleBlueprint CreateModule(string name)
     {
-        return AssetCreator.CreateCustomAsset<ImageModule>();
+        return AssetCreator.CreateCustomAsset<ImageModule>(name);
     }
 
     public void OnEnable()
@@ -69,7 +70,7 @@ public class ImageModuleInspector : Editor
 
         if (GUILayout.Button("Add Log Entry"))
         {
-            mod.log = LogEntryInspector.CreateEntry();
+            mod.log = LogEntryInspector.CreateEntry(null);
         }
         mod.log = (LogEntry)EditorGUILayout.ObjectField(logLabel, mod.log, typeof(LogEntry), false);
 
@@ -90,9 +91,13 @@ public class ImageModuleInspector : Editor
 
         //create a new module and give it a fitting set of IDs
         //{TODO}: selection list where the user can select which *type* of module is up next
-        if (GUILayout.Button("Create next module"))
+        nextModType = (ModuleManager.ModuleTypes)EditorGUILayout.Popup("Next module type", (int)nextModType, ModuleManager.m_ModuleTypeEnumDescriptions);
+
+        if (GUILayout.Button("Create next module (" + ModuleManager.m_ModuleTypeEnumDescriptions[(int)nextModType] + ")"))
         {
-            mod.nextModule = CreateModule();
+            mod.nextModule = createNextModule(nextModType, mod, mod.seqID + 1, mod.branchID, mod.hierarchyID, mod.subpartID);
+            /*
+             mod.nextModule = CreateModule();
             mod.nextModule.previousModule = mod;
             ((TextModule)mod.nextModule).txtContent = "[textless]";
             mod.nextModule.sendingCharacter = mod.sendingCharacter;
@@ -103,6 +108,7 @@ public class ImageModuleInspector : Editor
             mod.nextModule.seqID = mod.seqID + 1;
             mod.nextModule.branchID = mod.branchID;
             mod.nextModule.hierarchyID = mod.hierarchyID;
+            */
         }
     }
 

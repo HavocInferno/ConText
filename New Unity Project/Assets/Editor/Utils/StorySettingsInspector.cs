@@ -16,13 +16,13 @@ public class StorySettingsInspector : Editor {
 	[MenuItem("Assets/Create/ConText Framework/Story Settings")]
     public static void Create()
     {
-        AssetCreator.CreateCustomAsset<StorySettings>();
+        AssetCreator.CreateCustomAsset<StorySettings>(null);
     }
 
     [MenuItem("Assets/Create/ConText Framework/Character")]
     public static Character CreateCharacter()
     {
-        return AssetCreator.CreateCustomAsset<Character>();
+        return AssetCreator.CreateCustomAsset<Character>(null);
     }
 
     void OnEnable()

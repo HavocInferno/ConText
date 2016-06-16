@@ -13,9 +13,9 @@ public class LogEntryInspector : Editor {
     private GUIContent textLabel, parentLabel, logIDLabel;
 
     [MenuItem("Assets/Create/ConText Framework/Log/Log Entry")]
-    public static LogEntry CreateEntry()
+    public static LogEntry CreateEntry(string name)
     {
-        return AssetCreator.CreateCustomAsset<LogEntry>();
+        return AssetCreator.CreateCustomAsset<LogEntry>(name);
     }
 
     public void OnEnable()
@@ -76,7 +76,7 @@ public class LogEntryInspector : Editor {
         //{TODO}: selection list where the user can select which *type* of module is up next
         if (GUILayout.Button("Create next log"))
         {
-            LogEntry newLog = CreateEntry();
+            LogEntry newLog = CreateEntry(null);
             newLog.parent = logE;
             newLog.logID = logE.logID * 10 + (logE.children.Count + 1); //bad, temp, doesnt allow for more than 9 children without issues
             newLog.txtContent = "Prev log entry: " + logE.logID;

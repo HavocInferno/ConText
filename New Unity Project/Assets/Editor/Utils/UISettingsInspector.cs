@@ -21,7 +21,7 @@ public class UISettingsInspector : Editor {
     [MenuItem("Assets/Create/ConText Framework/Misc/UI Settings (don't add multiple)")]
     public static UISettings CreateModule()
     {
-        return AssetCreator.CreateCustomAsset<UISettings>();
+        return AssetCreator.CreateCustomAsset<UISettings>(null);
     }
 
     public void OnEnable()

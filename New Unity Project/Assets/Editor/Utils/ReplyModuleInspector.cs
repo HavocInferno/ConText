@@ -11,12 +11,13 @@ Copyright 2016 - Paul Preißner - for Bachelor Thesis "ConText - A Choice/Text A
 public class ReplyModuleInspector : TextModuleInspector {
 
     private ReplyModule rmod;
+    //private ModuleManager.ModuleTypes nextModType;
     private GUIContent repliesLabel = new GUIContent("Replies");
 
     [MenuItem("Assets/Create/ConText Framework/Modules/Reply Module")]
-    public static ModuleBlueprint CreateModule()
+    public static ModuleBlueprint CreateModule(string name)
     {
-        return AssetCreator.CreateCustomAsset<ReplyModule>();
+        return AssetCreator.CreateCustomAsset<ReplyModule>(name);
     }
 
     public void OnEnable()
@@ -61,10 +62,12 @@ public class ReplyModuleInspector : TextModuleInspector {
             EditorGUILayout.EndHorizontal();
         }
 
-        if (GUILayout.Button("Add reply option"))
+        nextModType = (ModuleManager.ModuleTypes)EditorGUILayout.Popup("Next module type", (int)nextModType, ModuleManager.m_ModuleTypeEnumDescriptions);
+        if (GUILayout.Button("Add reply option (" + ModuleManager.m_ModuleTypeEnumDescriptions[(int)nextModType] + ")"))
         {
             ReplyModule.ReplyOption r = new ReplyModule.ReplyOption();
-            r.outcome = TextModuleInspector.CreateModule();
+            r.outcome = createNextModule(nextModType, rmod, 0, rmod.outcomes.Count, rmod.hierarchyID + 1, rmod.subpartID);
+
             if (rmod.outcomes.Count < 1)
             {
                 r.choiceID = 0;
@@ -74,17 +77,6 @@ public class ReplyModuleInspector : TextModuleInspector {
                 r.choiceID = rmod.outcomes[rmod.outcomes.Count - 1].choiceID + 1;
             }
             rmod.outcomes.Add(r);
-            r.outcome.previousModule = rmod;
-            ((TextModule)r.outcome).txtContent = "[textless]";
-            r.outcome.sendingCharacter = rmod.sendingCharacter;
-            if (rmod.previousModule == null)
-            {
-                rmod.seqID = rmod.branchID = rmod.hierarchyID = 0;
-            }
-            r.outcome.seqID = 0;
-            r.outcome.branchID = rmod.outcomes.Count;
-            r.outcome.hierarchyID = rmod.hierarchyID + 1;
-            
 
             r.replyText = "new reply " + r.outcome.branchID;
         }
