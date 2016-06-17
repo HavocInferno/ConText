@@ -42,9 +42,33 @@ public class ModuleInspectorAncestor : Editor {
                 im.subpartID = newSubpartID;
                 return im;
             case ModuleManager.ModuleTypes.REPLYM:
-                return null;
+                ReplyModule rm = (ReplyModule)ReplyModuleInspector.CreateModule(newAssetName + "-ReplyModule");
+                rm.previousModule = thisMod;
+                rm.txtContent = "[textless]";
+                rm.sendingCharacter = thisMod.sendingCharacter;
+                if (thisMod.previousModule == null)
+                {
+                    thisMod.seqID = thisMod.branchID = thisMod.hierarchyID = 0;
+                }
+                rm.seqID = newSeqID;
+                rm.branchID = newBranchID;
+                rm.hierarchyID = newHierarchyID;
+                rm.subpartID = newSubpartID;
+                return rm;
             case ModuleManager.ModuleTypes.TICTACM:
-                return null;
+                TicTacToe tttm = (TicTacToe)TicTacInspector.CreateModule(newAssetName + "-ReplyModule");
+                tttm.previousModule = thisMod;
+                tttm.txtContent = "[textless]";
+                tttm.sendingCharacter = thisMod.sendingCharacter;
+                if (thisMod.previousModule == null)
+                {
+                    thisMod.seqID = thisMod.branchID = thisMod.hierarchyID = 0;
+                }
+                tttm.seqID = newSeqID;
+                tttm.branchID = newBranchID;
+                tttm.hierarchyID = newHierarchyID;
+                tttm.subpartID = newSubpartID;
+                return tttm;
             default:
                 return null;
         }
