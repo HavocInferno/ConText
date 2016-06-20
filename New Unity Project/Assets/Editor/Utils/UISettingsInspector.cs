@@ -17,6 +17,7 @@ public class UISettingsInspector : Editor {
     private GUIContent bg_ModColorLabel, bg_ModFontLabel, bg_ModFontSizeLabel, bg_ModImageLabel;
     private GUIContent bg_ViewsColorLabel, bg_ViewsFontLabel, bg_ViewsFontSizeLabel, bg_ViewsImageLabel;
     private SerializedProperty modTemplates;
+    private bool showHints = false;
 
     [MenuItem("Assets/Create/ConText Framework/Misc/UI Settings (don't add multiple)")]
     public static UISettings CreateModule()
@@ -31,13 +32,13 @@ public class UISettingsInspector : Editor {
         uis = target as UISettings;
 
         bg_ModColorLabel = new GUIContent("Mod Bg Clr");
-        bg_ModFontLabel = new GUIContent("Mod Font");
-        bg_ModFontSizeLabel = new GUIContent("Mod Font Size");
+        bg_ModFontLabel = new GUIContent("Module/message font");
+        bg_ModFontSizeLabel = new GUIContent("Module/message font Size");
         bg_ModImageLabel = new GUIContent("Mod Image");
 
-        bg_ViewsColorLabel = new GUIContent("Views Bg Clr");
-        bg_ViewsFontLabel = new GUIContent("Views Font");
-        bg_ViewsFontSizeLabel = new GUIContent("Views Font Size");
+        bg_ViewsColorLabel = new GUIContent("Views background color");
+        bg_ViewsFontLabel = new GUIContent("Views font");
+        bg_ViewsFontSizeLabel = new GUIContent("Views font Size");
         bg_ViewsImageLabel = new GUIContent("Views Image");
 
         uis.MenuView = GameObject.FindGameObjectWithTag("UIDummy").GetComponent<UIWrapper>().MenuLayer;
@@ -68,19 +69,30 @@ public class UISettingsInspector : Editor {
 
     public virtual void ModuleSpecific()
     {
-        uis.sSettings = (StorySettings)EditorGUILayout.ObjectField(uis.sSettings, typeof(StorySettings), false);
+        showHints = EditorGUILayout.Toggle("Show hints", showHints);
+        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
-        if(uis.sSettings != null)
+        if (showHints)
+            EditorGUILayout.HelpBox("All existing character info is grabbed from the Story Settings asset.", MessageType.Info);
+        uis.sSettings = (StorySettings)EditorGUILayout.ObjectField("Story settings asset" ,uis.sSettings, typeof(StorySettings), false);
+        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+
+        if (showHints)
+            EditorGUILayout.HelpBox("Color and background image for the respective character's messages.", MessageType.Info);
+        if (uis.sSettings != null)
         {
             foreach(Character ch in uis.sSettings.characters)
             {
-                ch.blobColor = EditorGUILayout.ColorField(ch.name + " blob color", ch.blobColor);
-                ch.blobBackground = (Sprite)EditorGUILayout.ObjectField(ch.name + " bg image", ch.blobBackground, typeof(Sprite), false);
+                ch.blobColor = EditorGUILayout.ColorField("[" + ch.name + "] message color", ch.blobColor);
+                ch.blobBackground = (Sprite)EditorGUILayout.ObjectField("[" + ch.name + "] msg background image", ch.blobBackground, typeof(Sprite), false);
             }
         }
+        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
         /*for settings related to module properties*/
         #region ModuleRelatedFields
+        if (showHints)
+            EditorGUILayout.HelpBox("Add all your module UI templates here. This list is used to apply the below properties.", MessageType.Info);
         EditorGUI.BeginChangeCheck();
         EditorGUILayout.PropertyField(modTemplates, true);
         if (EditorGUI.EndChangeCheck())
@@ -90,41 +102,21 @@ public class UISettingsInspector : Editor {
         //
         EditorGUILayout.BeginHorizontal();
         uis.moduleTextFont = (Font)EditorGUILayout.ObjectField(bg_ModFontLabel, uis.moduleTextFont, typeof(Font), false);
-        /*uis.moduleTextFont = bgFont;
-
-        if (GUILayout.Button("Apply"))
-        {
-            foreach (GameObject a in uis.moduleTemplates)
-            {
-                foreach (Text ia in a.GetComponentsInChildren<Text>())
-                {
-                    ia.font = bgFont;
-                }
-            }
-        }*/
         EditorGUILayout.EndHorizontal();
         //
         EditorGUILayout.BeginHorizontal();
         uis.moduleTextFontSize = EditorGUILayout.IntField(bg_ModFontSizeLabel, uis.moduleTextFontSize);
-        /*uis.moduleTextFontSize = bgFontSize;
-
-        if (GUILayout.Button("Apply"))
-        {
-            foreach (GameObject a in uis.moduleTemplates)
-            {
-                foreach (Text ia in a.GetComponentsInChildren<Text>())
-                {
-                    ia.fontSize = bgFontSize;
-                }
-            }
-        }*/
         EditorGUILayout.EndHorizontal();
         //
         EditorGUILayout.EndVertical();
+        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
         #endregion
 
         /*for settings related to view properties (views being Menu, Text, Log etc)*/
         #region ViewRelatedFields
+        if (showHints)
+            EditorGUILayout.HelpBox("'Views' are the Menu, the Text stream and the Log list. These settings affect all three the same.", MessageType.Info);
+
         EditorGUILayout.BeginVertical();
         //
         EditorGUILayout.BeginHorizontal();
@@ -191,21 +183,26 @@ public class UISettingsInspector : Editor {
         }
         EditorGUILayout.EndHorizontal();
         //
-        uis.MenuImage.sprite = (Sprite)EditorGUILayout.ObjectField("Menu Image", uis.MenuImage.sprite, typeof(Sprite), false);
-        uis.TextImage.sprite = (Sprite)EditorGUILayout.ObjectField("Text Image", uis.TextImage.sprite, typeof(Sprite), false);
-        uis.LogImage.sprite = (Sprite)EditorGUILayout.ObjectField("Log Image", uis.LogImage.sprite, typeof(Sprite), false);
+        uis.MenuImage.sprite = (Sprite)EditorGUILayout.ObjectField("Menu background image", uis.MenuImage.sprite, typeof(Sprite), false);
+        uis.TextImage.sprite = (Sprite)EditorGUILayout.ObjectField("Text background image", uis.TextImage.sprite, typeof(Sprite), false);
+        uis.LogImage.sprite = (Sprite)EditorGUILayout.ObjectField("Log background image", uis.LogImage.sprite, typeof(Sprite), false);
 
         EditorGUILayout.EndVertical();
+        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
         #endregion
 
         /*for configuring which modules use which templates*/
         #region ModTemplatesStuff
+        if (showHints)
+            EditorGUILayout.HelpBox("This list pairs the respective modules to their UI templates. Put the class name of a new module into the left text field of an entry, and the corresponding UI template into the right. \n\nDo not change this unless you know what you are doing!", MessageType.Info);
         EditorGUI.BeginChangeCheck();
-        
+
+        int i = 1;
         foreach (UISettings.modUIPair mup in uis.modUITemplates)
         {
             EditorGUILayout.BeginHorizontal();
 
+            EditorGUILayout.LabelField(i + ".", GUILayout.MaxWidth(14.0f));
             mup.modClassName = EditorGUILayout.TextField(mup.modClassName);
             mup.modUITemplate = (GameObject)EditorGUILayout.ObjectField(mup.modUITemplate, typeof(GameObject), false);
 
@@ -215,6 +212,7 @@ public class UISettingsInspector : Editor {
             }
 
             EditorGUILayout.EndHorizontal();
+            i++;
         }
 
         if (GUILayout.Button("Add template pair"))
