@@ -9,20 +9,23 @@ Copyright 2016 - Paul Preißner - for Bachelor Thesis "ConText - A Choice/Text A
 
 public class ModuleInspectorAncestor : Editor { 
 
-    public virtual ModuleBlueprint createNextModule(ModuleManager.ModuleTypes mtype, ModuleBlueprint thisMod, int newSeqID, int newBranchID, int newHierarchyID, int newSubpartID)
+    public static ModuleBlueprint createNextModule(ModuleManager.ModuleTypes mtype, ModuleBlueprint thisMod, int newSeqID, int newBranchID, int newHierarchyID, int newSubpartID)
     {
         string newAssetName = "H" + newHierarchyID + ".B" + newBranchID + ".S" + newSeqID;
         switch (mtype)
         {
             case ModuleManager.ModuleTypes.TEXTM:
                 TextModule tm = (TextModule)TextModuleInspector.CreateModule(newAssetName + "-TextModule");
-                tm.previousModule = thisMod;
-                tm.txtContent = "[textless]";
-                tm.sendingCharacter = thisMod.sendingCharacter;
-                if (thisMod.previousModule == null)
+                if (thisMod != null)
                 {
-                    thisMod.seqID = thisMod.branchID = thisMod.hierarchyID = 0;
+                    tm.previousModule = thisMod;
+                    tm.sendingCharacter = thisMod.sendingCharacter;
+                    if (thisMod.previousModule == null)
+                    {
+                        thisMod.seqID = thisMod.branchID = thisMod.hierarchyID = 0;
+                    }
                 }
+                tm.txtContent = "[textless]";
                 tm.seqID = newSeqID;
                 tm.branchID = newBranchID;
                 tm.hierarchyID = newHierarchyID;
@@ -30,11 +33,14 @@ public class ModuleInspectorAncestor : Editor {
                 return tm;
             case ModuleManager.ModuleTypes.IMGM:
                 ImageModule im = (ImageModule)ImageModuleInspector.CreateModule(newAssetName + "-ImageModule");
-                im.previousModule = thisMod;
-                im.sendingCharacter = thisMod.sendingCharacter;
-                if (thisMod.previousModule == null)
+                if (thisMod != null)
                 {
-                    thisMod.seqID = thisMod.branchID = thisMod.hierarchyID = 0;
+                    im.previousModule = thisMod;
+                    im.sendingCharacter = thisMod.sendingCharacter;
+                    if (thisMod.previousModule == null)
+                    {
+                        thisMod.seqID = thisMod.branchID = thisMod.hierarchyID = 0;
+                    }
                 }
                 im.seqID = newSeqID;
                 im.branchID = newBranchID;
@@ -43,13 +49,16 @@ public class ModuleInspectorAncestor : Editor {
                 return im;
             case ModuleManager.ModuleTypes.REPLYM:
                 ReplyModule rm = (ReplyModule)ReplyModuleInspector.CreateModule(newAssetName + "-ReplyModule");
-                rm.previousModule = thisMod;
-                rm.txtContent = "[textless]";
-                rm.sendingCharacter = thisMod.sendingCharacter;
-                if (thisMod.previousModule == null)
+                if (thisMod != null)
                 {
-                    thisMod.seqID = thisMod.branchID = thisMod.hierarchyID = 0;
+                    rm.previousModule = thisMod;
+                    rm.sendingCharacter = thisMod.sendingCharacter;
+                    if (thisMod.previousModule == null)
+                    {
+                        thisMod.seqID = thisMod.branchID = thisMod.hierarchyID = 0;
+                    }
                 }
+                rm.txtContent = "[textless]";
                 rm.seqID = newSeqID;
                 rm.branchID = newBranchID;
                 rm.hierarchyID = newHierarchyID;
@@ -57,13 +66,16 @@ public class ModuleInspectorAncestor : Editor {
                 return rm;
             case ModuleManager.ModuleTypes.TICTACM:
                 TicTacToe tttm = (TicTacToe)TicTacInspector.CreateModule(newAssetName + "-ReplyModule");
-                tttm.previousModule = thisMod;
-                tttm.txtContent = "[textless]";
-                tttm.sendingCharacter = thisMod.sendingCharacter;
-                if (thisMod.previousModule == null)
+                if (thisMod != null)
                 {
-                    thisMod.seqID = thisMod.branchID = thisMod.hierarchyID = 0;
+                    tttm.previousModule = thisMod;
+                    tttm.sendingCharacter = thisMod.sendingCharacter;
+                    if (thisMod.previousModule == null)
+                    {
+                        thisMod.seqID = thisMod.branchID = thisMod.hierarchyID = 0;
+                    }
                 }
+                tttm.txtContent = "[textless]";
                 tttm.seqID = newSeqID;
                 tttm.branchID = newBranchID;
                 tttm.hierarchyID = newHierarchyID;

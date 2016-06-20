@@ -20,9 +20,9 @@ public class UISettingsInspector : Editor {
     private bool showHints = false;
 
     [MenuItem("Assets/Create/ConText Framework/Misc/UI Settings (don't add multiple)")]
-    public static UISettings CreateModule()
+    public static UISettings CreateModule(string name)
     {
-        return AssetCreator.CreateCustomAsset<UISettings>(null);
+        return AssetCreator.CreateCustomAsset<UISettings>(name);
     }
 
     public void OnEnable()
