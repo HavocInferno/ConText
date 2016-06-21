@@ -7,7 +7,39 @@ using System.Collections.Generic;
 Copyright 2016 - Paul Preißner - for Bachelor Thesis "ConText - A Choice/Text Adventure Framework" @ TU München
 --------------------------------*/
 
-public class ModuleInspectorAncestor : Editor { 
+public class ModuleInspectorAncestor : Editor {
+
+    public bool showHints = false;
+
+    public static string getShortDesc(ModuleBlueprint m)
+    {
+        if(m == null)
+        {
+            return "";
+        }
+
+        if(m is TextModule)
+        {
+            return "(" + m.sendingCharacter.name + "; Text)";
+        }
+
+        if(m is ImageModule)
+        {
+            return "(" + m.sendingCharacter.name + "; Image)";
+        }
+
+        if(m is ReplyModule)
+        {
+            return "(" + m.sendingCharacter.name + "; Reply)";
+        }
+
+        if(m is TicTacToe)
+        {
+            return "(" + m.sendingCharacter.name + "; TicTacToe)";
+        }
+
+        return "";
+    }
 
     public static ModuleBlueprint createNextModule(ModuleManager.ModuleTypes mtype, ModuleBlueprint thisMod, int newSeqID, int newBranchID, int newHierarchyID, int newSubpartID)
     {

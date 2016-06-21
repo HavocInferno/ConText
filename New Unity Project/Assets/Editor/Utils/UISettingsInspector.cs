@@ -22,6 +22,12 @@ public class UISettingsInspector : Editor {
     [MenuItem("Assets/Create/ConText Framework/Misc/UI Settings (don't add multiple)")]
     public static UISettings CreateModule(string name)
     {
+        if (Unify.Instance.UIMng.UISettings != null)
+            return Unify.Instance.UIMng.UISettings;
+
+        if (Object.FindObjectOfType<UISettings>() != null)
+            return Object.FindObjectOfType<UISettings>();
+
         return AssetCreator.CreateCustomAsset<UISettings>(name);
     }
 
@@ -77,6 +83,7 @@ public class UISettingsInspector : Editor {
         uis.sSettings = (StorySettings)EditorGUILayout.ObjectField("Story settings asset" ,uis.sSettings, typeof(StorySettings), false);
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
+        GUILayout.Label("Characters UI properties", EditorStyles.boldLabel);
         if (showHints)
             EditorGUILayout.HelpBox("Color and background image for the respective character's messages.", MessageType.Info);
         if (uis.sSettings != null)
@@ -90,6 +97,7 @@ public class UISettingsInspector : Editor {
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
         /*for settings related to module properties*/
+        GUILayout.Label("Module UI properties", EditorStyles.boldLabel);
         #region ModuleRelatedFields
         if (showHints)
             EditorGUILayout.HelpBox("Add all your module UI templates here. This list is used to apply the below properties.", MessageType.Info);
@@ -113,6 +121,7 @@ public class UISettingsInspector : Editor {
         #endregion
 
         /*for settings related to view properties (views being Menu, Text, Log etc)*/
+        GUILayout.Label("View UI properties", EditorStyles.boldLabel);
         #region ViewRelatedFields
         if (showHints)
             EditorGUILayout.HelpBox("'Views' are the Menu, the Text stream and the Log list. These settings affect all three the same.", MessageType.Info);
@@ -192,6 +201,7 @@ public class UISettingsInspector : Editor {
         #endregion
 
         /*for configuring which modules use which templates*/
+        GUILayout.Label("Module UI templates", EditorStyles.boldLabel);
         #region ModTemplatesStuff
         if (showHints)
             EditorGUILayout.HelpBox("This list pairs the respective modules to their UI templates. Put the class name of a new module into the left text field of an entry, and the corresponding UI template into the right. \n\nDo not change this unless you know what you are doing!", MessageType.Info);
