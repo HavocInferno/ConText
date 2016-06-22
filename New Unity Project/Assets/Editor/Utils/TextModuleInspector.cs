@@ -70,19 +70,16 @@ public class TextModuleInspector : ModuleInspectorAncestor
         EditorGUILayout.EndHorizontal();
         serializedObject.ApplyModifiedProperties();
 
-        EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.LabelField("ID: " + mod.seqID + "(seq) " + mod.branchID + "(branch) " + mod.hierarchyID + "(hierarchy)");
-        EditorGUILayout.EndHorizontal();
-
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
         GUILayout.Label("Message properties", EditorStyles.boldLabel);
+
+        EditorGUILayout.LabelField("ID: " + mod.seqID + "(seq) " + mod.branchID + "(branch) " + mod.hierarchyID + "(hierarchy)");
+
         //character sending the message -> change to dropdown (enum of all characters, then determine forward/backward?)
         mod.sendingCharacter = (Character)EditorGUILayout.ObjectField(charLabel, mod.sendingCharacter, typeof(Character), false);
 
         //text input
         drawTextField(500);
-
-        ModuleSpecific();
 
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
         GUILayout.Label("Log", EditorStyles.boldLabel);
@@ -94,6 +91,8 @@ public class TextModuleInspector : ModuleInspectorAncestor
             mod.log = LogEntryInspector.CreateEntry(null);
         }
         mod.log = (LogEntry)EditorGUILayout.ObjectField(logLabel, mod.log, typeof(LogEntry), false);
+
+        ModuleSpecific();
 
         serializedObject.ApplyModifiedProperties();
         EditorUtility.SetDirty(mod);

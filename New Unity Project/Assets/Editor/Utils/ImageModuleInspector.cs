@@ -46,7 +46,13 @@ public class ImageModuleInspector : ModuleInspectorAncestor
         //base.OnInspectorGUI();
         serializedObject.Update();
 
+        showHints = EditorGUILayout.Toggle("Show hints", showHints);
+
+        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+        GUILayout.Label("Previous module", EditorStyles.boldLabel);
+
         //previous module selection
+        EditorGUILayout.BeginHorizontal();
         ModuleBlueprint prevMod = (ModuleBlueprint)EditorGUILayout.ObjectField(prevMLabel, mod.previousModule, typeof(ModuleBlueprint), false);
         if (prevMod != null)
         {
@@ -54,19 +60,21 @@ public class ImageModuleInspector : ModuleInspectorAncestor
             prevMod.nextModule = mod;
             fixNextIDs();
         }
+        EditorGUILayout.LabelField(getShortDesc(prevMod), GUILayout.MaxWidth(getShortDesc(prevMod).Length * 10.0f));
+        EditorGUILayout.EndHorizontal();
         serializedObject.ApplyModifiedProperties();
 
-        EditorGUILayout.BeginHorizontal();
+        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+        GUILayout.Label("Message properties", EditorStyles.boldLabel);
+
         EditorGUILayout.LabelField("ID: " + mod.seqID + "(seq) " + mod.branchID + "(branch) " + mod.hierarchyID + "(hierarchy)");
-        EditorGUILayout.EndHorizontal();
 
-        //character sending the message -> change to dropdown (enum of all characters, then determine forward/backward?)
-        mod.sendingCharacter = (Character)EditorGUILayout.ObjectField(charLabel, mod.sendingCharacter, typeof(Character), false);
-        EditorGUILayout.HelpBox("testus", MessageType.Info);
+        mod.imgContent = (Sprite)EditorGUILayout.ObjectField(imgLabel, mod.imgContent, typeof(Sprite), false, GUILayout.ExpandHeight(true));
 
-        mod.imgContent = (Sprite)EditorGUILayout.ObjectField(imgLabel, mod.imgContent, typeof(Sprite), false);
-
-        ModuleSpecific();
+        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+        GUILayout.Label("Log", EditorStyles.boldLabel);
+        if (showHints)
+            EditorGUILayout.HelpBox("The log entry that will be added or updated when this module is triggered.", MessageType.Info);
 
         if (GUILayout.Button("Add Log Entry"))
         {
@@ -74,41 +82,39 @@ public class ImageModuleInspector : ModuleInspectorAncestor
         }
         mod.log = (LogEntry)EditorGUILayout.ObjectField(logLabel, mod.log, typeof(LogEntry), false);
 
+        ModuleSpecific();
+
         serializedObject.ApplyModifiedProperties();
         EditorUtility.SetDirty(mod);
     }
 
     public virtual void ModuleSpecific()
     {
+        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+        GUILayout.Label("Next module", EditorStyles.boldLabel);
+        if (showHints)
+            EditorGUILayout.HelpBox("The module being triggered after this one.", MessageType.Info);
+
+
         //next module selection
+        EditorGUILayout.BeginHorizontal();
         ModuleBlueprint nextMod = (ModuleBlueprint)EditorGUILayout.ObjectField(nextMLabel, mod.nextModule, typeof(ModuleBlueprint), false);
         if (nextMod != null)
         {
             mod.nextModule = nextMod;
         }
+        EditorGUILayout.LabelField(getShortDesc(nextMod), GUILayout.MaxWidth(getShortDesc(nextMod).Length * 10.0f));
+        EditorGUILayout.EndHorizontal();
 
         EditorGUILayout.Space();
 
         //create a new module and give it a fitting set of IDs
-        //{TODO}: selection list where the user can select which *type* of module is up next
+        //selection list where the user can select which *type* of module is up next
         nextModType = (ModuleManager.ModuleTypes)EditorGUILayout.Popup("Next module type", (int)nextModType, ModuleManager.m_ModuleTypeEnumDescriptions);
 
         if (GUILayout.Button("Create next module (" + ModuleManager.m_ModuleTypeEnumDescriptions[(int)nextModType] + ")"))
         {
             mod.nextModule = createNextModule(nextModType, mod, mod.seqID + 1, mod.branchID, mod.hierarchyID, mod.subpartID);
-            /*
-             mod.nextModule = CreateModule();
-            mod.nextModule.previousModule = mod;
-            ((TextModule)mod.nextModule).txtContent = "[textless]";
-            mod.nextModule.sendingCharacter = mod.sendingCharacter;
-            if (mod.previousModule == null)
-            {
-                mod.seqID = mod.branchID = mod.hierarchyID = 0;
-            }
-            mod.nextModule.seqID = mod.seqID + 1;
-            mod.nextModule.branchID = mod.branchID;
-            mod.nextModule.hierarchyID = mod.hierarchyID;
-            */
         }
     }
 

@@ -27,8 +27,10 @@ public class ContextEditorWindow : EditorWindow
         EditorGUILayout.EndToggleGroup();*/
         GUIStyle wrapStyle = new GUIStyle(GUI.skin.label);
         wrapStyle.wordWrap = true;
+        wrapStyle.fontStyle = FontStyle.Bold;
 
-        GUILayout.Label("Welcome to your ConText Framework project.", EditorStyles.boldLabel);
+        GUILayout.Label("Welcome to your ConText Framework project.", wrapStyle);
+        wrapStyle.fontStyle = FontStyle.Normal;
         GUILayout.Label("This framework is intended to be used for creating choice based text adventures for mobile devices. It comes with all modules and tools necessary to create such a game in its basic form. Experienced users may expand the given modules with own code. Please refer to the documentation if you have troubles using this.", wrapStyle);
 
         if (Unify.Instance.UIMng.UISettings == null)

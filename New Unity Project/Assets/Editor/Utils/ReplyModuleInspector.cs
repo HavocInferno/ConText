@@ -44,25 +44,33 @@ public class ReplyModuleInspector : TextModuleInspector {
 
         EditorGUILayout.Space();
 
-        EditorGUILayout.LabelField(repliesLabel);
+        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+        GUILayout.Label(repliesLabel, EditorStyles.boldLabel);
+        if (showHints)
+            EditorGUILayout.HelpBox("The respective replies this module will offer to the player, i.e. the text for each option and the module to trigger.", MessageType.Info);
+
         for (int i = 0; i < rmod.outcomes.Count; i++)
         {
             EditorGUILayout.BeginHorizontal();
-
-            EditorGUILayout.BeginVertical();
-            rmod.outcomes[i].replyText = EditorGUILayout.TextArea(rmod.outcomes[i].replyText);
             EditorGUILayout.LabelField("choice ID: " + rmod.outcomes[i].choiceID);
-            rmod.outcomes[i].outcome = (ModuleBlueprint)EditorGUILayout.ObjectField("Module", rmod.outcomes[i].outcome, typeof(ModuleBlueprint), false);
-            EditorGUILayout.EndVertical();
-
             if (GUILayout.Button("Delete"))
             {
                 rmod.outcomes.RemoveAt(i);
             }
             EditorGUILayout.EndHorizontal();
+
+            rmod.outcomes[i].replyText = EditorGUILayout.TextArea(rmod.outcomes[i].replyText);
+
+            EditorGUILayout.BeginHorizontal();
+            rmod.outcomes[i].outcome = (ModuleBlueprint)EditorGUILayout.ObjectField("Module", rmod.outcomes[i].outcome, typeof(ModuleBlueprint), false);
+            EditorGUILayout.LabelField(getShortDesc(rmod.outcomes[i].outcome), GUILayout.MaxWidth(getShortDesc(rmod.outcomes[i].outcome).Length * 10.0f));
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.LabelField("--------------------------------------------------------------------------------------------------------------------------------", GUILayout.MaxWidth(0.75f * EditorGUIUtility.currentViewWidth));
         }
 
-        nextModType = (ModuleManager.ModuleTypes)EditorGUILayout.Popup("Next module type", (int)nextModType, ModuleManager.m_ModuleTypeEnumDescriptions);
+        GUILayout.Label("Add reply", EditorStyles.boldLabel);
+        nextModType = (ModuleManager.ModuleTypes)EditorGUILayout.Popup("Reply type", (int)nextModType, ModuleManager.m_ModuleTypeEnumDescriptions);
         if (GUILayout.Button("Add reply option (" + ModuleManager.m_ModuleTypeEnumDescriptions[(int)nextModType] + ")"))
         {
             ReplyModule.ReplyOption r = new ReplyModule.ReplyOption();
