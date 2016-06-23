@@ -15,6 +15,11 @@ public class ReplyModuleInspector : TextModuleInspector {
     private GUIContent repliesLabel = new GUIContent("Replies");
 
     [MenuItem("Assets/Create/ConText Framework/Modules/Reply Module")]
+    public static ModuleBlueprint CreateModuleManual()
+    {
+        return AssetCreator.CreateCustomAsset<ReplyModule>(null);
+    }
+
     public static ModuleBlueprint CreateModule(string name)
     {
         return AssetCreator.CreateCustomAsset<ReplyModule>(name);
@@ -64,6 +69,11 @@ public class ReplyModuleInspector : TextModuleInspector {
             EditorGUILayout.BeginHorizontal();
             rmod.outcomes[i].outcome = (ModuleBlueprint)EditorGUILayout.ObjectField("Module", rmod.outcomes[i].outcome, typeof(ModuleBlueprint), false);
             EditorGUILayout.LabelField(getShortDesc(rmod.outcomes[i].outcome), GUILayout.MaxWidth(getShortDesc(rmod.outcomes[i].outcome).Length * 10.0f));
+            if (rmod.outcomes[i].outcome != null)
+            {
+                if (GUILayout.Button("Go to"))
+                    Selection.activeObject = rmod.outcomes[i].outcome;
+            }
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.LabelField("--------------------------------------------------------------------------------------------------------------------------------", GUILayout.MaxWidth(0.75f * EditorGUIUtility.currentViewWidth));

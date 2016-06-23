@@ -21,6 +21,11 @@ public class TextModuleInspector : ModuleInspectorAncestor
     private GUIContent textLabel, prevMLabel, nextMLabel, modIDLabel, subIDLabel, charLabel, logLabel;
 
     [MenuItem("Assets/Create/ConText Framework/Modules/Text Module")]
+    public static ModuleBlueprint CreateModuleManual()
+    {
+        return AssetCreator.CreateCustomAsset<TextModule>(null);
+    }
+
     public static ModuleBlueprint CreateModule(string name)
     {
         return AssetCreator.CreateCustomAsset<TextModule>(name);
@@ -67,6 +72,11 @@ public class TextModuleInspector : ModuleInspectorAncestor
             fixNextIDs();
         }
         EditorGUILayout.LabelField(getShortDesc(prevMod), GUILayout.MaxWidth(getShortDesc(prevMod).Length * 10.0f));
+        if (prevMod != null)
+        {
+            if (GUILayout.Button("Go to"))
+                Selection.activeObject = prevMod;
+        }
         EditorGUILayout.EndHorizontal();
         serializedObject.ApplyModifiedProperties();
 
@@ -113,6 +123,11 @@ public class TextModuleInspector : ModuleInspectorAncestor
             mod.nextModule = nextMod;
         }
         EditorGUILayout.LabelField(getShortDesc(nextMod), GUILayout.MaxWidth(getShortDesc(nextMod).Length * 10.0f));
+        if (nextMod != null)
+        {
+            if (GUILayout.Button("Go to"))
+                Selection.activeObject = nextMod;
+        }
         EditorGUILayout.EndHorizontal();
 
         EditorGUILayout.Space();

@@ -20,7 +20,12 @@ public class TicTacInspector : ModuleInspectorAncestor
     private ModuleManager.ModuleTypes nextModType;
     private GUIContent textLabel, prevMLabel, succMLabel, failMLabel, tieMLabel, modIDLabel, subIDLabel, charLabel, logLabel;
 
-    [MenuItem("Assets/Create/ConText Framework/Modules/Minigames/TicTacToe")]
+    [MenuItem("Assets/Create/ConText Framework/Modules/Minigames/TicTacToe2")]
+    public static ModuleBlueprint CreateModuleManual()
+    {
+        return AssetCreator.CreateCustomAsset<TicTacToe>(null);
+    }
+
     public static ModuleBlueprint CreateModule(string name)
     {
         return AssetCreator.CreateCustomAsset<TicTacToe>(name);
@@ -67,6 +72,11 @@ public class TicTacInspector : ModuleInspectorAncestor
             mod.previousModule = prevMod;
         }
         EditorGUILayout.LabelField(getShortDesc(prevMod), GUILayout.MaxWidth(getShortDesc(prevMod).Length * 10.0f));
+        if (prevMod != null)
+        {
+            if (GUILayout.Button("Go to"))
+                Selection.activeObject = prevMod;
+        }
         EditorGUILayout.EndHorizontal();
 
         serializedObject.ApplyModifiedProperties();
@@ -124,6 +134,11 @@ public class TicTacInspector : ModuleInspectorAncestor
                 mod.moduleSuccess = createNextModule(nextModType, mod, 0, 0, mod.hierarchyID + 1, mod.subpartID);
             }
         }
+        if (succMod != null)
+        {
+            if (GUILayout.Button("Go to"))
+                Selection.activeObject = succMod;
+        }
         EditorGUILayout.EndHorizontal();
 
         //failure module selection
@@ -141,6 +156,11 @@ public class TicTacInspector : ModuleInspectorAncestor
                 mod.moduleFailure = createNextModule(nextModType, mod, 0, 0, mod.hierarchyID + 1, mod.subpartID);
             }
         }
+        if (failMod != null)
+        {
+            if (GUILayout.Button("Go to"))
+                Selection.activeObject = failMod;
+        }
         EditorGUILayout.EndHorizontal();
 
         //tie module selection
@@ -157,6 +177,11 @@ public class TicTacInspector : ModuleInspectorAncestor
             {
                 mod.moduleTie = createNextModule(nextModType, mod, 0, 0, mod.hierarchyID + 1, mod.subpartID);
             }
+        }
+        if (tieMod != null)
+        {
+            if (GUILayout.Button("Go to"))
+                Selection.activeObject = tieMod;
         }
         EditorGUILayout.EndHorizontal();
 

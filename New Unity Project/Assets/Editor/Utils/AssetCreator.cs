@@ -26,10 +26,10 @@ public class AssetCreator {
         }
 
         //there a way to give it more clever default names? maybe give the types/classes static functions for something better?
-        Debug.Log(name);
         string assetName = aPath + "/New" + typeof(T).ToString() + ".asset";
         if (name != null)
         {
+            Debug.Log(name);
             if (!name.Equals(""))
                 assetName = aPath + "/" + name + ".asset";
         } 

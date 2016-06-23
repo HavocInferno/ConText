@@ -54,9 +54,6 @@ public class ReplyModule : TextModule {
                     }
                 }
             }
-
-            //if(Unify.Instance.StateMng.initialLoad)
-             //   textHandover = true;
         }
     }
 
@@ -141,5 +138,39 @@ public class ReplyModule : TextModule {
         }
 
         return nextModule;
+    }
+
+    public override ModuleBlueprint getHighestModule()
+    {
+        ModuleBlueprint highest;
+        if(outcomes.Count < 1)
+        {
+            return this;
+        } else
+        {
+            highest = outcomes[0].outcome.getHighestModule();
+        }
+
+        foreach(ReplyOption ro in outcomes)
+        {
+            if (ro.outcome != null)
+            {
+                ModuleBlueprint tmp = ro.outcome.getHighestModule();
+                if (tmp.hierarchyID > highest.hierarchyID)
+                {
+                    highest = tmp;
+                }
+                else if (tmp.hierarchyID == highest.hierarchyID && tmp.branchID > highest.branchID)
+                {
+                    highest = tmp;
+                }
+                else if (tmp.hierarchyID == highest.hierarchyID && tmp.branchID == highest.branchID && tmp.seqID > highest.seqID)
+                {
+                    highest = tmp;
+                }
+            }
+        }
+
+        return highest;
     }
 }

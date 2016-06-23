@@ -132,4 +132,12 @@ public class ModuleBlueprint : ScriptableObject {
     {
         return nextModule;
     }
+
+    public virtual ModuleBlueprint getHighestModule()
+    {
+        if (nextModule != null)
+            return nextModule.getHighestModule();
+        else
+            return this;
+    }
 }
