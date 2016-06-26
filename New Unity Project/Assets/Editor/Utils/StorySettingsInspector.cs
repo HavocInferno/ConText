@@ -14,9 +14,9 @@ public class StorySettingsInspector : Editor {
     private GUIContent charsLabel = new GUIContent("Characters");
 
 	[MenuItem("Assets/Create/ConText Framework/Story Settings")]
-    public static void Create()
+    public static StorySettings Create()
     {
-        AssetCreator.CreateCustomAsset<StorySettings>(null);
+        return AssetCreator.CreateCustomAsset<StorySettings>(null);
     }
 
     [MenuItem("Assets/Create/ConText Framework/Character")]
@@ -44,6 +44,11 @@ public class StorySettingsInspector : Editor {
 
             stt.characters[i] = (Character)EditorGUILayout.ObjectField(stt.characters[i], typeof(Character), false);
             EditorGUILayout.LabelField("Name: " + (stt.characters[i] != null ? stt.characters[i].characterName : ""));
+
+            if (GUILayout.Button("Go to"))
+            {
+                Selection.activeObject = stt.characters[i];
+            }
 
             if (GUILayout.Button("Delete"))
             {

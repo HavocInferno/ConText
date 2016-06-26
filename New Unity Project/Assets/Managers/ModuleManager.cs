@@ -126,7 +126,7 @@ public class ModuleManager : MonoBehaviour {
             if(idc.checkIDequal(nextMod))
             {
                 fireInvidivual(nextMod);
-                nextMod = nextMod.getModForChoice(idc.choice);
+                nextMod = nextMod.getModForChoice(idc.choice, idc);
                 if (nextMod == null)
                     { Debug.Log("Couldn't load further story progress. No next module found. Actual end of story?"); return null; }
             } else
@@ -139,5 +139,11 @@ public class ModuleManager : MonoBehaviour {
         Unify.Instance.StateMng.initialLoad = false;
 
         return nextMod;
+    }
+
+    public void fixIDs()
+    {
+        firstModule.SetModuleID(0, 0, 0);
+        firstModule.fixNextIDs();
     }
 }

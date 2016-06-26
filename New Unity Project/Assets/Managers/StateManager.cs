@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -79,5 +80,11 @@ public class StateManager : MonoBehaviour {
         Unify.Instance.ModMng.choices.Clear();
         SaveChoices(fn);
         Debug.Log("save file wiped");
+    }
+
+    public static void deleteSaveFile(string fn)
+    {
+        string path = Application.persistentDataPath + "/Saves/" + fn + ".ctxt";
+        FileUtil.DeleteFileOrDirectory(path);
     }
 }

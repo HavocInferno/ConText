@@ -20,22 +20,22 @@ public class ModuleInspectorAncestor : Editor {
 
         if(m is TextModule)
         {
-            return "(" + m.sendingCharacter.name + "; Text)";
+            return "(" + m.sendingCharacter.characterName + "; Text)";
         }
 
         if(m is ImageModule)
         {
-            return "(" + m.sendingCharacter.name + "; Image)";
+            return "(" + m.sendingCharacter.characterName + "; Image)";
         }
 
         if(m is ReplyModule)
         {
-            return "(" + m.sendingCharacter.name + "; Reply)";
+            return "(" + m.sendingCharacter.characterName + "; Reply)";
         }
 
         if(m is TicTacToe)
         {
-            return "(" + m.sendingCharacter.name + "; TicTacToe)";
+            return "(" + m.sendingCharacter.characterName + "; TicTacToe)";
         }
 
         return "";

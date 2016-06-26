@@ -140,6 +140,22 @@ public class TextModuleInspector : ModuleInspectorAncestor
         {
             mod.nextModule = createNextModule(nextModType, mod, mod.seqID + 1, mod.branchID, mod.hierarchyID, mod.subpartID);
         }
+
+        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+        GUILayout.Label("Delete", EditorStyles.boldLabel);
+        if (showHints)
+            EditorGUILayout.HelpBox("The module being triggered after this one.", MessageType.Info);
+
+        if (GUILayout.Button("Delete this module"))
+        {
+            if(mod.previousModule != null)
+                mod.previousModule.nextModule = mod.nextModule;
+
+            if (mod.nextModule != null)
+                mod.nextModule.previousModule = mod.previousModule;
+
+            Debug.Log(mod.ToString() + " deleted? -> " + AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(mod)));
+        }
     }
 
     public void fixNextIDs()

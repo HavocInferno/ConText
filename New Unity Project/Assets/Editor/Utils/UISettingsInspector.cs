@@ -90,8 +90,8 @@ public class UISettingsInspector : Editor {
         {
             foreach(Character ch in uis.sSettings.characters)
             {
-                ch.blobColor = EditorGUILayout.ColorField("[" + ch.name + "] message color", ch.blobColor);
-                ch.blobBackground = (Sprite)EditorGUILayout.ObjectField("[" + ch.name + "] msg background image", ch.blobBackground, typeof(Sprite), false);
+                ch.blobColor = EditorGUILayout.ColorField("[" + ch.characterName + "] message color", ch.blobColor);
+                ch.blobBackground = (Sprite)EditorGUILayout.ObjectField("[" + ch.characterName + "] msg background image", ch.blobBackground, typeof(Sprite), false);
             }
         }
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);

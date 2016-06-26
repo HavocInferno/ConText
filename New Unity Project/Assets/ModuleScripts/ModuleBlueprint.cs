@@ -30,6 +30,8 @@ public class ModuleBlueprint : ScriptableObject {
 
         public bool checkIDequal(ModuleBlueprint mod)
         {
+            Debug.Log("checking. mod: " + mod.hierarchyID + "h-" + mod.branchID + "b-" + mod.seqID + "s --- idc: " + c_hierarchyID + "h-" + c_branchID + "b-" + c_seqID + "s");
+
             if (mod.seqID != c_seqID)
                 return false;
 
@@ -80,13 +82,10 @@ public class ModuleBlueprint : ScriptableObject {
     }
     public bool SetModuleID(int sID, int bID, int hID)
     {
-        if (!IDset)
-        {
             seqID = sID;
             branchID = bID;
             hierarchyID = hID;
-            IDset = true;
-        } return IDset;
+        return true;
     }
 
     public virtual GameObject getUIObject()
@@ -128,7 +127,7 @@ public class ModuleBlueprint : ScriptableObject {
         return null;
     }*/
 
-    public virtual ModuleBlueprint getModForChoice(int choiceID)
+    public virtual ModuleBlueprint getModForChoice(int choiceID, IDChoiceCapsule idc)
     {
         return nextModule;
     }
@@ -139,5 +138,14 @@ public class ModuleBlueprint : ScriptableObject {
             return nextModule.getHighestModule();
         else
             return this;
+    }
+
+    public virtual void fixNextIDs()
+    {
+        if(nextModule != null)
+        {
+            nextModule.SetModuleID(seqID + 1, branchID, hierarchyID);
+            nextModule.fixNextIDs();
+        }
     }
 }

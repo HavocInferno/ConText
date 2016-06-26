@@ -54,7 +54,7 @@ public class TicTacToe : TextModule {
             Debug.Log("Not pushing due to initial load");
     }
 
-    public override ModuleBlueprint getModForChoice(int choiceID)
+    public override ModuleBlueprint getModForChoice(int choiceID, IDChoiceCapsule idc)
     {
         switch(choiceID)
         {
@@ -66,6 +66,27 @@ public class TicTacToe : TextModule {
                 return moduleTie;
             default:
                 return null;
+        }
+    }
+
+    public override void fixNextIDs()
+    {
+        if(moduleSuccess != null)
+        {
+            moduleSuccess.SetModuleID(0, 0, hierarchyID + 1);
+            moduleSuccess.fixNextIDs();
+        }
+
+        if (moduleFailure != null)
+        {
+            moduleFailure.SetModuleID(0, 1, hierarchyID + 1);
+            moduleFailure.fixNextIDs();
+        }
+
+        if (moduleTie != null)
+        {
+            moduleTie.SetModuleID(0, 2, hierarchyID + 1);
+            moduleTie.fixNextIDs();
         }
     }
 }

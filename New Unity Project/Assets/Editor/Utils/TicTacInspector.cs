@@ -153,7 +153,7 @@ public class TicTacInspector : ModuleInspectorAncestor
         {
             if (GUILayout.Button("+ (" + ModuleManager.m_ModuleTypeEnumDescriptions[(int)nextModType] + ")"))
             {
-                mod.moduleFailure = createNextModule(nextModType, mod, 0, 0, mod.hierarchyID + 1, mod.subpartID);
+                mod.moduleFailure = createNextModule(nextModType, mod, 0, 1, mod.hierarchyID + 1, mod.subpartID);
             }
         }
         if (failMod != null)
@@ -175,7 +175,7 @@ public class TicTacInspector : ModuleInspectorAncestor
         {
             if (GUILayout.Button("+ (" + ModuleManager.m_ModuleTypeEnumDescriptions[(int)nextModType] + ")"))
             {
-                mod.moduleTie = createNextModule(nextModType, mod, 0, 0, mod.hierarchyID + 1, mod.subpartID);
+                mod.moduleTie = createNextModule(nextModType, mod, 0, 2, mod.hierarchyID + 1, mod.subpartID);
             }
         }
         if (tieMod != null)
@@ -187,22 +187,20 @@ public class TicTacInspector : ModuleInspectorAncestor
 
         EditorGUILayout.Space();
 
-        //create a success/failure/tie module and give it a fitting set of IDs
-        //{TODO}: selection list where the user can select which *type* of module is up next
-        /*nextModType = (ModuleManager.ModuleTypes)EditorGUILayout.Popup("Module type", (int)nextModType, ModuleManager.m_ModuleTypeEnumDescriptions);
-        if (GUILayout.Button("Create succ module (" + ModuleManager.m_ModuleTypeEnumDescriptions[(int)nextModType] + ")"))
-        {
-            mod.moduleSuccess = createNextModule(nextModType, mod, 0, 0, mod.hierarchyID + 1, mod.subpartID);
-        }
+        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+        GUILayout.Label("Delete", EditorStyles.boldLabel);
+        if (showHints)
+            EditorGUILayout.HelpBox("The module being triggered after this one.", MessageType.Info);
 
-        if (GUILayout.Button("Create fail module (" + ModuleManager.m_ModuleTypeEnumDescriptions[(int)nextModType] + ")"))
+        if (GUILayout.Button("Delete this module"))
         {
-            mod.moduleFailure = createNextModule(nextModType, mod, 0, 1, mod.hierarchyID + 1, mod.subpartID);
-        }
+            if (mod.previousModule != null)
+                mod.previousModule.nextModule = mod.nextModule;
 
-        if (GUILayout.Button("Create tie module (" + ModuleManager.m_ModuleTypeEnumDescriptions[(int)nextModType] + ")"))
-        {
-            mod.moduleTie = createNextModule(nextModType, mod, 0, 2, mod.hierarchyID + 1, mod.subpartID);
-        }*/
+            if (mod.nextModule != null)
+                mod.nextModule.previousModule = mod.previousModule;
+
+            Debug.Log(mod.ToString() + " deleted? -> " + AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(mod)));
+        }
     }
 }

@@ -102,12 +102,16 @@ public class ReplyModule : TextModule {
         idc.choice = chosen;
 
         if (!Unify.Instance.StateMng.initialLoad)
+        {
             Unify.Instance.ModMng.addChoiceToList(this, idc);
+            idc.c_subpartID++;
+            Unify.Instance.ModMng.addChoiceToList(this, idc);
+        }
         else
             Debug.Log("Not pushing due to initial load");
     }
 
-    public override ModuleBlueprint getModForChoice(int choiceID)
+    public override ModuleBlueprint getModForChoice(int choiceID, IDChoiceCapsule idc)
     {
         if (textHandover)
         {
@@ -172,5 +176,16 @@ public class ReplyModule : TextModule {
         }
 
         return highest;
+    }
+
+    public override void fixNextIDs()
+    {
+        int i = 0;
+        foreach(ReplyOption ro in outcomes)
+        {
+            ro.outcome.SetModuleID(0, i, hierarchyID + 1);
+            i++;
+            ro.outcome.fixNextIDs();
+        }
     }
 }

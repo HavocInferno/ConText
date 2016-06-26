@@ -71,7 +71,7 @@ public class ImageModule : ModuleBlueprint
         base.pushChoice(idc);
     }
 
-    public override ModuleBlueprint getModForChoice(int choiceID)
+    public override ModuleBlueprint getModForChoice(int choiceID, IDChoiceCapsule idc)
     {
         return nextModule;
     }

@@ -14,6 +14,7 @@ public class TextModule : ModuleBlueprint {
     //private Text UIContent;
     //this has the module's text parsed
     private List<TextParser.ParsedChunk> allnextParts;
+    private int numberParts = 0;
 
     public override GameObject getUIObject()
     {
@@ -38,6 +39,7 @@ public class TextModule : ModuleBlueprint {
         {
             Debug.Log("text not parsed yet? parsing...");
             allnextParts = TextParser.parse(txtContent);
+            //numberParts = allnextParts.Count;
         } else
         {
             Debug.Log("text already parsed into " + allnextParts.Count + " parts.");
@@ -76,7 +78,10 @@ public class TextModule : ModuleBlueprint {
             tmp.enabled = true;
         }
 
-        delayBeforeSend = allnextParts[0].delay;
+        if (Unify.Instance.StateMng.initialLoad)
+            delayBeforeSend = 0f;
+        else
+            delayBeforeSend = allnextParts[0].delay;
         allnextParts.RemoveAt(0);
 
         Unify.Instance.LogMng.fireLog(log);
@@ -112,8 +117,11 @@ public class TextModule : ModuleBlueprint {
         base.pushChoice(idc);
     }
 
-    public override ModuleBlueprint getModForChoice(int choiceID)
+    public override ModuleBlueprint getModForChoice(int choiceID, IDChoiceCapsule idc)
     {
+        if (allnextParts.Count > 0)
+            return this;
+
         return nextModule;
     }
 }

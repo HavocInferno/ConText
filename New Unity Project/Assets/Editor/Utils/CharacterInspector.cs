@@ -23,6 +23,9 @@ public class CharacterInspector : Editor
         DrawDefaultInspector();
         serializedObject.Update();
 
+        ch.name = ch.characterName;
+        AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath(ch), "ch_" + ch.characterName);
+
         EditorUtility.SetDirty(ch);
     }
 }

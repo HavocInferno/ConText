@@ -31,6 +31,14 @@ public class ReplyModuleInspector : TextModuleInspector {
 
         rmod = target as ReplyModule;
 
+        for(int i = 0; i < rmod.outcomes.Count; i++)
+        {
+            if(rmod.outcomes[i].outcome == null)
+            {
+                rmod.outcomes.RemoveAt(i);
+            }
+        }
+
         Debug.Log(rmod.ToString() + "; " + rmod.textHandover);
     }
 
@@ -97,6 +105,22 @@ public class ReplyModuleInspector : TextModuleInspector {
             rmod.outcomes.Add(r);
 
             r.replyText = "new reply " + r.outcome.branchID;
+        }
+
+        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+        GUILayout.Label("Delete", EditorStyles.boldLabel);
+        if (showHints)
+            EditorGUILayout.HelpBox("The module being triggered after this one.", MessageType.Info);
+
+        if (GUILayout.Button("Delete this module"))
+        {
+            if (rmod.previousModule != null)
+                rmod.previousModule.nextModule = rmod.outcomes[0].outcome;
+
+            if (rmod.outcomes[0].outcome != null)
+                rmod.outcomes[0].outcome.previousModule = rmod.previousModule;
+
+            Debug.Log(rmod.ToString() + " deleted? -> " + AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(rmod)));
         }
 
         serializedObject.ApplyModifiedProperties();
