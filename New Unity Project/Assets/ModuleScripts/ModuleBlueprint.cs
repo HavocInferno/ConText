@@ -10,6 +10,11 @@ Copyright 2016 - Paul Preißner - for Bachelor Thesis "ConText - A Choice/Text A
 [System.Serializable]
 public class ModuleBlueprint : ScriptableObject {
 
+    /*
+    IDCChoiceCapsule is a special data type to encapsulate a single ID set and be able to check whether it is equal to the ID set of a given module.
+    This is used during initial loading of existing as well as saving of new story progress in order to encode the module as light as possible 
+    as well as to compare the save file content with the module assets for consistency.
+    */
     [System.Serializable]
     public class IDChoiceCapsule
     {
@@ -73,7 +78,7 @@ public class ModuleBlueprint : ScriptableObject {
     //the gameobject/prefab (needs to be compatible with Unity 4.6/5.0 onward new UI) to be used as a message instance in the UI's content view.
     public GameObject UIObjectTemplate;
 
-    //getter/setter/crude "final" workaround for defining a moduleID manually. Not used yet (Alan, please fix!)
+    //getter/setter/crude "final" workaround for defining a moduleID manually.
     private bool IDset = false;
     public int[] GetModuleID()
     {
@@ -114,6 +119,7 @@ public class ModuleBlueprint : ScriptableObject {
         return nextModule;
     }
 
+    /*This hands over the given Capsule to the Module Manager for saving in the progress save file.*/
     public virtual void pushChoice(IDChoiceCapsule idc)
     {
         if (!Unify.Instance.StateMng.initialLoad)
@@ -122,16 +128,18 @@ public class ModuleBlueprint : ScriptableObject {
             Debug.Log("Not pushing due to initial load");
     }
 
-    /*public virtual ModuleBlueprint getChoiceFromCapsule(IDChoiceCapsule idc)
-    {
-        return null;
-    }*/
-
+    /*This is used when loading a save file and displaying the progress up to that point. 
+    Given is the choice capsule as well as the choice ID in question. 
+    This function should then return the corresponding next module of this module. 
+    e.g. in a Reply Module this function might return outcome #3 when given the parameter choiceID = 3.*/
     public virtual ModuleBlueprint getModForChoice(int choiceID, IDChoiceCapsule idc)
     {
         return nextModule;
     }
 
+    /*This function should return the highest module that can be found above this module. 
+    Essentially quasi recursive, it should query all next modules for their respective highest module (e.g. by calling their getHighestModule() function) 
+    and then return the "highest" (i.e. with highest ID set) of the returned modules. Otherwise return itself.*/
     public virtual ModuleBlueprint getHighestModule()
     {
         if (nextModule != null)
@@ -140,6 +148,10 @@ public class ModuleBlueprint : ScriptableObject {
             return this;
     }
 
+    /*This function is similarly quasi recursive as getHighestModule(). 
+    It is intended to fix the ID sets of the entire active story by starting with the firstModule specified in the module manager. 
+    It should simply consider its own ID and given next modules are present, adapt their IDs as the logical next ID set and then call this function on these next modules.
+    Given the function is implemented correctly across all module classes, the process will work and the entire story will have correct ID sets.*/
     public virtual void fixNextIDs()
     {
         if(nextModule != null)
