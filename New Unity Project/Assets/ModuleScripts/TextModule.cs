@@ -72,7 +72,7 @@ public class TextModule : ModuleBlueprint {
 
         if (sendingCharacter.blobBackground != null)
         {
-            Image tmp = UIObjectInstance.GetComponentInChildren<Image>();
+            Image tmp = UIObjectInstance.GetComponentInChildren<ModuleUIHelper>().TextContainer.GetComponentInChildren<Image>();//UIObjectInstance.GetComponentInChildren<Image>();
             tmp.sprite = sendingCharacter.blobBackground;
             tmp.color = Color.white;
             tmp.enabled = true;

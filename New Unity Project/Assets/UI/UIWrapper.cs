@@ -16,9 +16,7 @@ public class UIWrapper : MonoBehaviour {
     public GameObject TextLayer;
     public GameObject LogLayer;
 
-    //public Canvas canvas;
-    //public Text testText;
-    //public int letterWidth = 15;
+    public GameObject typingIndicator;
 
     public GameObject ReplyButtonTemplate;
 
@@ -42,18 +40,6 @@ public class UIWrapper : MonoBehaviour {
         ToLayer(MenuLayer);
 
         Debug.Log(currentLayer.GetComponent<RectTransform>().anchoredPosition + ", " + currentLayer.GetComponent<RectTransform>().offsetMax); //offsetmax is negated though
-
-        /*testText.font = Unify.Instance.UIMng.UISettings.moduleTextFont;
-        testText.fontSize = Unify.Instance.UIMng.UISettings.moduleTextFontSize;
-        Debug.Log(testText.text);
-        CharacterInfo chinfo;
-        for (int i = 0; i < testText.text.Length; i++)
-        {
-            testText.font.GetCharacterInfo(testText.text[i], out chinfo, testText.fontSize, testText.fontStyle);
-            letterWidth += chinfo.advance;
-        }
-        letterWidth /= testText.text.Length;
-        Debug.Log("Avg char width: " + letterWidth);*/
     }
 
     /*first set the pos/size of the current layer to off-center (kinda redundant), then deactivate it.

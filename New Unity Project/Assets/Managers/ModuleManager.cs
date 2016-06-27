@@ -63,8 +63,10 @@ public class ModuleManager : MonoBehaviour {
         {
             if (Unify.Instance.StateMng.GetGameState() == StateManager.GameState.TEXT)
             {
+                Unify.Instance.UIMng.UIWrap.typingIndicator.SetActive(true);
                 yield return new WaitForSeconds(nextModule.delayBeforeSend);
                 Unify.Instance.UIMng.addModule(nextModule);
+                Unify.Instance.UIMng.UIWrap.typingIndicator.SetActive(false);
                 nextModule = nextModule.getNextPart();
             }
             else
@@ -101,8 +103,8 @@ public class ModuleManager : MonoBehaviour {
 
     public bool addChoiceToList(ModuleBlueprint mod, ModuleBlueprint.IDChoiceCapsule id_choice)
     {
-        /*There check whether mod and choice capsule are same data, 
-        then add the capsule to the choices list (i.e. this function to be 
+        /*Checks whether mod and choice capsule are same data, 
+        then adds the capsule to the choices list (i.e. this function to be 
         called from within the specific module's code, as those have better 
         control over what choice ID to use etc)*/
         if (mod == null || id_choice == null)

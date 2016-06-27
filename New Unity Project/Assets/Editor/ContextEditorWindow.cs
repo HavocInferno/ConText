@@ -8,6 +8,8 @@ public class ContextEditorWindow : EditorWindow
     bool myBool = true;
     float myFloat = 1.23f;
 
+    Vector2 scrollPos;
+
     [MenuItem("ConText/Project Overview")]
     static void Init()
     {
@@ -18,6 +20,10 @@ public class ContextEditorWindow : EditorWindow
 
     void OnGUI()
     {
+        scrollPos = EditorGUILayout.BeginScrollView(scrollPos,
+                                                      false,
+                                                      false);
+
         GUIStyle wrapStyle = new GUIStyle(GUI.skin.label);
         wrapStyle.wordWrap = true;
         wrapStyle.fontStyle = FontStyle.Bold;
@@ -126,5 +132,7 @@ public class ContextEditorWindow : EditorWindow
         //GUILayout.Space(10);
 
         wrapStyle.fontSize = tmp;
+
+        EditorGUILayout.EndScrollView();
     }
 }
