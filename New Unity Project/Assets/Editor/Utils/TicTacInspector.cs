@@ -84,15 +84,15 @@ public class TicTacInspector : ModuleInspectorAncestor
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
         GUILayout.Label("Message properties", EditorStyles.boldLabel);
 
-        EditorGUILayout.LabelField("ID: " + mod.seqID + "(seq) " + mod.branchID + "(branch) " + mod.hierarchyID + "(hierarchy)");
+        EditorGUILayout.LabelField("message ID: " + mod.seqID + "(seq) " + mod.branchID + "(branch) " + mod.hierarchyID + "(hierarchy)");
+        EditorGUILayout.Space();
 
         //character sending the message -> change to dropdown (enum of all characters, then determine forward/backward?)
         mod.sendingCharacter = (Character)EditorGUILayout.ObjectField(charLabel, mod.sendingCharacter, typeof(Character), false);
+        mod.delayBeforeSend = EditorGUILayout.FloatField("Delay before sending (seconds)", mod.delayBeforeSend);
 
         //text input
         drawTextField(500);
-
-        ModuleSpecific();
 
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
         GUILayout.Label("Log", EditorStyles.boldLabel);
@@ -104,6 +104,8 @@ public class TicTacInspector : ModuleInspectorAncestor
             mod.log = LogEntryInspector.CreateEntry(null);
         }
         mod.log = (LogEntry)EditorGUILayout.ObjectField(logLabel, mod.log, typeof(LogEntry), false);
+
+        ModuleSpecific();
 
         serializedObject.ApplyModifiedProperties();
         EditorUtility.SetDirty(mod);
@@ -192,7 +194,9 @@ public class TicTacInspector : ModuleInspectorAncestor
         if (showHints)
             EditorGUILayout.HelpBox("The module being triggered after this one.", MessageType.Info);
 
-        if (GUILayout.Button("Delete this module"))
+        GUIStyle bStyle = new GUIStyle(GUI.skin.button);
+        bStyle.normal.textColor = Color.red;
+        if (GUILayout.Button("Delete this module (irreversible)", bStyle))
         {
             if (mod.previousModule != null)
                 mod.previousModule.nextModule = mod.nextModule;

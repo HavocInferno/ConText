@@ -112,7 +112,9 @@ public class ReplyModuleInspector : TextModuleInspector {
         if (showHints)
             EditorGUILayout.HelpBox("The module being triggered after this one.", MessageType.Info);
 
-        if (GUILayout.Button("Delete this module"))
+        GUIStyle bStyle = new GUIStyle(GUI.skin.button);
+        bStyle.normal.textColor = Color.red;
+        if (GUILayout.Button("Delete this module (irreversible)", bStyle))
         {
             if (rmod.previousModule != null)
                 rmod.previousModule.nextModule = rmod.outcomes[0].outcome;

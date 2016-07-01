@@ -24,6 +24,17 @@ public class ContextEditorWindow : EditorWindow
                                                       false,
                                                       false);
 
+        if(Unify.Instance.ModMng == null || Unify.Instance.UIMng == null || Unify.Instance.StateMng == null || Unify.Instance.LogMng == null)
+        {
+            GUIStyle bStyle = new GUIStyle(GUI.skin.label);
+            bStyle.normal.textColor = Color.red;
+            bStyle.wordWrap = true;
+            bStyle.fontSize = 20;
+            GUILayout.Label("(Some) manager instances missing. Is Main.unity open?", bStyle);
+            EditorGUILayout.EndScrollView();
+            return;
+        }
+
         GUIStyle wrapStyle = new GUIStyle(GUI.skin.label);
         wrapStyle.wordWrap = true;
         wrapStyle.fontStyle = FontStyle.Bold;
@@ -37,7 +48,6 @@ public class ContextEditorWindow : EditorWindow
 
         GUILayout.Label("--------------------------------------------------------------------------------------------------------------------------------", EditorStyles.centeredGreyMiniLabel);
         //GUILayout.Space(10);
-
         if (Unify.Instance.UIMng.UISettings == null)
         {
             GUILayout.Label("No UI Settings specified yet.");

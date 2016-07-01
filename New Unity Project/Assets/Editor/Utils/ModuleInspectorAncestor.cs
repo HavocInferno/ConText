@@ -97,7 +97,7 @@ public class ModuleInspectorAncestor : Editor {
                 rm.subpartID = newSubpartID;
                 return rm;
             case ModuleManager.ModuleTypes.TICTACM:
-                TicTacToe tttm = (TicTacToe)TicTacInspector.CreateModule(newAssetName + "-ReplyModule");
+                TicTacToe tttm = (TicTacToe)TicTacInspector.CreateModule(newAssetName + "-MG_TicTacToe");
                 if (thisMod != null)
                 {
                     tttm.previousModule = thisMod;
