@@ -13,6 +13,11 @@ public class ModuleInspectorAncestor : Editor {
 
     public static string getShortDesc(ModuleBlueprint m)
     {
+        if(m.sendingCharacter == null)
+        {
+            return "(char. unspecified, Error)";
+        }
+
         if(m == null)
         {
             return "";
