@@ -37,6 +37,8 @@ public class ModuleManager : MonoBehaviour {
     void Start () {
         StateManager.LoadChoices("mainStory");
 
+        Unify.Instance.UIMng.menuLayerSetStartButton(choices.Count > 0 ? "Continue" : "Start");
+
         foreach(UISettings.modUIPair mup in Unify.Instance.UIMng.UISettings.modUITemplates)
         {
             UITemplateMapping.Add(mup.modClassName, mup.modUITemplate);

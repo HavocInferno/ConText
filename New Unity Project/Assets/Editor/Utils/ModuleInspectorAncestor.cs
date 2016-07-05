@@ -8,6 +8,7 @@ Copyright 2016 - Paul Preißner - for Bachelor Thesis "ConText - A Choice/Text A
 public class ModuleInspectorAncestor : Editor {
 
     public bool showHints = false;
+    bool reallyDelete = false;
     protected ModuleBlueprint mod;
     protected SerializedProperty prevModule;
     protected SerializedProperty nextModule;
@@ -204,6 +205,18 @@ public class ModuleInspectorAncestor : Editor {
     {
         GUILayout.Label("This is a " + mod.GetType().ToString(), EditorStyles.boldLabel);
         showHints = EditorGUILayout.Toggle("Show hints", showHints);
+        EditorGUILayout.BeginHorizontal();
+        if (!(showSectionPrev & showSectionMsg & showSectionLog & showSectionNext))
+        {
+            if (GUILayout.Button("Expand all", GUILayout.MaxWidth(100.0f)))
+                showSectionPrev = showSectionMsg = showSectionLog = showSectionNext = true;
+        }
+        if ((showSectionPrev | showSectionMsg | showSectionLog | showSectionNext))
+        {
+            if (GUILayout.Button("Collapse all", GUILayout.MaxWidth(100.0f)))
+                showSectionPrev = showSectionMsg = showSectionLog = showSectionNext = false;
+        }
+        EditorGUILayout.EndHorizontal();
         GUILayout.Label("Fields labeled with (*) need to be set in order for the game to work.");
 
         if (mod.previousModule != null)
@@ -294,15 +307,32 @@ public class ModuleInspectorAncestor : Editor {
 
         GUIStyle bStyle = new GUIStyle(GUI.skin.button);
         bStyle.normal.textColor = Color.red;
-        if (GUILayout.Button("Delete this module (irreversible)", bStyle))
+        if (!reallyDelete && GUILayout.Button("Delete this module (irreversible)", bStyle))
         {
-            if (mod.previousModule != null)
-                mod.previousModule.nextModule = mod.nextModule;
+            reallyDelete = true;
+        }
 
-            if (mod.nextModule != null)
-                mod.nextModule.previousModule = mod.previousModule;
+        if (reallyDelete)
+        {
+            EditorGUILayout.LabelField("Really delete?");
 
-            Debug.Log(mod.ToString() + " deleted? -> " + AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(mod)));
+            EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Yes, really delete", bStyle))
+            {
+                reallyDelete = false;
+                if (mod.previousModule != null)
+                    mod.previousModule.nextModule = mod.nextModule;
+
+                if (mod.nextModule != null)
+                    mod.nextModule.previousModule = mod.previousModule;
+
+                Debug.Log(mod.ToString() + " deleted? -> " + AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(mod)));
+            }
+            if (GUILayout.Button("No"))
+            {
+                reallyDelete = false;
+            }
+            EditorGUILayout.EndHorizontal();
         }
     }
 

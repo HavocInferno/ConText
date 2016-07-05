@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -74,5 +75,10 @@ public class UIManager : MonoBehaviour {
                 UIWrap.ToLayer(UIWrap.LogLayer);
                 break;
         }
+    }
+
+    public void menuLayerSetStartButton(string s)
+    {
+        UIWrap.MenuStartButton.GetComponent<Text>().text = s;
     }
 }

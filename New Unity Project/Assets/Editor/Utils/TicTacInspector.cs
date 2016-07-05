@@ -32,6 +32,8 @@ public class TicTacInspector : ModuleInspectorAncestor
 
         textContent = serializedObject.FindProperty("txtContent");
 
+        partNext = new GUIContent("Next modules (Win/Fail/Loss)");
+
         succMLabel = new GUIContent("Win module", "is usually set automatically when using this Inspector's Create button");
         failMLabel = new GUIContent("Lose module", "is usually set automatically when using this Inspector's Create button");
         tieMLabel = new GUIContent("Tie module", "is usually set automatically when using this Inspector's Create button");
@@ -69,7 +71,7 @@ public class TicTacInspector : ModuleInspectorAncestor
         {
             ((TicTacToe)mod).moduleSuccess = succMod;
         }
-        EditorGUILayout.LabelField(getShortDesc(succMod), GUILayout.MaxWidth(getShortDesc(succMod).Length * 10.0f));
+        EditorGUILayout.LabelField(getShortDesc(succMod), GUILayout.MaxWidth(getShortDesc(succMod).Length * 7.0f));
         if (succMod == null)
         {
             if (GUILayout.Button("+ (" + ModuleManager.m_ModuleTypeEnumDescriptions[(int)nextModType] + ")"))
@@ -91,7 +93,7 @@ public class TicTacInspector : ModuleInspectorAncestor
         {
             ((TicTacToe)mod).moduleFailure = failMod;
         }
-        EditorGUILayout.LabelField(getShortDesc(failMod), GUILayout.MaxWidth(getShortDesc(failMod).Length * 10.0f));
+        EditorGUILayout.LabelField(getShortDesc(failMod), GUILayout.MaxWidth(getShortDesc(failMod).Length * 7.0f));
         if (failMod == null)
         {
             if (GUILayout.Button("+ (" + ModuleManager.m_ModuleTypeEnumDescriptions[(int)nextModType] + ")"))
@@ -113,7 +115,7 @@ public class TicTacInspector : ModuleInspectorAncestor
         {
             ((TicTacToe)mod).moduleTie = tieMod;
         }
-        EditorGUILayout.LabelField(getShortDesc(tieMod), GUILayout.MaxWidth(getShortDesc(tieMod).Length * 10.0f));
+        EditorGUILayout.LabelField(getShortDesc(tieMod), GUILayout.MaxWidth(getShortDesc(tieMod).Length * 7.0f));
         if (tieMod == null)
         {
             if (GUILayout.Button("+ (" + ModuleManager.m_ModuleTypeEnumDescriptions[(int)nextModType] + ")"))

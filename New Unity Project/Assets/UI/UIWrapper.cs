@@ -17,6 +17,7 @@ public class UIWrapper : MonoBehaviour {
     public GameObject LogLayer;
 
     public GameObject typingIndicator;
+    public GameObject MenuStartButton;
 
     public GameObject ReplyButtonTemplate;
 
