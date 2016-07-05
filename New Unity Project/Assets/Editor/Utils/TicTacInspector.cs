@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEditor;
-using System.Collections;
-using System.Collections.Generic;
+
 
 /*--------------------------------
 Copyright 2016 - Paul Preißner - for Bachelor Thesis "ConText - A Choice/Text Adventure Framework" @ TU München
@@ -10,15 +9,9 @@ Copyright 2016 - Paul Preißner - for Bachelor Thesis "ConText - A Choice/Text A
 [CustomEditor(typeof(TicTacToe))]
 public class TicTacInspector : ModuleInspectorAncestor
 {
-
-    //private SerializedProperty modID;
-    private SerializedProperty prevModule;
     private SerializedProperty textContent;
     private SerializedProperty successModule, failureModule, tieModule;
-
-    private TicTacToe mod;
-    private ModuleManager.ModuleTypes nextModType;
-    private GUIContent textLabel, prevMLabel, succMLabel, failMLabel, tieMLabel, modIDLabel, subIDLabel, charLabel, logLabel;
+    private GUIContent succMLabel, failMLabel, tieMLabel;
 
     [MenuItem("Assets/Create/ConText Framework/Modules/Minigames/TicTacToe2")]
     public static ModuleBlueprint CreateModuleManual()
@@ -31,59 +24,26 @@ public class TicTacInspector : ModuleInspectorAncestor
         return AssetCreator.CreateCustomAsset<TicTacToe>(name);
     }
 
-    public void OnEnable()
+    public override void OnEnable()
     {
-        //modID = serializedObject.FindProperty("moduleID");
-        textContent = serializedObject.FindProperty("txtContent");
+        base.OnEnable();
 
         mod = target as TicTacToe;
 
-        textLabel = new GUIContent("Text message (incl. markup)");
-        prevMLabel = new GUIContent("Previous module", "is usually set automatically when using this Inspector's Create button");
+        textContent = serializedObject.FindProperty("txtContent");
+
         succMLabel = new GUIContent("Win module", "is usually set automatically when using this Inspector's Create button");
         failMLabel = new GUIContent("Lose module", "is usually set automatically when using this Inspector's Create button");
         tieMLabel = new GUIContent("Tie module", "is usually set automatically when using this Inspector's Create button");
-        modIDLabel = new GUIContent("Module ID", "unique ID, automatically generated when using this Inspector's Create button");
-        subIDLabel = new GUIContent("Sub ID", "unique ID, automatically generated when using this Inspector's Create button");
-        charLabel = new GUIContent("Character", "which character is sending this?");
-        logLabel = new GUIContent("Log", "log");
     }
 
     public virtual void drawTextField(int height)
     {
-        EditorGUILayout.PropertyField(textContent, textLabel, GUILayout.MaxHeight(height));
+        EditorGUILayout.PropertyField(textContent, contentLabel, GUILayout.MaxHeight(height));
     }
 
-    public override void OnInspectorGUI()
+    public override void PartMessage()
     {
-        //base.OnInspectorGUI();
-        serializedObject.Update();
-
-        showHints = EditorGUILayout.Toggle("Show hints", showHints);
-
-        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
-        GUILayout.Label("Previous module", EditorStyles.boldLabel);
-
-        //previous module selection
-        EditorGUILayout.BeginHorizontal();
-        ModuleBlueprint prevMod = (ModuleBlueprint)EditorGUILayout.ObjectField(prevMLabel, mod.previousModule, typeof(ModuleBlueprint), false);
-        if (prevMod != null || true)
-        {
-            mod.previousModule = prevMod;
-        }
-        EditorGUILayout.LabelField(getShortDesc(prevMod), GUILayout.MaxWidth(getShortDesc(prevMod).Length * 10.0f));
-        if (prevMod != null)
-        {
-            if (GUILayout.Button("Go to"))
-                Selection.activeObject = prevMod;
-        }
-        EditorGUILayout.EndHorizontal();
-
-        serializedObject.ApplyModifiedProperties();
-
-        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
-        GUILayout.Label("Message properties", EditorStyles.boldLabel);
-
         EditorGUILayout.LabelField("message ID: " + mod.seqID + "(seq) " + mod.branchID + "(branch) " + mod.hierarchyID + "(hierarchy)");
         EditorGUILayout.Space();
 
@@ -93,28 +53,9 @@ public class TicTacInspector : ModuleInspectorAncestor
 
         //text input
         drawTextField(500);
-
-        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
-        GUILayout.Label("Log", EditorStyles.boldLabel);
-        if (showHints)
-            EditorGUILayout.HelpBox("The log entry that will be added or updated when this module is triggered.", MessageType.Info);
-
-        if (GUILayout.Button("Add Log Entry"))
-        {
-            mod.log = LogEntryInspector.CreateEntry(null);
-        }
-        mod.log = (LogEntry)EditorGUILayout.ObjectField(logLabel, mod.log, typeof(LogEntry), false);
-
-        ModuleSpecific();
-
-        serializedObject.ApplyModifiedProperties();
-        EditorUtility.SetDirty(mod);
     }
-
-    public virtual void ModuleSpecific()
+    public override void PartNext()
     {
-        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
-        GUILayout.Label("Next modules", EditorStyles.boldLabel);
         if (showHints)
             EditorGUILayout.HelpBox("The modules being triggered upon win/lose/tie game outcome.", MessageType.Info);
 
@@ -123,17 +64,17 @@ public class TicTacInspector : ModuleInspectorAncestor
 
         //success module selection
         EditorGUILayout.BeginHorizontal();
-        ModuleBlueprint succMod = (ModuleBlueprint)EditorGUILayout.ObjectField(succMLabel, mod.moduleSuccess, typeof(ModuleBlueprint), false);
+        ModuleBlueprint succMod = (ModuleBlueprint)EditorGUILayout.ObjectField(succMLabel, ((TicTacToe)mod).moduleSuccess, typeof(ModuleBlueprint), false);
         if (succMod != null)
         {
-            mod.moduleSuccess = succMod;
+            ((TicTacToe)mod).moduleSuccess = succMod;
         }
         EditorGUILayout.LabelField(getShortDesc(succMod), GUILayout.MaxWidth(getShortDesc(succMod).Length * 10.0f));
         if (succMod == null)
         {
             if (GUILayout.Button("+ (" + ModuleManager.m_ModuleTypeEnumDescriptions[(int)nextModType] + ")"))
             {
-                mod.moduleSuccess = createNextModule(nextModType, mod, 0, 0, mod.hierarchyID + 1, mod.subpartID);
+                ((TicTacToe)mod).moduleSuccess = createNextModule(nextModType, mod, 0, 0, mod.hierarchyID + 1, mod.subpartID);
             }
         }
         if (succMod != null)
@@ -145,17 +86,17 @@ public class TicTacInspector : ModuleInspectorAncestor
 
         //failure module selection
         EditorGUILayout.BeginHorizontal();
-        ModuleBlueprint failMod = (ModuleBlueprint)EditorGUILayout.ObjectField(failMLabel, mod.moduleFailure, typeof(ModuleBlueprint), false);
+        ModuleBlueprint failMod = (ModuleBlueprint)EditorGUILayout.ObjectField(failMLabel, ((TicTacToe)mod).moduleFailure, typeof(ModuleBlueprint), false);
         if (failMod != null)
         {
-            mod.moduleFailure = failMod;
+            ((TicTacToe)mod).moduleFailure = failMod;
         }
         EditorGUILayout.LabelField(getShortDesc(failMod), GUILayout.MaxWidth(getShortDesc(failMod).Length * 10.0f));
         if (failMod == null)
         {
             if (GUILayout.Button("+ (" + ModuleManager.m_ModuleTypeEnumDescriptions[(int)nextModType] + ")"))
             {
-                mod.moduleFailure = createNextModule(nextModType, mod, 0, 1, mod.hierarchyID + 1, mod.subpartID);
+                ((TicTacToe)mod).moduleFailure = createNextModule(nextModType, mod, 0, 1, mod.hierarchyID + 1, mod.subpartID);
             }
         }
         if (failMod != null)
@@ -167,17 +108,17 @@ public class TicTacInspector : ModuleInspectorAncestor
 
         //tie module selection
         EditorGUILayout.BeginHorizontal();
-        ModuleBlueprint tieMod = (ModuleBlueprint)EditorGUILayout.ObjectField(tieMLabel, mod.moduleTie, typeof(ModuleBlueprint), false);
+        ModuleBlueprint tieMod = (ModuleBlueprint)EditorGUILayout.ObjectField(tieMLabel, ((TicTacToe)mod).moduleTie, typeof(ModuleBlueprint), false);
         if (tieMod != null)
         {
-            mod.moduleTie = tieMod;
+            ((TicTacToe)mod).moduleTie = tieMod;
         }
         EditorGUILayout.LabelField(getShortDesc(tieMod), GUILayout.MaxWidth(getShortDesc(tieMod).Length * 10.0f));
         if (tieMod == null)
         {
             if (GUILayout.Button("+ (" + ModuleManager.m_ModuleTypeEnumDescriptions[(int)nextModType] + ")"))
             {
-                mod.moduleTie = createNextModule(nextModType, mod, 0, 2, mod.hierarchyID + 1, mod.subpartID);
+                ((TicTacToe)mod).moduleTie = createNextModule(nextModType, mod, 0, 2, mod.hierarchyID + 1, mod.subpartID);
             }
         }
         if (tieMod != null)
@@ -188,23 +129,5 @@ public class TicTacInspector : ModuleInspectorAncestor
         EditorGUILayout.EndHorizontal();
 
         EditorGUILayout.Space();
-
-        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
-        GUILayout.Label("Delete", EditorStyles.boldLabel);
-        if (showHints)
-            EditorGUILayout.HelpBox("The module being triggered after this one.", MessageType.Info);
-
-        GUIStyle bStyle = new GUIStyle(GUI.skin.button);
-        bStyle.normal.textColor = Color.red;
-        if (GUILayout.Button("Delete this module (irreversible)", bStyle))
-        {
-            if (mod.previousModule != null)
-                mod.previousModule.nextModule = mod.nextModule;
-
-            if (mod.nextModule != null)
-                mod.nextModule.previousModule = mod.previousModule;
-
-            Debug.Log(mod.ToString() + " deleted? -> " + AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(mod)));
-        }
     }
 }

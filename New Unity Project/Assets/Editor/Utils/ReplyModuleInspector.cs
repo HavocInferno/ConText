@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEditor;
-using System.Collections;
 
 /*--------------------------------
 Copyright 2016 - Paul Preißner - for Bachelor Thesis "ConText - A Choice/Text Adventure Framework" @ TU München
@@ -11,7 +10,6 @@ Copyright 2016 - Paul Preißner - for Bachelor Thesis "ConText - A Choice/Text A
 public class ReplyModuleInspector : TextModuleInspector {
 
     private ReplyModule rmod;
-    //private ModuleManager.ModuleTypes nextModType;
     private GUIContent repliesLabel = new GUIContent("Replies");
 
     [MenuItem("Assets/Create/ConText Framework/Modules/Reply Module")]
@@ -25,7 +23,7 @@ public class ReplyModuleInspector : TextModuleInspector {
         return AssetCreator.CreateCustomAsset<ReplyModule>(name);
     }
 
-    public void OnEnable()
+    public override void OnEnable()
     {
         base.OnEnable();
 
@@ -39,6 +37,8 @@ public class ReplyModuleInspector : TextModuleInspector {
             }
         }
 
+        partNext = new GUIContent("Replies");
+
         Debug.Log(rmod.ToString() + "; " + rmod.textHandover);
     }
 
@@ -47,18 +47,8 @@ public class ReplyModuleInspector : TextModuleInspector {
         base.drawTextField(200);
     }
 
-    public override void OnInspectorGUI()
+    public override void PartNext()
     {
-        /*replaces default inspector with specifics for reply modules,
-        i.e. display base stuff (from TextModule/ModuleBlueprint) as well as a list of replies with linked outcomes
-        */
-
-        base.OnInspectorGUI();
-
-        EditorGUILayout.Space();
-
-        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
-        GUILayout.Label(repliesLabel, EditorStyles.boldLabel);
         if (showHints)
             EditorGUILayout.HelpBox("The respective replies this module will offer to the player, i.e. the text for each option and the module to trigger.", MessageType.Info);
 
@@ -106,11 +96,11 @@ public class ReplyModuleInspector : TextModuleInspector {
 
             r.replyText = "new reply " + r.outcome.branchID;
         }
-
-        EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
-        GUILayout.Label("Delete", EditorStyles.boldLabel);
+    }
+    public override void PartDelete()
+    {
         if (showHints)
-            EditorGUILayout.HelpBox("The module being triggered after this one.", MessageType.Info);
+            EditorGUILayout.HelpBox("Permanently delete this module. This action cannot be reversed and is final.", MessageType.Info);
 
         GUIStyle bStyle = new GUIStyle(GUI.skin.button);
         bStyle.normal.textColor = Color.red;
@@ -124,13 +114,5 @@ public class ReplyModuleInspector : TextModuleInspector {
 
             Debug.Log(rmod.ToString() + " deleted? -> " + AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(rmod)));
         }
-
-        serializedObject.ApplyModifiedProperties();
-        EditorUtility.SetDirty(rmod);
-    }
-
-    public override void ModuleSpecific()
-    {
-        //
     }
 }
