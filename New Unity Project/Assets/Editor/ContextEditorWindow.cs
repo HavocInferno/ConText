@@ -3,19 +3,24 @@ using UnityEditor;
 
 public class ContextEditorWindow : EditorWindow
 {
-    string myString = "This is work in progress";
     bool groupEnabled;
-    bool myBool = true;
-    float myFloat = 1.23f;
+    bool showHints = false;
+    float buttonWidth = 300f;
 
     Vector2 scrollPos;
 
-    [MenuItem("ConText/Project Overview")]
+    [MenuItem("ConText/Project Options")]
     static void Init()
     {
         // Get existing open window or if none, make a new one:
-        ContextEditorWindow window = (ContextEditorWindow)EditorWindow.GetWindow(typeof(ContextEditorWindow), false, "ConText Overview", true);
+        ContextEditorWindow window = (ContextEditorWindow)EditorWindow.GetWindow(typeof(ContextEditorWindow), false, "ConText Options", true);
         window.Show();
+    }
+
+    void OnEnable()
+    {
+        StateManager.checkForFile("mainStory");
+        Debug.Log("beep");
     }
 
     void OnGUI()
@@ -40,54 +45,66 @@ public class ContextEditorWindow : EditorWindow
         wrapStyle.fontStyle = FontStyle.Bold;
         int tmp = wrapStyle.fontSize;
 
+        GUIStyle descStyle = new GUIStyle(GUI.skin.label);
+        descStyle.wordWrap = true;
+        descStyle.fontStyle = FontStyle.Bold;
+        int tmp2 = descStyle.fontSize;
+
         GUILayout.Label("Welcome to your ConText Framework project.", wrapStyle);
         wrapStyle.fontStyle = FontStyle.Normal;
         GUILayout.Label("This framework is intended to be used for creating choice based text adventures for mobile devices. It comes with all modules and tools necessary to create such a game in its basic form. Experienced users may expand the given modules with own code. Please refer to the documentation if you have troubles using this.", wrapStyle);
 
         wrapStyle.fontSize = 10;
 
+        showHints = EditorGUILayout.Toggle("Show hints", showHints);
+
         GUILayout.Label("--------------------------------------------------------------------------------------------------------------------------------", EditorStyles.centeredGreyMiniLabel);
-        //GUILayout.Space(10);
+        GUILayout.Label("Game settings", descStyle);
         if (Unify.Instance.UIMng.UISettings == null)
         {
             GUILayout.Label("No UI Settings specified yet.");
-            if(GUILayout.Button("Add UI Settings"))
+            if(GUILayout.Button("Add UI Settings", GUILayout.MaxWidth(buttonWidth)))
             {
                 Unify.Instance.UIMng.UISettings = UISettingsInspector.CreateModule("UISettings_0");
             }
         } else
         {
-            if(GUILayout.Button("Go to Game UI Settings"))
+            if(GUILayout.Button("Go to Game UI Settings", GUILayout.MaxWidth(buttonWidth)))
             {
                 Selection.activeObject = Unify.Instance.UIMng.UISettings;
             }
-            GUILayout.Label("Game UI settings encompass visual properties of the message modules for each character, fonts, etc.", wrapStyle);
+            if(showHints)
+                GUILayout.Label("Game UI settings encompass visual properties of the game screens as well as of the message modules for each character (color, font, background images).", wrapStyle);
 
             if (Unify.Instance.UIMng.UISettings.sSettings == null)
             {
-                GUILayout.Label("No Story Settings specified yet.");
-                if (GUILayout.Button("Add Story Settings"))
+                GUILayout.Label("No Character List specified yet.");
+                if (GUILayout.Button("Add Character List", GUILayout.MaxWidth(buttonWidth)))
                 {
                     Unify.Instance.UIMng.UISettings.sSettings = StorySettingsInspector.Create();
                 }
             }
             else
             {
-                if (GUILayout.Button("Go to Story Settings"))
+                if (GUILayout.Button("Go to Character List", GUILayout.MaxWidth(buttonWidth)))
                 {
                     Selection.activeObject = Unify.Instance.UIMng.UISettings.sSettings;
                 }
-                GUILayout.Label("Story settings include a list of the story's characters.", wrapStyle);
             }
         }
-        
-        GUILayout.Label("--------------------------------------------------------------------------------------------------------------------------------", EditorStyles.centeredGreyMiniLabel);
-        //GUILayout.Space(10);
+        if (GUILayout.Button("Go to 'Player Settings'", GUILayout.MaxWidth(buttonWidth)))
+        {
+            EditorApplication.ExecuteMenuItem("Edit/Project Settings/Player");
+        }
+        if (showHints)
+            GUILayout.Label("Player settings include settings such as the game's name, icon, etc. as well as the iOS/Android app settings.", wrapStyle);
 
+        GUILayout.Label("--------------------------------------------------------------------------------------------------------------------------------", EditorStyles.centeredGreyMiniLabel);
+        GUILayout.Label("Story", descStyle);
         if (Unify.Instance.ModMng.firstModule == null)
         {
             GUILayout.Label("No story specified yet.");
-            if (GUILayout.Button("Create your story"))
+            if (GUILayout.Button("Create your story", GUILayout.MaxWidth(buttonWidth)))
             {
                 ModuleManager.ModuleTypes nextModType = ModuleManager.ModuleTypes.TEXTM;
                 nextModType = (ModuleManager.ModuleTypes)EditorGUILayout.Popup("Next module type", (int)nextModType, ModuleManager.m_ModuleTypeEnumDescriptions);
@@ -96,53 +113,41 @@ public class ContextEditorWindow : EditorWindow
             }
         } else
         {
-            if (GUILayout.Button("Go to latest story module"))
+            if (GUILayout.Button("Go to latest story module", GUILayout.MaxWidth(buttonWidth)))
             {
                 Selection.activeObject = Unify.Instance.ModMng.firstModule.getHighestModule();
                 Debug.Log(((ModuleBlueprint)Selection.activeObject).hierarchyID + " " + ((ModuleBlueprint)Selection.activeObject).branchID + " " + ((ModuleBlueprint)Selection.activeObject).seqID);
             }
             Color tmpc = wrapStyle.normal.textColor;
             wrapStyle.normal.textColor = Color.red;
-            GUILayout.Label("This is still experimental and might not return the correct module. Make sure to manually check.", wrapStyle);
+            if (showHints)
+                GUILayout.Label("This is still experimental and might not return the correct module. Make sure to manually check.", wrapStyle);
             wrapStyle.normal.textColor = tmpc;
+
+            if (GUILayout.Button("Fix IDs (experimental)", GUILayout.MaxWidth(buttonWidth)))
+            {
+                Unify.Instance.ModMng.fixIDs();
+            }
+            if (showHints)
+            {
+                Color tmpc3 = wrapStyle.normal.textColor;
+                wrapStyle.normal.textColor = Color.red;
+                GUILayout.Label("This is still experimental and might break module IDs. Be aware.", wrapStyle);
+                wrapStyle.normal.textColor = tmpc3;
+            }
         }
-
-        GUILayout.Label("--------------------------------------------------------------------------------------------------------------------------------", EditorStyles.centeredGreyMiniLabel);
-        //GUILayout.Space(10);
-
-        if (GUILayout.Button("Go to 'Player Settings'"))
-        {
-            EditorApplication.ExecuteMenuItem("Edit/Project Settings/Player");
-        }
-        Color tmpc2 = wrapStyle.normal.textColor;
-        GUILayout.Label("Player settings include settings such as the game's name, icon, etc. as well as the iOS/Android app settings.", wrapStyle);
-        wrapStyle.normal.textColor = Color.red;
-        GUILayout.Label("For this user study, those don't need to be changed.", wrapStyle);
-        wrapStyle.normal.textColor = tmpc2;
-
-        GUILayout.Label("--------------------------------------------------------------------------------------------------------------------------------", EditorStyles.centeredGreyMiniLabel);
-        //GUILayout.Space(10);
-
-        if (GUILayout.Button("Delete save file"))
+        GUILayout.Space(10);
+        GUI.enabled = StateManager.saveExists;
+        if (GUILayout.Button("Reset save file" + (StateManager.saveExists ? "" : " (no file found)"), GUILayout.MaxWidth(buttonWidth)))
         {
             StateManager.deleteSaveFile("mainStory");
+            StateManager.checkForFile("mainStory");
         }
-        GUILayout.Label("If your story changes, the save file will not fit anymore. This will delete the old file (if there is one).", wrapStyle);
-
-        if (GUILayout.Button("Fix IDs"))
-        {
-            Unify.Instance.ModMng.fixIDs();
-        }
-        Color tmpc3 = wrapStyle.normal.textColor;
-        wrapStyle.normal.textColor = Color.red;
-        GUILayout.Label("This is still experimental and might break module IDs. Be aware.", wrapStyle);
-        wrapStyle.normal.textColor = tmpc3;
-
-        GUILayout.Label("--------------------------------------------------------------------------------------------------------------------------------", EditorStyles.centeredGreyMiniLabel);
-        //GUILayout.Space(10);
+        GUI.enabled = true;
+        if (showHints)
+            GUILayout.Label("If your story changes, the save file will not fit anymore. This will delete the old file (if there is one).", wrapStyle);
 
         wrapStyle.fontSize = tmp;
-
         EditorGUILayout.EndScrollView();
     }
 }

@@ -20,6 +20,7 @@ public class StateManager : MonoBehaviour {
 
     private GameState gameState = GameState.MENU;
     public bool initialLoad = true;
+    public static bool saveExists = false;
 
     public GameState GetGameState()
     { return gameState; }
@@ -46,6 +47,8 @@ public class StateManager : MonoBehaviour {
         Debug.Log("Likely file saved to " + path);
 
         saveFile.Close();
+
+        saveExists = true;
     }
 
     public static bool LoadChoices(string fileName)
@@ -86,5 +89,12 @@ public class StateManager : MonoBehaviour {
     {
         string path = Application.persistentDataPath + "/Saves/" + fn + ".ctxt";
         FileUtil.DeleteFileOrDirectory(path);
+        saveExists = false;
+    }
+
+    public static void checkForFile(string fn)
+    {
+        string path = Application.persistentDataPath + "/Saves/" + fn + ".ctxt";
+        saveExists = File.Exists(path);
     }
 }

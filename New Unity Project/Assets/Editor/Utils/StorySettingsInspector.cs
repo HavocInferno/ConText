@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEditor;
-using System.Collections;
+using System.Collections.Generic;
 
 /*--------------------------------
 Copyright 2016 - Paul Preißner - for Bachelor Thesis "ConText - A Choice/Text Adventure Framework" @ TU München
@@ -11,7 +11,7 @@ public class StorySettingsInspector : Editor {
 
     private StorySettings stt;
 
-    private GUIContent charsLabel = new GUIContent("Characters");
+    private List<bool> showInfos;
 
 	[MenuItem("Assets/Create/ConText Framework/Story Settings")]
     public static StorySettings Create()
@@ -28,46 +28,69 @@ public class StorySettingsInspector : Editor {
     void OnEnable()
     {
         stt = target as StorySettings;
+
+        showInfos = new List<bool>();
+        for(int i = 0; i < stt.characters.Count; i++)
+        {
+            showInfos.Add(false);
+        }
     }
 
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
 
-        serializedObject.ApplyModifiedProperties();
+        GUILayout.Label("Character List", EditorStyles.boldLabel);
+        GUILayout.Space(20);
 
         /*display a list of characters with their associated assets as well as (label) each character name*/
-        EditorGUILayout.LabelField(charsLabel);
         for (int i = 0; i < stt.characters.Count; i++)
         {
-            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.BeginVertical();
 
+            EditorGUILayout.BeginHorizontal();
             stt.characters[i] = (Character)EditorGUILayout.ObjectField(stt.characters[i], typeof(Character), false);
             EditorGUILayout.LabelField("Name: " + (stt.characters[i] != null ? stt.characters[i].characterName : ""));
 
-            if (GUILayout.Button("Go to"))
+            if (GUILayout.Button("Go to asset"))
             {
                 Selection.activeObject = stt.characters[i];
             }
 
-            if (GUILayout.Button("Delete"))
+            if (GUILayout.Button("Delete (irreversible)"))
             {
+                Character ch = stt.characters[i];
+                Debug.Log(ch.ToString() + " deleted? -> " + AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(ch)));
                 stt.characters.RemoveAt(i);
+                showInfos.RemoveAt(i);
             }
             EditorGUILayout.EndHorizontal();
+
+            showInfos[i] = EditorGUILayout.Foldout(showInfos[i], showInfos[i] ? "Hide" : "Show");
+            if (showInfos[i])
+            {
+                Character ch = stt.characters[i];
+                EditorGUILayout.LabelField("Character...");
+                ch.charID = EditorGUILayout.IntField("ID", ch.charID);
+                ch.characterName = EditorGUILayout.TextField("Name", ch.characterName); AssetDatabase.RenameAsset(AssetDatabase.GetAssetPath(ch), "ch_" + ch.characterName);
+                EditorGUILayout.Space();
+                ch.blobColor = EditorGUILayout.ColorField("msg color", ch.blobColor);
+                ch.blobBackground = (Sprite)EditorGUILayout.ObjectField("msg background image", ch.blobBackground, typeof(Sprite), false);
+                ch.alignment = (Character.blobAlignment)EditorGUILayout.EnumPopup("msg alignment", ch.alignment);
+            }
+            EditorGUILayout.EndVertical();
+            GUILayout.Label("--------------------------------------------------------------------------------------------------------------------------------", EditorStyles.centeredGreyMiniLabel);
+            GUILayout.Space(10);
         }
 
-        EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("Add a character slot"))
+        if (GUILayout.Button("Add a character", GUILayout.MaxWidth(250f)))
         {
-            stt.characters.Add(null);
-        }
-        if (GUILayout.Button("Add a character"))
-        {
+            showInfos.Add(false);
             stt.addChar(CreateCharacter());
+            Selection.activeObject = stt;
         }
-        EditorGUILayout.EndHorizontal();
 
+        serializedObject.ApplyModifiedProperties();
         EditorUtility.SetDirty(stt);
     }
 }

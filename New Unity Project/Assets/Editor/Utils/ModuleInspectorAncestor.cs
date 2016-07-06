@@ -298,6 +298,7 @@ public class ModuleInspectorAncestor : Editor {
         if (GUILayout.Button("Create next module (" + ModuleManager.m_ModuleTypeEnumDescriptions[(int)nextModType] + ")"))
         {
             mod.nextModule = createNextModule(nextModType, mod, mod.seqID + 1, mod.branchID, mod.hierarchyID, mod.subpartID);
+            Selection.activeObject = mod;
         }
     }
     public virtual void PartDelete()
