@@ -14,7 +14,7 @@ public class TextModule : ModuleBlueprint {
     //private Text UIContent;
     //this has the module's text parsed
     private List<TextParser.ParsedChunk> allnextParts;
-    private int numberParts = 0;
+    //private int numberParts = 0;
 
     public override GameObject getUIObject()
     {
@@ -123,5 +123,11 @@ public class TextModule : ModuleBlueprint {
             return this;
 
         return nextModule;
+    }
+
+    public override void resetModule()
+    {
+        allnextParts.Clear();
+        allnextParts = null;
     }
 }

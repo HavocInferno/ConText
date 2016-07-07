@@ -97,4 +97,10 @@ public class StateManager : MonoBehaviour {
         string path = Application.persistentDataPath + "/Saves/" + fn + ".ctxt";
         saveExists = File.Exists(path);
     }
+
+    public void deleteSaveIngame(string fn)
+    {
+        deleteSaveFile(fn);
+        Unify.Instance.ModMng.resetStream(true);
+    }
 }

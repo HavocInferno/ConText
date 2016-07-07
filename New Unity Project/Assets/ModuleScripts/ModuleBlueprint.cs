@@ -160,4 +160,6 @@ public class ModuleBlueprint : ScriptableObject {
             nextModule.fixNextIDs();
         }
     }
+
+    public virtual void resetModule() { }
 }

@@ -11,12 +11,13 @@ public class ModuleManager : MonoBehaviour {
     /*modules dictionary receives all modules instanced at runtime, technically in order to handle hiding, access etc when needed, also to generally keep track.
     firstModule has to be the starting point of the story.
     nextModule internally temporarily stores a reference to the module next up for display.*/
-    public Dictionary<int/*Pair<int,int>*/, GameObject> modules = new Dictionary<int/*Pair<int,int>*/, GameObject>();
+    public Dictionary<int, GameObject> modules = new Dictionary<int, GameObject>();
     public List<ModuleBlueprint.IDChoiceCapsule> choices = new List<ModuleBlueprint.IDChoiceCapsule>();
 
     public Dictionary<string, GameObject> UITemplateMapping = new Dictionary<string, GameObject>();
     public ModuleBlueprint firstModule;
     private ModuleBlueprint nextModule;
+    bool stopStream = false;
 
     public enum ModuleTypes
     {
@@ -137,6 +138,7 @@ public class ModuleManager : MonoBehaviour {
             {
                 Debug.Log("Save file corrupt; does not fit with storyline.");
                 Unify.Instance.StateMng.initialLoad = false;
+                resetStream(false);
                 return firstModule; //not ideal, if corrupt, reset to 0?
             }
         }
@@ -149,5 +151,46 @@ public class ModuleManager : MonoBehaviour {
     {
         firstModule.SetModuleID(0, 0, 0);
         firstModule.fixNextIDs();
+    }
+
+    public void resetFiredModules()
+    {
+        Debug.Log("Attempting to reset all modules that have been fired already");
+        ModuleBlueprint nextMod = firstModule;
+        foreach (ModuleBlueprint.IDChoiceCapsule idc in choices)
+        {
+            if (idc.checkIDequal(nextMod))
+            {
+                ModuleBlueprint tmp = nextMod;
+                nextMod = nextMod.getModForChoice(idc.choice, idc);
+                tmp.resetModule();
+                if (nextMod == null)
+                    return;
+            }
+            else
+            {
+                Debug.Log("List corrupt, possibly not all reset.");
+                return;
+            }
+        }
+    }
+
+    public void resetStream(bool goOnToo)
+    {
+        StopCoroutine(fireNext());
+        Unify.Instance.UIMng.UIWrap.typingIndicator.SetActive(false);
+        nextModule = null;
+        foreach(KeyValuePair<int, GameObject> kvp in modules)
+        {
+            GameObject.Destroy(kvp.Value);
+        }
+        resetFiredModules();
+
+        modules.Clear();
+        choices.Clear();
+        Unify.Instance.UIMng.menuLayerSetStartButton("Start");
+
+        if(goOnToo)
+            goOnWith(firstModule);
     }
 }

@@ -124,6 +124,7 @@ public class ContextEditorWindow : EditorWindow
                 GUILayout.Label("This is still experimental and might not return the correct module. Make sure to manually check.", wrapStyle);
             wrapStyle.normal.textColor = tmpc;
 
+            GUILayout.Space(10);
             if (GUILayout.Button("Fix IDs (experimental)", GUILayout.MaxWidth(buttonWidth)))
             {
                 Unify.Instance.ModMng.fixIDs();
@@ -136,7 +137,6 @@ public class ContextEditorWindow : EditorWindow
                 wrapStyle.normal.textColor = tmpc3;
             }
         }
-        GUILayout.Space(10);
         GUI.enabled = StateManager.saveExists;
         if (GUILayout.Button("Reset save file" + (StateManager.saveExists ? "" : " (no file found)"), GUILayout.MaxWidth(buttonWidth)))
         {
