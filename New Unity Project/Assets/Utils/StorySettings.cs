@@ -12,6 +12,9 @@ public class StorySettings : ScriptableObject {
     public List<Character> characters = new List<Character>();
     static string[] charNames = new string[0];
 
+    public AudioClip defaultMsgSound;
+    public AudioClip backgroundTrack;
+
     //adds the given character to the List, and expands the string array as well
     /*note: the string array is not used anymore, a better solution was found that uses the List directly*/
     public void addChar(Character nC)

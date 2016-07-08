@@ -32,9 +32,12 @@ public class TextModuleInspector : ModuleInspectorAncestor
     public virtual void drawTextField(int height)
     {
         EditorGUILayout.BeginHorizontal();
-        if (((TextModule)mod).txtContent.Length > 0)
+        if (((TextModule)mod).txtContent != null)
         {
-            reqStyle.normal.textColor = Color.green;
+            if (((TextModule)mod).txtContent.Length > 0)
+            {
+                reqStyle.normal.textColor = Color.green;
+            }
         }
         GUILayout.Label(required, reqStyle);
         reqStyle.normal.textColor = Color.red;
@@ -63,6 +66,7 @@ public class TextModuleInspector : ModuleInspectorAncestor
         EditorGUILayout.EndHorizontal();
 
         mod.delayBeforeSend = EditorGUILayout.FloatField("Delay before sending (seconds)", mod.delayBeforeSend);
+        base.PartMessage();
         EditorGUILayout.Space();
 
         //text input

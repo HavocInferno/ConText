@@ -6,6 +6,7 @@ using System.Collections.Generic;
 Copyright 2016 - Paul Preißner - for Bachelor Thesis "ConText - A Choice/Text Adventure Framework" @ TU München
 --------------------------------*/
 
+[RequireComponent(typeof(AudioSource), typeof(AudioSource))]
 public class ModuleManager : MonoBehaviour {
 
     /*modules dictionary receives all modules instanced at runtime, technically in order to handle hiding, access etc when needed, also to generally keep track.
@@ -18,6 +19,7 @@ public class ModuleManager : MonoBehaviour {
     public ModuleBlueprint firstModule;
     private ModuleBlueprint nextModule;
     bool stopStream = false;
+    AudioSource audio, audio_bg;
 
     public enum ModuleTypes
     {
@@ -35,7 +37,14 @@ public class ModuleManager : MonoBehaviour {
     };
 
     // Use this for initialization
-    void Start () {
+    void Start() {
+        audio = gameObject.GetComponentsInChildren<AudioSource>()[0];
+        audio_bg = gameObject.GetComponentsInChildren<AudioSource>()[1];
+        audio.loop = false;
+        audio_bg.loop = true;
+        audio_bg.clip = Unify.Instance.UIMng.UISettings.sSettings.backgroundTrack;
+        audio_bg.Play();
+
         StateManager.LoadChoices("mainStory");
 
         Unify.Instance.UIMng.menuLayerSetStartButton(choices.Count > 0 ? "Continue" : "Start");
@@ -70,6 +79,8 @@ public class ModuleManager : MonoBehaviour {
                 yield return new WaitForSeconds(nextModule.delayBeforeSend);
                 Unify.Instance.UIMng.addModule(nextModule);
                 Unify.Instance.UIMng.UIWrap.typingIndicator.SetActive(false);
+                audio.PlayOneShot(Unify.Instance.UIMng.UISettings.sSettings.defaultMsgSound);
+                audio.PlayOneShot(nextModule.messageSound);
                 nextModule = nextModule.getNextPart();
             }
             else
@@ -189,6 +200,7 @@ public class ModuleManager : MonoBehaviour {
         modules.Clear();
         choices.Clear();
         Unify.Instance.UIMng.menuLayerSetStartButton("Start");
+        Unify.Instance.StateMng.initialLoad = false;
 
         if(goOnToo)
             goOnWith(firstModule);

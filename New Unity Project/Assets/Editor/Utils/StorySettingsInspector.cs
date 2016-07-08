@@ -39,10 +39,15 @@ public class StorySettingsInspector : Editor {
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
-
-        GUILayout.Label("Character List", EditorStyles.boldLabel);
+        GUILayout.Label("General story settings", EditorStyles.boldLabel);
+        stt.defaultMsgSound = (AudioClip)EditorGUILayout.ObjectField("Default message sound", stt.defaultMsgSound, typeof(AudioClip), false);
+        stt.backgroundTrack = (AudioClip)EditorGUILayout.ObjectField("Background track", stt.backgroundTrack, typeof(AudioClip), false);
+        GUIStyle mLww = new GUIStyle(EditorStyles.miniLabel);
+        mLww.wordWrap = true;
+        GUILayout.Label("The default message sound will be played whenever a message is fired/arrives. The background track will continuously play while the game is active.", mLww);
         GUILayout.Space(20);
 
+        GUILayout.Label("Character List", EditorStyles.boldLabel);
         /*display a list of characters with their associated assets as well as (label) each character name*/
         for (int i = 0; i < stt.characters.Count; i++)
         {

@@ -74,6 +74,7 @@ public class ModuleBlueprint : ScriptableObject {
 
     public Character sendingCharacter;
     public LogEntry log;
+    public AudioClip messageSound;
 
     //the gameobject/prefab (needs to be compatible with Unity 4.6/5.0 onward new UI) to be used as a message instance in the UI's content view.
     public GameObject UIObjectTemplate;

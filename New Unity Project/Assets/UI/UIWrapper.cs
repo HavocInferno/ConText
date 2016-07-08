@@ -60,7 +60,10 @@ public class UIWrapper : MonoBehaviour {
         if (currentLayer == MenuLayer)
             Unify.Instance.StateMng.SetGameState(StateManager.GameState.MENU);
         else if (currentLayer == TextLayer)
+        {
             Unify.Instance.StateMng.SetGameState(StateManager.GameState.TEXT);
+            Unify.Instance.UIMng.menuLayerSetStartButton("Continue");
+        }
         else if (currentLayer == LogLayer)
             Unify.Instance.StateMng.SetGameState(StateManager.GameState.LOG);
 

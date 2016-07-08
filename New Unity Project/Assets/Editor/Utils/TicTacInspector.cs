@@ -52,6 +52,7 @@ public class TicTacInspector : ModuleInspectorAncestor
         //character sending the message -> change to dropdown (enum of all characters, then determine forward/backward?)
         mod.sendingCharacter = (Character)EditorGUILayout.ObjectField(charLabel, mod.sendingCharacter, typeof(Character), false);
         mod.delayBeforeSend = EditorGUILayout.FloatField("Delay before sending (seconds)", mod.delayBeforeSend);
+        base.PartMessage();
 
         //text input
         drawTextField(500);

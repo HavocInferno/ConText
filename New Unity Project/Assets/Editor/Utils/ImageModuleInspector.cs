@@ -35,6 +35,7 @@ public class ImageModuleInspector : ModuleInspectorAncestor
 
         mod.sendingCharacter = (Character)EditorGUILayout.ObjectField(charLabel, mod.sendingCharacter, typeof(Character), false);
         mod.delayBeforeSend = EditorGUILayout.FloatField("Delay before sending (seconds)", mod.delayBeforeSend);
+        base.PartMessage();
 
         ((ImageModule)mod).imgContent = (Sprite)EditorGUILayout.ObjectField(contentLabel, ((ImageModule)mod).imgContent, typeof(Sprite), false, GUILayout.ExpandHeight(true));
     }

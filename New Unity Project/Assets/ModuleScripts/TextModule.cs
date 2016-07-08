@@ -14,7 +14,8 @@ public class TextModule : ModuleBlueprint {
     //private Text UIContent;
     //this has the module's text parsed
     private List<TextParser.ParsedChunk> allnextParts;
-    //private int numberParts = 0;
+    private int numberParts = 0;
+    private int numberParts2 = 0;
 
     public override GameObject getUIObject()
     {
@@ -39,7 +40,7 @@ public class TextModule : ModuleBlueprint {
         {
             Debug.Log("text not parsed yet? parsing...");
             allnextParts = TextParser.parse(txtContent);
-            //numberParts = allnextParts.Count;
+            numberParts = numberParts2 = allnextParts.Count;
         } else
         {
             Debug.Log("text already parsed into " + allnextParts.Count + " parts.");
@@ -119,15 +120,23 @@ public class TextModule : ModuleBlueprint {
 
     public override ModuleBlueprint getModForChoice(int choiceID, IDChoiceCapsule idc)
     {
-        if (allnextParts.Count > 0)
+        if (numberParts > 1)
+        {
+            numberParts--;
+            Debug.Log("more than one subpart left, returning this; " + numberParts + " left");
             return this;
+        }
 
+        numberParts = numberParts2;
         return nextModule;
     }
 
     public override void resetModule()
     {
-        allnextParts.Clear();
-        allnextParts = null;
+        if (allnextParts != null)
+        {
+            allnextParts.Clear();
+            allnextParts = null;
+        }
     }
 }

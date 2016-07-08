@@ -15,7 +15,7 @@ public class ModuleInspectorAncestor : Editor {
 
     protected ModuleManager.ModuleTypes nextModType;
     protected bool showSectionPrev, showSectionMsg, showSectionLog, showSectionNext;
-    protected GUIContent contentLabel, prevMLabel, nextMLabel, charLabel, logLabel;
+    protected GUIContent contentLabel, prevMLabel, nextMLabel, charLabel, logLabel, audioLabel;
     protected GUIContent partPrevious, partMessage, partLog, partNext, partDelete;
     public GUIStyle reqStyle; public string required;
 
@@ -146,6 +146,7 @@ public class ModuleInspectorAncestor : Editor {
         nextMLabel = new GUIContent("Next module asset", "is usually set automatically when using this Inspector's Create button");
         charLabel = new GUIContent("Character", "which character is sending this?");
         logLabel = new GUIContent("Log entry", "log");
+        audioLabel = new GUIContent("Message sound");
     }
 
     public override void OnInspectorGUI()
@@ -257,7 +258,10 @@ public class ModuleInspectorAncestor : Editor {
         EditorGUILayout.EndHorizontal();
         serializedObject.ApplyModifiedProperties();
     }
-    public virtual void PartMessage() { }
+    public virtual void PartMessage()
+    {
+        mod.messageSound = (AudioClip)EditorGUILayout.ObjectField(audioLabel, mod.messageSound, typeof(AudioClip), false);
+    }
     public virtual void PartLog()
     {
         if (showHints)

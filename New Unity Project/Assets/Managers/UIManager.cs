@@ -22,7 +22,7 @@ public class UIManager : MonoBehaviour {
     public bool addModule(ModuleBlueprint mod)
     {
         GameObject UIModTemplate;
-        Debug.Log(mod.GetType().ToString());
+        Debug.Log(mod.name);
         if (Unify.Instance.ModMng.UITemplateMapping.TryGetValue(mod.GetType().ToString(), out UIModTemplate))
         {
             GameObject UIModInstance = Instantiate(UIModTemplate) as GameObject;

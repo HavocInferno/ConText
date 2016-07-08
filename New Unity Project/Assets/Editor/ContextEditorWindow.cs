@@ -6,6 +6,7 @@ public class ContextEditorWindow : EditorWindow
     bool groupEnabled;
     bool showHints = false;
     float buttonWidth = 300f;
+    bool changeFirstMod = false;
 
     Vector2 scrollPos;
 
@@ -79,14 +80,14 @@ public class ContextEditorWindow : EditorWindow
             if (Unify.Instance.UIMng.UISettings.sSettings == null)
             {
                 GUILayout.Label("No Character List specified yet.");
-                if (GUILayout.Button("Add Character List", GUILayout.MaxWidth(buttonWidth)))
+                if (GUILayout.Button("Add 'Character & Story' settings", GUILayout.MaxWidth(buttonWidth)))
                 {
                     Unify.Instance.UIMng.UISettings.sSettings = StorySettingsInspector.Create();
                 }
             }
             else
             {
-                if (GUILayout.Button("Go to Character List", GUILayout.MaxWidth(buttonWidth)))
+                if (GUILayout.Button("Go to 'Character & Story' settings", GUILayout.MaxWidth(buttonWidth)))
                 {
                     Selection.activeObject = Unify.Instance.UIMng.UISettings.sSettings;
                 }
@@ -113,6 +114,21 @@ public class ContextEditorWindow : EditorWindow
             }
         } else
         {
+            EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("Go to first story module", GUILayout.MaxWidth(0.5f * buttonWidth)))
+            {
+                Selection.activeObject = Unify.Instance.ModMng.firstModule;
+                Debug.Log(((ModuleBlueprint)Selection.activeObject).hierarchyID + " " + ((ModuleBlueprint)Selection.activeObject).branchID + " " + ((ModuleBlueprint)Selection.activeObject).seqID);
+            }
+            if (!changeFirstMod && GUILayout.Button("Swap first module", GUILayout.MaxWidth(0.5f * buttonWidth)))
+            {
+                changeFirstMod = true;
+            }
+            if (changeFirstMod)
+            {
+                Unify.Instance.ModMng.firstModule = (ModuleBlueprint)EditorGUILayout.ObjectField(Unify.Instance.ModMng.firstModule, typeof(ModuleBlueprint), false, GUILayout.MaxWidth(0.5f * buttonWidth));
+            }
+            EditorGUILayout.EndHorizontal();
             if (GUILayout.Button("Go to latest story module", GUILayout.MaxWidth(buttonWidth)))
             {
                 Selection.activeObject = Unify.Instance.ModMng.firstModule.getHighestModule();
