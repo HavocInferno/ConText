@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
-using UnityEditor;
-using System.Collections;
+//using UnityEditor;
 using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
@@ -88,7 +87,7 @@ public class StateManager : MonoBehaviour {
     public static void deleteSaveFile(string fn)
     {
         string path = Application.persistentDataPath + "/Saves/" + fn + ".ctxt";
-        FileUtil.DeleteFileOrDirectory(path);
+        File.Delete(path);
         saveExists = false;
     }
 
