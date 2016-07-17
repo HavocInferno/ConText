@@ -10,11 +10,16 @@ public class NodeViewer : EditorWindow //*
     {
         public Rect window;
         public ModuleBlueprint mod;
-        public List<GraphNode> neighbors;
+        public List<int> neighbors;
+        public bool _nodeOption, _handleActive;
     }
 
-    Rect window1; //*
-    Rect window2; //*
+    public Rect _handleArea;
+    private bool _options, _action;
+    private Texture2D _resizeHandle, _aaLine;
+    private GUIContent _icon;
+    private int _mainwindowID;
+    private int i = 0;
 
     Dictionary<int, GraphNode> idNodes;
     List<GraphNode> nodes;
@@ -24,78 +29,204 @@ public class NodeViewer : EditorWindow //*
     [MenuItem("ConText/Story graph")] //*
     static void ShowEditor() //*
     { //*
-        NodeViewer editor = (NodeViewer)EditorWindow.GetWindow(typeof(NodeViewer), false, "CT Story Graph", true); //*
-        editor.Init(); //*
+        NodeViewer editor = (NodeViewer)EditorWindow.GetWindow(typeof(NodeViewer), false, "ConText Graph", true); //*
+        editor.ShowNodes(); //Init(); //*
     } //*
 
-    public void Init() //*
-    { //*
-        float w_x = iw_x = 10;
-        float w_y = iw_y = 10;
-        float w_width = iw_width = 150;
-        float w_height = iw_height = 100;
+    private void ShowNodes()
+    {
+        i = 0;
+
+        w_x = iw_x = 10f;
+        w_y = iw_y = 30f;
+        w_width = iw_width = 250f;
+        w_height = iw_height = 400f;
+
+        _resizeHandle = AssetDatabase.LoadAssetAtPath("Assets/Editor/NodeViewer/Icons/ResizeHandle.png", typeof(Texture2D)) as Texture2D;
+        //_aaLine = AssetDatabase.LoadAssetAtPath("Assets/Editor/NodeViewer/Icons/AA1x5.png", typeof(Texture2D)) as Texture2D;
+        _icon = new GUIContent(_resizeHandle);
+        _mainwindowID = GUIUtility.GetControlID(FocusType.Native); //grab primary editor window controlID
 
         nodes = new List<GraphNode>();
         idNodes = new Dictionary<int, GraphNode>();
         ModuleBlueprint nextmod = Unify.Instance.ModMng.firstModule;
 
-        int i = 0;
-        while(nextmod != null)
+        resetCFNrec(nextmod);
+        addGN(nextmod, -1, w_x, w_y);
+        /*foreach(GraphNode gn in nodes)
+        {
+            gn.mod.checkedForNode = false;
+        }*/
+    }
+    
+    private void resetCFNrec(ModuleBlueprint mod)
+    {
+        mod.checkedForNode = false;
+        mod.nodeID = -1;
+
+        foreach(ModuleBlueprint mb in mod.getAllNext())
+        {
+            if (mb != null)
+            {
+                if (mb.checkedForNode)
+                    resetCFNrec(mb);
+            }
+        }
+    }
+    private void addGN(ModuleBlueprint mod, int prevNodeID, float x, float y)
+    {
+        Debug.Log("checking " + mod.ToString() + "; cFN " + mod.checkedForNode);
+        int tmpID;
+        if (!mod.checkedForNode)
         {
             GraphNode gn = new GraphNode();
-            gn.window = new Rect(w_x, w_y, w_width, w_height);
-            gn.mod = nextmod;
+            gn.window = new Rect(x, y, w_width, w_height);
+            gn.mod = mod;
+            gn.neighbors = new List<int>();
+            if (prevNodeID > -1)
+            {
+                gn.neighbors.Add(prevNodeID);
+            }
+            mod.nodeID = i;
+            mod.checkedForNode = true;
 
             nodes.Add(gn);
             idNodes.Add(i, gn);
 
-            w_x += 2 * w_width + 10;
-            nextmod = nextmod.nextModule;
+            tmpID = i;
             i++;
+        } else
+        {
+            tmpID = mod.nodeID;
         }
 
-        //window1 = new Rect(10, 10, 100, 100); //*
-        //window2 = new Rect(210, 210, 100, 100); //*
-    } //*
+        //here, do next
+        ModuleBlueprint[] allNext = mod.getAllNext();
+        int j = 1;
+        foreach (ModuleBlueprint mb in allNext)
+        {
+            if (mb != null)
+            {
+                addGN(mb, tmpID, x + iw_width + 3 * w_x, j * w_y);
+                j++;
+            }
+        }
+    }
 
     void OnGUI() //*
     { //*
-        //DrawNodeCurve(window1, window2); // Here the curve is drawn under the windows //*
-
         BeginWindows(); //*
         if (idNodes != null)
         {
             foreach (KeyValuePair<int, GraphNode> kvp in idNodes)
             {
                 GraphNode gn = kvp.Value;
-                GUI.Window(kvp.Key, gn.window, DrawNodeWindow, gn.mod.name);
+                gn.window = GUI.Window(kvp.Key, gn.window, DrawNodeWindow, gn.mod.name);
 
                 if (gn.neighbors != null)
                 {
-                    foreach (GraphNode neigh in gn.neighbors)
+                    foreach (int no in gn.neighbors)
                     {
-                        DrawNodeCurve(gn.window, neigh.window);
+                        DrawNodeCurve(idNodes[no].window, gn.window);
                     }
                 }
             }
         }
-        //window1 = GUI.Window(1, window1, DrawNodeWindow, "Window 1");   // Updates the Rect's when these are dragged //*
-        //window2 = GUI.Window(2, window2, DrawNodeWindow, "Window 2"); //*
         EndWindows(); //*
+
+        GUILayout.BeginHorizontal(EditorStyles.toolbar);
+        _options = GUILayout.Toggle(_options, "Toggle Me", EditorStyles.toolbarButton);
+        if(GUILayout.Button("Reset layout", EditorStyles.toolbarButton))
+        {
+            ShowNodes();
+        }
+        GUILayout.FlexibleSpace();
+        GUILayout.EndHorizontal();
+
+        //if drag extends inner window bounds _handleActive remains true as event gets lost to parent window
+        if ((Event.current.rawType == EventType.MouseUp) && (GUIUtility.hotControl != _mainwindowID))
+        {
+            GUIUtility.hotControl = 0;
+        }
     } //*
 
     void DrawNodeWindow(int id) //*
     { //*
-        GUI.DragWindow(); //*
-        if(GUI.Button(new Rect(5, 15, 50, 20), "Go to"))
+        if (GUIUtility.hotControl == 0)  //mouseup event outside parent window?
         {
-            GraphNode gn;
-            Debug.Log("pipi");
-            if (idNodes.TryGetValue(id, out gn)) {
-                Selection.activeObject = gn.mod;
+            idNodes[id]._handleActive = false; //make sure handle is deactivated
+        }
+
+        float _cornerX = 0f;
+        float _cornerY = 0f;
+        _cornerX = idNodes[id].window.width;
+        _cornerY = idNodes[id].window.height;
+
+        //begin layout of contents
+        GUILayout.BeginArea(new Rect(1, 16, _cornerX - 3, _cornerY - 1));
+        GUILayout.BeginHorizontal(EditorStyles.toolbar);
+        idNodes[id]._nodeOption = GUILayout.Toggle(idNodes[id]._nodeOption, "show debug", EditorStyles.toolbarButton);
+        GUILayout.FlexibleSpace();
+        GUILayout.EndHorizontal();
+        if (idNodes[id]._nodeOption)
+        {
+            GUILayout.Label("x: " + idNodes[id].window.x + " y: " + idNodes[id].window.y);
+            GUILayout.Label("parents:");
+            foreach (int no in idNodes[id].neighbors)
+            {
+                GUILayout.Label(no.ToString() + " (" + idNodes[no].mod.ToString() + ")");
             }
         }
+        if (GUILayout.Button("Go to"))
+        {
+            Selection.activeObject = idNodes[id].mod;
+        }
+        GUILayout.EndArea();
+
+        GUILayout.BeginArea(new Rect(1, _cornerY - 16, _cornerX - 3, 14));
+        GUILayout.BeginHorizontal(EditorStyles.toolbarTextField, GUILayout.ExpandWidth(true));
+        GUILayout.FlexibleSpace();
+
+        //grab corner area based on content reference
+        _handleArea = GUILayoutUtility.GetRect(_icon, GUIStyle.none);
+        GUI.DrawTexture(new Rect(_handleArea.xMin + 6, _handleArea.yMin - 3, 20, 20), _resizeHandle); //hacky placement
+        _action = (Event.current.type == EventType.MouseDown) || (Event.current.type == EventType.MouseDrag);
+        if (!idNodes[id]._handleActive && _action)
+        {
+            if (_handleArea.Contains(Event.current.mousePosition, true))
+            {
+                idNodes[id]._handleActive = true; //active when cursor is in contact area
+                GUIUtility.hotControl = GUIUtility.GetControlID(FocusType.Native); //set handle hot
+            }
+        }
+
+        EditorGUIUtility.AddCursorRect(_handleArea, MouseCursor.ResizeUpLeft);
+        GUILayout.EndHorizontal();
+        GUILayout.EndArea();
+
+        //resize window
+        if (idNodes[id]._handleActive && (Event.current.type == EventType.MouseDrag))
+        {
+            ResizeNode(id, Event.current.delta.x, Event.current.delta.y);
+            Repaint();
+            Event.current.Use();
+        }
+
+        //enable drag for node
+        if (!idNodes[id]._handleActive)
+        {
+            GUI.DragWindow();
+        }
     } //*
+
+    private void ResizeNode(int id, float deltaX, float deltaY)
+    {
+        float _w = idNodes[id].window.width;
+        float _h = idNodes[id].window.height;
+
+        if ((_w + deltaX) > iw_width) { idNodes[id].window.xMax += deltaX; }
+        if ((_h + deltaY) > iw_height) { idNodes[id].window.yMax += deltaY; }
+    }
 
     void DrawNodeCurve(Rect start, Rect end) //*
     { //*

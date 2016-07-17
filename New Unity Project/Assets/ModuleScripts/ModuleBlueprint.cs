@@ -79,6 +79,9 @@ public class ModuleBlueprint : ScriptableObject {
     //the gameobject/prefab (needs to be compatible with Unity 4.6/5.0 onward new UI) to be used as a message instance in the UI's content view.
     public GameObject UIObjectTemplate;
 
+    public bool checkedForNode = false;
+    public int nodeID = -1;
+
     //getter/setter/crude "final" workaround for defining a moduleID manually.
     private bool IDset = false;
     public int[] GetModuleID()
@@ -163,4 +166,9 @@ public class ModuleBlueprint : ScriptableObject {
     }
 
     public virtual void resetModule() { }
+
+    public virtual ModuleBlueprint[] getAllNext()
+    {
+        return new ModuleBlueprint[] { nextModule };
+    }
 }
