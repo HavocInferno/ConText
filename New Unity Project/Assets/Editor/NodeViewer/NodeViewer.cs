@@ -20,6 +20,7 @@ public class NodeViewer : EditorWindow //*
     private GUIContent _icon;
     private int _mainwindowID;
     private int i = 0;
+    GUIStyle wrapStyle;
 
     Dictionary<int, GraphNode> idNodes;
     List<GraphNode> nodes;
@@ -102,12 +103,12 @@ public class NodeViewer : EditorWindow //*
 
         //here, do next
         ModuleBlueprint[] allNext = mod.getAllNext();
-        int j = 1;
+        int j = 0;
         foreach (ModuleBlueprint mb in allNext)
         {
             if (mb != null)
             {
-                addGN(mb, tmpID, x + iw_width + 3 * w_x, j * w_y);
+                addGN(mb, tmpID, x + iw_width + 3 * w_x, w_y + j * (iw_height + w_y));
                 j++;
             }
         }
@@ -115,6 +116,9 @@ public class NodeViewer : EditorWindow //*
 
     void OnGUI() //*
     { //*
+        wrapStyle = new GUIStyle(GUI.skin.label);
+        wrapStyle.wordWrap = true;
+
         BeginWindows(); //*
         if (idNodes != null)
         {
@@ -181,6 +185,32 @@ public class NodeViewer : EditorWindow //*
         {
             Selection.activeObject = idNodes[id].mod;
         }
+        ModuleBlueprint.NodeContent mnc = idNodes[id].mod.getContentForNode();
+        if (mnc != null)
+        {
+            if (mnc.minigame)
+            {
+                GUILayout.Label("This is a " + mnc.minigameName + " minigame module.", wrapStyle);
+            }
+            if(mnc.ch != null)
+            {
+                GUILayout.Label("Character: " + mnc.ch.characterName, wrapStyle);
+            }
+            GUILayout.Label("Content:");
+            if (mnc.text != null)
+            {
+                GUILayout.Label(mnc.text, wrapStyle);
+            }
+            if (mnc.img != null)
+            {
+                EditorGUILayout.ObjectField(mnc.img, typeof(Sprite), false, GUILayout.MaxHeight(idNodes[id].window.width));
+            }
+        } else
+        {
+            GUILayout.Label("Error: Couldn't fetch module content.", wrapStyle);
+        }
+
+
         GUILayout.EndArea();
 
         GUILayout.BeginArea(new Rect(1, _cornerY - 16, _cornerX - 3, 14));

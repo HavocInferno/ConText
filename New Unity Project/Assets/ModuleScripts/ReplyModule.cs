@@ -188,4 +188,27 @@ public class ReplyModule : TextModule {
             ro.outcome.fixNextIDs();
         }
     }
+
+    public override ModuleBlueprint[] getAllNext()
+    {
+        ModuleBlueprint[] mbs = new ModuleBlueprint[outcomes.Count];
+        int i = 0;
+        foreach (ReplyOption ro in outcomes)
+        {
+            mbs[i] = ro.outcome;
+            i++;
+        }
+        return mbs;
+    }
+    public override NodeContent getContentForNode()
+    {
+        NodeContent nc = new NodeContent();
+        nc.ch = sendingCharacter;
+        nc.text = txtContent + "\n";
+        foreach(ReplyOption ro in outcomes)
+        {
+            nc.text += "\nReply " + ro.choiceID + ": " + ro.replyText;
+        }
+        return nc;
+    }
 }

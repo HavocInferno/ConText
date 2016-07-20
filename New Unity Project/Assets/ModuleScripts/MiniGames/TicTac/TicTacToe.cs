@@ -89,4 +89,22 @@ public class TicTacToe : TextModule {
             moduleTie.fixNextIDs();
         }
     }
+
+    public override ModuleBlueprint[] getAllNext()
+    {
+        ModuleBlueprint[] mbs = new ModuleBlueprint[3];
+        mbs[0] = moduleSuccess;
+        mbs[1] = moduleFailure;
+        mbs[2] = moduleTie;
+        return mbs;
+    }
+    public override NodeContent getContentForNode()
+    {
+        NodeContent nc = new NodeContent();
+        nc.ch = sendingCharacter;
+        nc.text = txtContent;
+        nc.minigame = true;
+        nc.minigameName = "Tic Tac Toe";
+        return nc;
+    }
 }

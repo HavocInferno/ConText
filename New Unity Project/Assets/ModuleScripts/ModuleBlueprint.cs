@@ -58,6 +58,15 @@ public class ModuleBlueprint : ScriptableObject {
         }
     }
 
+    public class NodeContent
+    {
+        public Character ch;
+        public string text;
+        public Sprite img;
+        public bool minigame = false;
+        public string minigameName;
+    }
+
     /*moduleID and subID uniquely identify a single module (at least if not broken manually)*/
     //[TextArea(1,1)]
     public int seqID = -1;
@@ -170,5 +179,9 @@ public class ModuleBlueprint : ScriptableObject {
     public virtual ModuleBlueprint[] getAllNext()
     {
         return new ModuleBlueprint[] { nextModule };
+    }
+    public virtual NodeContent getContentForNode()
+    {
+        return null;
     }
 }

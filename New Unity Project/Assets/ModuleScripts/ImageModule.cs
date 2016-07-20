@@ -27,6 +27,7 @@ public class ImageModule : ModuleBlueprint
 
         UIContent.sprite = imgContent;
         UIContent.color = Color.white;
+        UIContent.GetComponentInChildren<LayoutElement>().minWidth = Unify.Instance.UIMng.UISettings.moduleWidth;
 
         switch (sendingCharacter.alignment)
         {
@@ -74,5 +75,13 @@ public class ImageModule : ModuleBlueprint
     public override ModuleBlueprint getModForChoice(int choiceID, IDChoiceCapsule idc)
     {
         return nextModule;
+    }
+
+    public override NodeContent getContentForNode()
+    {
+        NodeContent nc = new NodeContent();
+        nc.ch = sendingCharacter;
+        nc.img = imgContent;
+        return nc;
     }
 }

@@ -83,6 +83,7 @@ public class ReplyModuleInspector : TextModuleInspector {
         {
             ReplyModule.ReplyOption r = new ReplyModule.ReplyOption();
             r.outcome = createNextModule(nextModType, rmod, 0, rmod.outcomes.Count, rmod.hierarchyID + 1, rmod.subpartID);
+            Selection.activeObject = rmod;
 
             if (rmod.outcomes.Count < 1)
             {

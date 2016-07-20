@@ -20,6 +20,7 @@ public class UISettings : ScriptableObject {
 
     public Font moduleTextFont;
     public int moduleTextFontSize;
+    public float moduleWidth = 400f;
 
     public Color viewBackgroundColor;
     public Font viewTextFont;

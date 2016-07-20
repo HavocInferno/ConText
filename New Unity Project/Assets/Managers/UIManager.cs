@@ -14,6 +14,12 @@ public class UIManager : MonoBehaviour {
     public GameObject TextStreamUIObject;
     public GameObject LogStreamUIObject;
 
+    public void Start()
+    {
+        UISettings.moduleWidth = Screen.width - 20f;
+        Debug.Log("module width is " + UISettings.moduleWidth);
+    }
+
     /*instantiates the specified module's UI prefab, 
     then orders the module(asset) to set the content of the new UI instance accordingly, 
     then child-orders the instance into the text stream, 
