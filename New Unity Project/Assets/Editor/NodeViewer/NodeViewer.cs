@@ -26,6 +26,7 @@ public class NodeViewer : EditorWindow //*
     List<GraphNode> nodes;
     float iw_x, iw_y, iw_width, iw_height;
     float w_x, w_y, w_width, w_height;
+    float panX, panY = 0f;
 
     [MenuItem("ConText/Story graph")] //*
     static void ShowEditor() //*
@@ -119,24 +120,57 @@ public class NodeViewer : EditorWindow //*
         wrapStyle = new GUIStyle(GUI.skin.label);
         wrapStyle.wordWrap = true;
 
+        if (GUI.RepeatButton(new Rect(30, 45, 25, 25), "0"))
+        {
+            panX = panY = 0f;
+            Repaint();
+        }
+        if (GUI.RepeatButton(new Rect(30, 20, 25, 25), "^"))
+        {
+            panY += 1;
+            Repaint();
+        }
+        if (GUI.RepeatButton(new Rect(5, 45, 25, 25), "<"))
+        {
+            panX += 1;
+            Repaint();
+        }
+        if (GUI.RepeatButton(new Rect(55, 45, 25, 25), ">"))
+        {
+            panX -= 1;
+            Repaint();
+        }
+        if (GUI.RepeatButton(new Rect(30, 70, 25, 25), "v"))
+        {
+            panY -= 1;
+            Repaint();
+        }
+        GUI.RepeatButton(new Rect(0, 17, 85, 105), "");
+
+        GUI.BeginGroup(new Rect(panX, panY, 100000, 100000));
         BeginWindows(); //*
         if (idNodes != null)
         {
             foreach (KeyValuePair<int, GraphNode> kvp in idNodes)
             {
                 GraphNode gn = kvp.Value;
-                gn.window = GUI.Window(kvp.Key, gn.window, DrawNodeWindow, gn.mod.name);
-
-                if (gn.neighbors != null)
+                if (gn.mod != null)
                 {
-                    foreach (int no in gn.neighbors)
+                    gn.window = GUI.Window(kvp.Key, gn.window, DrawNodeWindow, gn.mod.name);
+
+                    if (gn.neighbors != null)
                     {
-                        DrawNodeCurve(idNodes[no].window, gn.window);
+                        foreach (int no in gn.neighbors)
+                        {
+                            if(idNodes[no].mod != null)
+                                DrawNodeCurve(idNodes[no].window, gn.window);
+                        }
                     }
                 }
             }
         }
         EndWindows(); //*
+        GUI.EndGroup();
 
         GUILayout.BeginHorizontal(EditorStyles.toolbar);
         _options = GUILayout.Toggle(_options, "Toggle Me", EditorStyles.toolbarButton);
@@ -152,6 +186,14 @@ public class NodeViewer : EditorWindow //*
         {
             GUIUtility.hotControl = 0;
         }
+
+        GUI.Box(new Rect(0, 17, 85, 105), "");
+        GUI.Label(new Rect(5, 95, 100, 30), "x:" + panX + "\ny:" + panY, EditorStyles.miniLabel);
+        GUI.RepeatButton(new Rect(30, 45, 25, 25), "0");
+        GUI.RepeatButton(new Rect(30, 20, 25, 25), "^");
+        GUI.RepeatButton(new Rect(5, 45, 25, 25), "<");
+        GUI.RepeatButton(new Rect(55, 45, 25, 25), ">");
+        GUI.RepeatButton(new Rect(30, 70, 25, 25), "v");
     } //*
 
     void DrawNodeWindow(int id) //*
