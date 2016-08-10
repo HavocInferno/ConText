@@ -173,7 +173,7 @@ public class NodeViewer : EditorWindow //*
         GUI.EndGroup();
 
         GUILayout.BeginHorizontal(EditorStyles.toolbar);
-        _options = GUILayout.Toggle(_options, "Toggle Me", EditorStyles.toolbarButton);
+        //_options = GUILayout.Toggle(_options, "Toggle Me", EditorStyles.toolbarButton);
         if(GUILayout.Button("Reset layout", EditorStyles.toolbarButton))
         {
             ShowNodes();

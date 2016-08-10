@@ -17,9 +17,29 @@ public class StateManager : MonoBehaviour {
         LOG,
     }
 
+    [System.Serializable]
+    public class GameSettings
+    {
+        public bool mute = false;
+        public float volume = 1.0f;
+        public float soundMultiplier = 1.0f;
+
+        public GameSettings()
+        {
+            mute = false;
+            volume = soundMultiplier = 1.0f;
+        }
+    }
+    public static GameSettings gameSettings = new GameSettings();
+
     private GameState gameState = GameState.MENU;
     public bool initialLoad = true;
     public static bool saveExists = false;
+
+    public void Awake()
+    {
+        LoadSettings();
+    }
 
     public GameState GetGameState()
     { return gameState; }
@@ -101,5 +121,46 @@ public class StateManager : MonoBehaviour {
     {
         deleteSaveFile(fn);
         Unify.Instance.ModMng.resetStream(true);
+    }
+
+    public static void SaveSettings()
+    {
+        string path = Application.persistentDataPath + "/Config/config.ctxt";
+        Debug.Log("Attempting config save to " + path);
+
+        if (!File.Exists(path))
+        {
+            Debug.Log("First save? Creating directory.");
+            Directory.CreateDirectory(Application.persistentDataPath + "/Config/");
+        }
+
+        BinaryFormatter bform = new BinaryFormatter();
+        FileStream saveFile = File.Create(path);
+        bform.Serialize(saveFile, gameSettings);
+        Debug.Log("Likely config saved to " + path);
+
+        saveFile.Close();
+    }
+
+    public static bool LoadSettings()
+    {
+        string path = Application.persistentDataPath + "/Config/config.ctxt";
+        Debug.Log("Attempting config load from " + path);
+
+        if (File.Exists(path))
+        {
+            BinaryFormatter bform = new BinaryFormatter();
+            FileStream saveFile = File.Open(path, FileMode.Open);
+            gameSettings = (GameSettings)bform.Deserialize(saveFile);
+            Unify.Instance.UIMng.UIWrap.initSettings();
+
+            Debug.Log("Likely config loaded from " + path);
+
+            saveFile.Close();
+            return true;
+        }
+
+        Debug.Log("couldn't load config (either not found or loading procedure failed)");
+        return false;
     }
 }

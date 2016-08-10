@@ -19,6 +19,9 @@ public class UIWrapper : MonoBehaviour {
     public GameObject typingIndicator;
     public GameObject MenuStartButton;
 
+    public Text settings_MuteT;
+    public Slider settings_VolS;
+
     public GameObject ReplyButtonTemplate;
 
     public Scrollbar vertScrollbar;
@@ -73,5 +76,35 @@ public class UIWrapper : MonoBehaviour {
     public void scrollToZero()
     {
         vertScrollbar.value = 0f;
+    }
+
+    public void toggleObject(GameObject go)
+    {
+        go.SetActive(!go.activeSelf);
+    }
+
+    public void toggleMute(Text buttonText)
+    {
+        StateManager.gameSettings.mute = !StateManager.gameSettings.mute;
+        StateManager.gameSettings.soundMultiplier = (StateManager.gameSettings.mute ? 0.0f : 1.0f);
+        AudioListener.volume = StateManager.gameSettings.soundMultiplier * StateManager.gameSettings.volume;
+        buttonText.text = (StateManager.gameSettings.mute ? "Unmute" : "Mute");
+        Debug.Log("Audio " + (StateManager.gameSettings.mute ? "muted" : "unmuted"));
+        StateManager.SaveSettings();
+    }
+
+    public void setVolume(Slider sld)
+    {
+        StateManager.gameSettings.volume = sld.value;
+        AudioListener.volume = StateManager.gameSettings.soundMultiplier * StateManager.gameSettings.volume;
+        Debug.Log("Vol set to " + AudioListener.volume);
+        StateManager.SaveSettings();
+    }
+
+    public void initSettings()
+    {
+        settings_MuteT.text = (StateManager.gameSettings.mute ? "Unmute" : "Mute");
+        settings_VolS.value = StateManager.gameSettings.volume;
+        AudioListener.volume = StateManager.gameSettings.soundMultiplier * StateManager.gameSettings.volume;
     }
 }

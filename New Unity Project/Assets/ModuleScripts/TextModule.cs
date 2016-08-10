@@ -53,7 +53,8 @@ public class TextModule : ModuleBlueprint {
         UIContent.font = Unify.Instance.UIMng.UISettings.moduleTextFont;
         UIContent.fontSize = Unify.Instance.UIMng.UISettings.moduleTextFontSize;
         UIContent.text = (sendingCharacter != null ? sendingCharacter.characterName : "") + "@" + System.DateTime.Now.ToString() + ": " + allnextParts[0].text;
-        UIContent.GetComponentInChildren<LayoutElement>().minWidth = Unify.Instance.UIMng.UISettings.moduleWidth; Debug.Log("settings " + this.name + " to " + UIContent.GetComponentInChildren<LayoutElement>().minWidth + " width");
+        UIContent.GetComponentInChildren<LayoutElement>().minWidth = Unify.Instance.UIMng.UISettings.moduleWidth;
+        Debug.Log("setting " + this.name + " to " + UIContent.GetComponentInChildren<LayoutElement>().minWidth + " width");
 
         switch(sendingCharacter.alignment)
         {
