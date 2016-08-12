@@ -2,6 +2,10 @@
 using System.Collections;
 using UnityEditor;
 
+/*--------------------------------
+Copyright 2016 - Paul Preißner - for Bachelor Thesis "ConText - A Choice/Text Adventure Framework" @ TU München
+--------------------------------*/
+
 [CustomEditor(typeof(LogEntry))]
 public class LogEntryInspector : Editor {
 
@@ -63,15 +67,6 @@ public class LogEntryInspector : Editor {
 
     public virtual void ModuleSpecific()
     {
-        //next module selection
-        /*LogEntry child = (LogEntry)EditorGUILayout.ObjectField(nextMLabel, mod.nextModule, typeof(ModuleBlueprint), false);
-        if (nextMod != null)
-        {
-            mod.nextModule = nextMod;
-        }
-
-        EditorGUILayout.Space();*/
-
         //create a new module and give it a fitting set of IDs
         //{TODO}: selection list where the user can select which *type* of module is up next
         if (GUILayout.Button("Create next log"))

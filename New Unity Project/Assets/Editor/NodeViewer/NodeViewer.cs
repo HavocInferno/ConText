@@ -2,7 +2,11 @@
 using UnityEditor; //*
 using System.Collections.Generic;
 
-/*Lines marked with '//*' as taken from https://community.unity.com/t5/Extensions-OnGUI/Simple-node-editor/td-p/1448640 */
+/*--------------------------------
+Copyright 2016 - Paul Preißner - for Bachelor Thesis "ConText - A Choice/Text Adventure Framework" @ TU München
+--------------------------------*/
+
+/*Some parts taken from https://community.unity.com/t5/Extensions-OnGUI/Simple-node-editor/td-p/1448640 */
 
 public class NodeViewer : EditorWindow //*
 { //*
@@ -45,7 +49,6 @@ public class NodeViewer : EditorWindow //*
         w_height = iw_height = 400f;
 
         _resizeHandle = AssetDatabase.LoadAssetAtPath("Assets/Editor/NodeViewer/Icons/ResizeHandle.png", typeof(Texture2D)) as Texture2D;
-        //_aaLine = AssetDatabase.LoadAssetAtPath("Assets/Editor/NodeViewer/Icons/AA1x5.png", typeof(Texture2D)) as Texture2D;
         _icon = new GUIContent(_resizeHandle);
         _mainwindowID = GUIUtility.GetControlID(FocusType.Native); //grab primary editor window controlID
 
@@ -55,10 +58,6 @@ public class NodeViewer : EditorWindow //*
 
         resetCFNrec(nextmod);
         addGN(nextmod, -1, w_x, w_y);
-        /*foreach(GraphNode gn in nodes)
-        {
-            gn.mod.checkedForNode = false;
-        }*/
     }
     
     private void resetCFNrec(ModuleBlueprint mod)
@@ -173,7 +172,6 @@ public class NodeViewer : EditorWindow //*
         GUI.EndGroup();
 
         GUILayout.BeginHorizontal(EditorStyles.toolbar);
-        //_options = GUILayout.Toggle(_options, "Toggle Me", EditorStyles.toolbarButton);
         if(GUILayout.Button("Reset layout", EditorStyles.toolbarButton))
         {
             ShowNodes();

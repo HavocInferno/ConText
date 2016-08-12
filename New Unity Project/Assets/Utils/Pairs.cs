@@ -10,6 +10,7 @@ Copyright 2016 - Paul Preißner - for Bachelor Thesis "ConText - A Choice/Text A
 
 Utility class implementing a tuple/pair, in this project primarily for use with the modules dictionary in ModuleManager 
 -> goal is the ability to encode both the primary moduleID as well as the dynamically generated module subID as one key.*/
+/*NOTE: NOT USED ANYMORE AS ID CONSISTS OF FOUR PARTS. singular representation of four part ID not trivial?*/
 
 public sealed class Pair<First, Second> : IEquatable<Pair<First,Second>> {
 

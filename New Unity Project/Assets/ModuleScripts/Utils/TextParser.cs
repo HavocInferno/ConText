@@ -3,6 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
+/*--------------------------------
+Copyright 2016 - Paul Preißner - for Bachelor Thesis "ConText - A Choice/Text Adventure Framework" @ TU München
+--------------------------------*/
+
+    /*class to parse input text for Regex markup commands. To be used to expand potential functionality for message text.
+     More of prototype nature right now with only one markup command. */
 public class TextParser : MonoBehaviour {
 
     static Regex markup_sec = new Regex(@"<Wait Seconds: *(\d+)>");

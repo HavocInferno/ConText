@@ -49,6 +49,7 @@ public class StateManager : MonoBehaviour {
         gameState = gs;
     }
 
+    /*Save current list of made choices to specified file/path. Using binary formatter, not ideal.*/
     public static void SaveChoices(string fileName)
     {
         string path = Application.persistentDataPath + "/Saves/" + fileName + ".ctxt";
@@ -70,6 +71,7 @@ public class StateManager : MonoBehaviour {
         saveExists = true;
     }
 
+    /*Load saved progress from specified path and attempt to extract choices list, set.*/
     public static bool LoadChoices(string fileName)
     {
         Unify.Instance.ModMng.choices.Clear();
@@ -97,6 +99,7 @@ public class StateManager : MonoBehaviour {
         return false;
     }
 
+    /*Wipe specified save file by clearing choices list and resaving file.*/
     public static void wipeSaveFile(string fn)
     {
         Unify.Instance.ModMng.choices.Clear();
@@ -104,6 +107,7 @@ public class StateManager : MonoBehaviour {
         Debug.Log("save file wiped");
     }
 
+    /*delete specified save file from storage*/
     public static void deleteSaveFile(string fn)
     {
         string path = Application.persistentDataPath + "/Saves/" + fn + ".ctxt";
@@ -111,18 +115,21 @@ public class StateManager : MonoBehaviour {
         saveExists = false;
     }
 
+    /*check whether specified save file exists*/
     public static void checkForFile(string fn)
     {
         string path = Application.persistentDataPath + "/Saves/" + fn + ".ctxt";
         saveExists = File.Exists(path);
     }
 
+    /*deletes specified save file and resets game UI stream*/
     public void deleteSaveIngame(string fn)
     {
         deleteSaveFile(fn);
         Unify.Instance.ModMng.resetStream(true);
     }
 
+    /*save game settings into binary file. binary formatter not ideal.*/
     public static void SaveSettings()
     {
         string path = Application.persistentDataPath + "/Config/config.ctxt";
@@ -142,6 +149,7 @@ public class StateManager : MonoBehaviour {
         saveFile.Close();
     }
 
+    /*load game settings file, attempt to extract and set settings ingame.*/
     public static bool LoadSettings()
     {
         string path = Application.persistentDataPath + "/Config/config.ctxt";

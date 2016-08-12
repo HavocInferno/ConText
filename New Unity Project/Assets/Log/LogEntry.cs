@@ -22,6 +22,8 @@ public class LogEntry : ScriptableObject {
         return UIObjectTemplate;
     }
 
+    /*sets content of the log entry. 
+     Note: similar to message modules, each log UI template needs a ModuleUIHelper component with the (Text)Container configured as the text portion of the log UI template.*/
     public void setContent(GameObject UIObjectInstance)
     {
         Debug.Log("setting content for ID " + logID);

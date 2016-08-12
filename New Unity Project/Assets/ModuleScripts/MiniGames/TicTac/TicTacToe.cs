@@ -2,6 +2,10 @@
 using System.Collections;
 using UnityEngine.UI;
 
+/*--------------------------------
+Copyright 2016 - Paul Preißner - for Bachelor Thesis "ConText - A Choice/Text Adventure Framework" @ TU München
+--------------------------------*/
+
 public class TicTacToe : TextModule {
 
     public ModuleBlueprint moduleSuccess, moduleFailure, moduleTie;

@@ -7,6 +7,7 @@ Copyright 2016 - Paul Preißner - for Bachelor Thesis "ConText - A Choice/Text A
 
 /*intended to simply unify public access to globally needed/requested stuff like references to the managers
 essentially a fancier name for classic GameData script*/
+/*i.e. ugly version of a Singleton...*/
 public class Unify : MonoBehaviour {
 
     private static Unify instance;

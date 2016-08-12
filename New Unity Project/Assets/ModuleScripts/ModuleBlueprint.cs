@@ -58,6 +58,7 @@ public class ModuleBlueprint : ScriptableObject {
         }
     }
 
+    /* Encapsulates the info relevant to the node viewer environment.*/
     public class NodeContent
     {
         public Character ch;
@@ -174,12 +175,16 @@ public class ModuleBlueprint : ScriptableObject {
         }
     }
 
+    /* This function resets potentially changed parts of the module to their "initial/unfired" state. Is called when the save file is wiped and the UI stream reset ingame.*/
     public virtual void resetModule() { }
 
+    /* Returns a list of all possible next modules. Used in the Node viewer*/
     public virtual ModuleBlueprint[] getAllNext()
     {
         return new ModuleBlueprint[] { nextModule };
     }
+
+    /* Should return a NodeContent object configured to contain the info of this module relevant to the node viewer*/
     public virtual NodeContent getContentForNode()
     {
         return null;

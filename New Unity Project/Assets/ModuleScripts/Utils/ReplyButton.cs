@@ -2,6 +2,10 @@
 using System.Collections;
 using UnityEngine.UI;
 
+/*--------------------------------
+Copyright 2016 - Paul Preißner - for Bachelor Thesis "ConText - A Choice/Text Adventure Framework" @ TU München
+--------------------------------*/
+
 public class ReplyButton : MonoBehaviour {
 
     public ReplyModule.ReplyOption option;
@@ -11,7 +15,6 @@ public class ReplyButton : MonoBehaviour {
     public void pressed()
     {
         parentModule.continueWithReply(option);
-        //Unify.Instance.ModMng.goOnWith(outcome);
         foreach(Button b in parentContainer.GetComponentsInChildren<Button>())
         {
             b.interactable = false;

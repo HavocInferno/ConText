@@ -133,6 +133,8 @@ public class ModuleManager : MonoBehaviour {
         return false;
     }
 
+    /*As the name suggests, advances the UI list/stream to the latest module loaded from the existing story progress. 
+     * fireIndividual() used to draw UI objects without delay and without any automated interference.*/
     public ModuleBlueprint advanceToLatest()
     {
         Debug.Log("Attempting to load existing story progress.");
@@ -164,6 +166,8 @@ public class ModuleManager : MonoBehaviour {
         firstModule.fixNextIDs();
     }
 
+    /*Resets all modules fired at that point, i.e. to be used after advanceToLatest to reset any changes made to modules by their setContent or otherwise functions. 
+     This requires module types to have resetModule() implemented correctly.*/
     public void resetFiredModules()
     {
         Debug.Log("Attempting to reset all modules that have been fired already");
@@ -186,6 +190,7 @@ public class ModuleManager : MonoBehaviour {
         }
     }
 
+    /*Destroys the current UI list/stream and resets all modules to initial "unfired" state.*/
     public void resetStream(bool goOnToo)
     {
         StopCoroutine(fireNext());

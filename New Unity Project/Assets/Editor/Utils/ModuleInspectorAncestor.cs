@@ -202,6 +202,7 @@ public class ModuleInspectorAncestor : Editor {
         EditorUtility.SetDirty(mod);
     }
 
+    /*PartInfo should contain basic info unrelated to the message or unfit for any of the other segments*/
     public virtual void PartInfo()
     {
         GUILayout.Label("This is a " + mod.GetType().ToString(), EditorStyles.boldLabel);
@@ -238,6 +239,7 @@ public class ModuleInspectorAncestor : Editor {
             }
         }
     }
+    /*PartPrevious should contain all related to the handling of the previous module in this one, e.g. the reference to the previous module or possible options related to that*/
     public virtual void PartPrevious()
     {
         //previous module selection
@@ -258,10 +260,12 @@ public class ModuleInspectorAncestor : Editor {
         EditorGUILayout.EndHorizontal();
         serializedObject.ApplyModifiedProperties();
     }
+    /*PartMessage should contain all contents and options related to the message itself, such as the character, ID, content of whatever type, etc*/
     public virtual void PartMessage()
     {
         mod.messageSound = (AudioClip)EditorGUILayout.ObjectField(audioLabel, mod.messageSound, typeof(AudioClip), false);
     }
+    /*PartLog should contain all options and references to the module's log entry*/
     public virtual void PartLog()
     {
         if (showHints)
@@ -273,6 +277,7 @@ public class ModuleInspectorAncestor : Editor {
         }
         mod.log = (LogEntry)EditorGUILayout.ObjectField(logLabel, mod.log, typeof(LogEntry), false);
     }
+    /*Analogously to PartPrevious, but for next modules. Optionally multiple next units.*/
     public virtual void PartNext()
     {
         if (showHints)
@@ -305,6 +310,7 @@ public class ModuleInspectorAncestor : Editor {
             Selection.activeObject = mod;
         }
     }
+    /*PartDelete contains the controls for deleting a module. Should not need changing. May be expanded to incorporate "moving" instead of outright deletion*/
     public virtual void PartDelete()
     {
         if (showHints)

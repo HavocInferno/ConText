@@ -34,6 +34,6 @@ public class UISettings : ScriptableObject {
     }
     public List<modUIPair> modUITemplates = new List<modUIPair>();
 
-    /*Add apply functions here*/
+    /*Should add proper clean apply functions here*/
     //Foo
 }
